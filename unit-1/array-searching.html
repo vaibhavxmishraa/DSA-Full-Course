@@ -1,0 +1,5036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Array Searching | DSA Master</title>
+
+<style>
+
+/* =========================================================
+   THEME VARIABLES
+========================================================= */
+
+:root{
+    --bg:#070811;
+    --bg2:#101326;
+    --card:rgba(255,255,255,.055);
+    --card2:rgba(255,255,255,.09);
+
+    --text:#f7f8ff;
+    --muted:#a9b0c9;
+
+    --purple:#8b5cf6;
+    --violet:#a855f7;
+    --blue:#3b82f6;
+    --cyan:#22d3ee;
+    --pink:#ec4899;
+    --orange:#f59e0b;
+    --green:#34d399;
+    --red:#fb7185;
+
+    --border:rgba(255,255,255,.10);
+    --shadow:rgba(0,0,0,.35);
+}
+
+body.light{
+    --bg:#f5f7ff;
+    --bg2:#ffffff;
+    --card:rgba(255,255,255,.75);
+    --card2:#ffffff;
+
+    --text:#171827;
+    --muted:#596075;
+
+    --purple:#7c3aed;
+    --violet:#9333ea;
+    --blue:#2563eb;
+    --cyan:#0891b2;
+    --pink:#db2777;
+    --orange:#d97706;
+    --green:#059669;
+    --red:#e11d48;
+
+    --border:rgba(15,23,42,.12);
+    --shadow:rgba(30,41,59,.15);
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:
+        radial-gradient(
+            circle at 5% 10%,
+            rgba(139,92,246,.13),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 95% 35%,
+            rgba(34,211,238,.10),
+            transparent 28%
+        ),
+        var(--bg);
+
+    color:var(--text);
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height:1.6;
+
+    overflow-x:hidden;
+
+    transition:
+        background .45s ease,
+        color .45s ease;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font:inherit;
+}
+
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.background{
+    position:fixed;
+    inset:0;
+
+    z-index:-1;
+
+    pointer-events:none;
+
+    overflow:hidden;
+}
+
+.orb{
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(110px);
+
+    opacity:.13;
+
+    animation:
+        floating 12s ease-in-out infinite;
+}
+
+.orb1{
+    width:420px;
+    height:420px;
+
+    background:var(--purple);
+
+    left:-170px;
+    top:4%;
+}
+
+.orb2{
+    width:350px;
+    height:350px;
+
+    background:var(--cyan);
+
+    right:-160px;
+    top:42%;
+
+    animation-delay:-4s;
+}
+
+.orb3{
+    width:330px;
+    height:330px;
+
+    background:var(--pink);
+
+    left:40%;
+    bottom:-170px;
+
+    animation-delay:-8s;
+}
+
+@keyframes floating{
+
+    0%,100%{
+        transform:
+            translate(0,0)
+            scale(1);
+    }
+
+    50%{
+        transform:
+            translate(35px,-40px)
+            scale(1.1);
+    }
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+header{
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    background:
+        rgba(7,8,17,.72);
+
+    backdrop-filter:blur(20px);
+
+    border-bottom:
+        1px solid var(--border);
+
+    transition:.4s;
+}
+
+body.light header{
+    background:
+        rgba(255,255,255,.78);
+}
+
+nav{
+    width:min(1200px,92%);
+
+    min-height:72px;
+
+    margin:auto;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.brand{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    font-weight:900;
+}
+
+.logo{
+    width:44px;
+    height:44px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            var(--blue),
+            var(--cyan)
+        );
+
+    color:white;
+
+    box-shadow:
+        0 0 30px
+        rgba(139,92,246,.30);
+}
+
+.brand span{
+    color:var(--cyan);
+}
+
+.nav-links{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+.nav-btn{
+    padding:
+        9px 14px;
+
+    border-radius:999px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    color:var(--muted);
+
+    font-size:.72rem;
+
+    transition:.3s;
+}
+
+.nav-btn:hover{
+    color:var(--text);
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--purple);
+}
+
+
+/* =========================================================
+   THEME TOGGLE
+========================================================= */
+
+.theme-toggle{
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--card);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    display:grid;
+
+    place-items:center;
+
+    font-size:1.05rem;
+
+    transition:.35s;
+}
+
+.theme-toggle:hover{
+    transform:
+        rotate(18deg)
+        scale(1.08);
+
+    border-color:
+        var(--cyan);
+
+    box-shadow:
+        0 0 20px
+        rgba(34,211,238,.15);
+}
+
+
+/* =========================================================
+   COMMON
+========================================================= */
+
+.container{
+    width:min(1150px,92%);
+
+    margin:auto;
+}
+
+.section{
+    padding:90px 0;
+}
+
+.eyebrow{
+    color:var(--cyan);
+
+    font-size:.68rem;
+
+    font-weight:900;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+}
+
+.section-title{
+    font-size:
+        clamp(2rem,4vw,3.3rem);
+
+    line-height:1.08;
+
+    letter-spacing:-2px;
+
+    margin:
+        10px 0 15px;
+}
+
+.gradient-text{
+    background:
+        linear-gradient(
+            100deg,
+            var(--purple),
+            var(--cyan),
+            var(--pink)
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+}
+
+.muted{
+    color:var(--muted);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:680px;
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:60px;
+
+    align-items:center;
+
+    padding:
+        80px 0 70px;
+}
+
+.hero-content{
+    animation:
+        heroEnter .9s ease forwards;
+}
+
+@keyframes heroEnter{
+
+    from{
+        opacity:0;
+        transform:
+            translateY(35px);
+    }
+
+    to{
+        opacity:1;
+        transform:
+            translateY(0);
+    }
+}
+
+.topic-badge{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:
+        8px 14px;
+
+    border-radius:999px;
+
+    background:
+        rgba(34,211,238,.08);
+
+    border:
+        1px solid
+        rgba(34,211,238,.25);
+
+    color:#67e8f9;
+
+    font-size:.7rem;
+
+    margin-bottom:24px;
+}
+
+.dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--cyan);
+
+    box-shadow:
+        0 0 14px var(--cyan);
+}
+
+.hero h1{
+    font-size:
+        clamp(3rem,6vw,5.4rem);
+
+    line-height:.92;
+
+    letter-spacing:-6px;
+
+    margin-bottom:28px;
+}
+
+.hero-description{
+    max-width:620px;
+
+    color:var(--muted);
+
+    line-height:1.9;
+
+    font-size:1rem;
+
+    margin-bottom:26px;
+}
+
+.hero-meta{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:9px;
+}
+
+.meta{
+    padding:
+        8px 12px;
+
+    border-radius:10px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    color:var(--muted);
+
+    font-size:.7rem;
+}
+
+
+/* =========================================================
+   SEARCH VISUAL
+========================================================= */
+
+.visual{
+    min-height:510px;
+
+    display:grid;
+
+    place-items:center;
+}
+
+.search-card{
+    width:min(520px,100%);
+
+    padding:27px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.09),
+            rgba(255,255,255,.025)
+        );
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 35px 90px
+        var(--shadow);
+
+    animation:
+        cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat{
+
+    0%,100%{
+        transform:
+            translateY(0)
+            rotateY(-2deg);
+    }
+
+    50%{
+        transform:
+            translateY(-12px)
+            rotateY(2deg);
+    }
+}
+
+.card-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+}
+
+.card-top strong{
+    font-size:.8rem;
+}
+
+.search-status{
+    color:var(--green);
+
+    font-size:.63rem;
+}
+
+.search-array{
+    display:flex;
+
+    justify-content:center;
+
+    gap:7px;
+
+    min-height:90px;
+}
+
+.search-cell{
+    width:68px;
+    height:80px;
+
+    position:relative;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139,92,246,.17),
+            rgba(34,211,238,.06)
+        );
+
+    border:
+        1px solid
+        rgba(139,92,246,.30);
+
+    font-weight:900;
+
+    transition:.5s;
+}
+
+.search-cell small{
+    position:absolute;
+
+    bottom:4px;
+
+    font-size:.45rem;
+
+    color:var(--muted);
+}
+
+.search-cell.active{
+    border-color:
+        var(--orange);
+
+    background:
+        rgba(245,158,11,.13);
+
+    color:#fbbf24;
+
+    transform:
+        translateY(-8px)
+        scale(1.07);
+
+    box-shadow:
+        0 0 25px
+        rgba(245,158,11,.18);
+}
+
+.search-cell.found{
+    border-color:
+        var(--green);
+
+    background:
+        rgba(52,211,153,.13);
+
+    color:#6ee7b7;
+
+    transform:
+        scale(1.1);
+
+    box-shadow:
+        0 0 30px
+        rgba(52,211,153,.2);
+}
+
+.card-message{
+    text-align:center;
+
+    margin-top:15px;
+
+    color:var(--muted);
+
+    font-size:.72rem;
+}
+
+.card-message strong{
+    color:var(--orange);
+}
+
+.card-footer{
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:22px;
+
+    color:var(--muted);
+
+    font-size:.62rem;
+}
+
+
+/* =========================================================
+   CONTENT CARD
+========================================================= */
+
+.content-card{
+    margin-top:30px;
+
+    padding:32px;
+
+    border-radius:25px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    backdrop-filter:blur(15px);
+
+    transition:
+        background .4s;
+}
+
+.content-card h3{
+    font-size:1.4rem;
+
+    margin-bottom:12px;
+}
+
+.content-card p{
+    color:var(--muted);
+
+    line-height:1.9;
+
+    margin-bottom:14px;
+}
+
+.highlight{
+    color:
+        var(--cyan);
+
+    font-weight:800;
+}
+
+
+/* =========================================================
+   SEARCH TYPES
+========================================================= */
+
+.search-types{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:20px;
+
+    margin-top:30px;
+}
+
+.type-card{
+    padding:30px;
+
+    border-radius:25px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.type-card::before{
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    filter:blur(60px);
+
+    opacity:.13;
+
+    right:-90px;
+    top:-90px;
+
+    background:var(--purple);
+}
+
+.type-card.linear::before{
+    background:var(--orange);
+}
+
+.type-card.binary::before{
+    background:var(--cyan);
+}
+
+.type-card:hover{
+    transform:
+        translateY(-8px);
+
+    border-color:
+        rgba(139,92,246,.42);
+
+    box-shadow:
+        0 20px 60px
+        var(--shadow);
+}
+
+.type-icon{
+    width:55px;
+    height:55px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:16px;
+
+    margin-bottom:17px;
+
+    font-size:1.5rem;
+
+    background:
+        rgba(139,92,246,.10);
+}
+
+.type-card.linear .type-icon{
+    background:
+        rgba(245,158,11,.10);
+}
+
+.type-card.binary .type-icon{
+    background:
+        rgba(34,211,238,.10);
+}
+
+.type-card h3{
+    margin-bottom:8px;
+}
+
+.type-card p{
+    color:var(--muted);
+
+    font-size:.8rem;
+
+    line-height:1.8;
+}
+
+.formula{
+    margin-top:18px;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    color:
+        #c4b5fd;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    font-size:.7rem;
+}
+
+
+/* =========================================================
+   FLOW
+========================================================= */
+
+.flow{
+    margin-top:28px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+}
+
+.flow-item{
+    padding:
+        13px 18px;
+
+    border-radius:13px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid
+        rgba(139,92,246,.28);
+
+    color:
+        #c4b5fd;
+
+    font-weight:800;
+
+    font-size:.75rem;
+
+    transition:.3s;
+}
+
+.flow-item:hover{
+    transform:
+        translateY(-5px);
+
+    border-color:
+        var(--cyan);
+}
+
+.arrow{
+    color:
+        var(--cyan);
+
+    font-weight:900;
+
+    font-size:1.15rem;
+}
+
+
+/* =========================================================
+   LINEAR VISUAL
+========================================================= */
+
+.visual-box{
+    margin-top:30px;
+
+    padding:30px;
+
+    border-radius:27px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+}
+
+.visual-title{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:27px;
+}
+
+.visual-title span{
+    padding:
+        7px 11px;
+
+    border-radius:999px;
+
+    background:
+        rgba(245,158,11,.08);
+
+    color:#fbbf24;
+
+    font-size:.6rem;
+}
+
+.array-visual{
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:7px;
+
+    min-height:100px;
+}
+
+.array-box{
+    width:72px;
+    height:80px;
+
+    position:relative;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:15px;
+
+    background:
+        rgba(139,92,246,.08);
+
+    border:
+        1px solid
+        rgba(139,92,246,.25);
+
+    font-weight:900;
+
+    transition:.5s;
+}
+
+.array-box small{
+    position:absolute;
+
+    bottom:4px;
+
+    color:var(--muted);
+
+    font-size:.45rem;
+}
+
+.array-box.checking{
+    background:
+        rgba(245,158,11,.13);
+
+    border-color:
+        var(--orange);
+
+    color:#fbbf24;
+
+    transform:
+        translateY(-10px)
+        scale(1.05);
+}
+
+.array-box.not-found{
+    opacity:.42;
+
+    transform:
+        scale(.92);
+}
+
+.array-box.found{
+    background:
+        rgba(52,211,153,.13);
+
+    border-color:
+        var(--green);
+
+    color:#6ee7b7;
+
+    transform:
+        scale(1.12);
+
+    box-shadow:
+        0 0 30px
+        rgba(52,211,153,.18);
+}
+
+
+/* =========================================================
+   BINARY SEARCH VISUAL
+========================================================= */
+
+.binary-visual{
+    margin-top:30px;
+
+    padding:30px;
+
+    border-radius:27px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+}
+
+.binary-array{
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:7px;
+
+    flex-wrap:wrap;
+}
+
+.binary-box{
+    width:65px;
+    height:70px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:14px;
+
+    background:
+        rgba(34,211,238,.06);
+
+    border:
+        1px solid
+        rgba(34,211,238,.20);
+
+    font-weight:900;
+
+    position:relative;
+
+    transition:.45s;
+}
+
+.binary-box::after{
+    content:
+        attr(data-index);
+
+    position:absolute;
+
+    bottom:4px;
+
+    font-size:.42rem;
+
+    color:var(--muted);
+}
+
+.binary-box.low{
+    background:
+        rgba(139,92,246,.10);
+
+    border-color:
+        var(--purple);
+}
+
+.binary-box.mid{
+    background:
+        rgba(245,158,11,.14);
+
+    border-color:
+        var(--orange);
+
+    color:#fbbf24;
+
+    transform:
+        translateY(-9px)
+        scale(1.08);
+}
+
+.binary-box.high{
+    background:
+        rgba(236,72,153,.08);
+
+    border-color:
+        var(--pink);
+}
+
+.binary-box.discarded{
+    opacity:.22;
+
+    transform:
+        scale(.88);
+}
+
+
+/* =========================================================
+   INTERACTIVE LAB
+========================================================= */
+
+.lab{
+    margin-top:35px;
+
+    padding:30px;
+
+    border-radius:28px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+}
+
+.lab-header{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:28px;
+}
+
+.lab-header h3{
+    font-size:1.2rem;
+}
+
+.lab-status{
+    padding:
+        7px 12px;
+
+    border-radius:999px;
+
+    background:
+        rgba(52,211,153,.08);
+
+    border:
+        1px solid
+        rgba(52,211,153,.20);
+
+    color:#6ee7b7;
+
+    font-size:.6rem;
+}
+
+.lab-array{
+    display:flex;
+
+    justify-content:center;
+
+    gap:7px;
+
+    min-height:95px;
+
+    flex-wrap:wrap;
+}
+
+.lab-cell{
+    width:72px;
+    height:80px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:15px;
+
+    background:
+        rgba(139,92,246,.07);
+
+    border:
+        1px solid
+        rgba(139,92,246,.24);
+
+    position:relative;
+
+    font-weight:900;
+
+    transition:.45s;
+}
+
+.lab-cell small{
+    position:absolute;
+
+    bottom:4px;
+
+    font-size:.44rem;
+
+    color:var(--muted);
+}
+
+.lab-cell.check{
+    background:
+        rgba(245,158,11,.13);
+
+    border-color:
+        var(--orange);
+
+    color:#fbbf24;
+
+    transform:
+        translateY(-8px);
+}
+
+.lab-cell.found{
+    background:
+        rgba(52,211,153,.13);
+
+    border-color:
+        var(--green);
+
+    color:#6ee7b7;
+
+    transform:
+        scale(1.1);
+
+    box-shadow:
+        0 0 25px
+        rgba(52,211,153,.18);
+}
+
+.lab-controls{
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin-top:27px;
+}
+
+.control-btn{
+    padding:
+        11px 17px;
+
+    border-radius:12px;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--card);
+
+    color:var(--text);
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:.7rem;
+}
+
+.control-btn:hover{
+    transform:
+        translateY(-3px);
+
+    border-color:
+        var(--cyan);
+}
+
+.control-btn.primary{
+    background:
+        linear-gradient(
+            120deg,
+            var(--purple),
+            var(--blue)
+        );
+
+    border-color:transparent;
+
+    color:white;
+}
+
+.lab-message{
+    margin-top:22px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:.75rem;
+}
+
+.lab-message strong{
+    color:var(--cyan);
+}
+
+
+/* =========================================================
+   CODE
+========================================================= */
+
+.example{
+    display:grid;
+
+    grid-template-columns:
+        1.1fr .9fr;
+
+    gap:20px;
+
+    margin-top:30px;
+}
+
+.code-card{
+    overflow:hidden;
+
+    border-radius:22px;
+
+    background:
+        #050611;
+
+    border:
+        1px solid var(--border);
+}
+
+body.light .code-card{
+    background:#111827;
+}
+
+.code-header{
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:
+        13px 17px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    color:#a9b0c9;
+
+    font-size:.7rem;
+}
+
+.circle{
+    width:9px;
+    height:9px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,.25);
+}
+
+pre{
+    padding:25px;
+
+    overflow-x:auto;
+
+    color:#dce3ff;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    font-size:.74rem;
+
+    line-height:1.85;
+}
+
+.keyword{
+    color:#c084fc;
+}
+
+.number{
+    color:#fbbf24;
+}
+
+.type{
+    color:#67e8f9;
+}
+
+.string{
+    color:#86efac;
+}
+
+.explain{
+    padding:28px;
+
+    border-radius:22px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+}
+
+.explain h3{
+    margin-bottom:12px;
+}
+
+.explain p{
+    color:var(--muted);
+
+    font-size:.8rem;
+
+    line-height:1.8;
+
+    margin-bottom:12px;
+}
+
+.result{
+    margin-top:18px;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    background:
+        rgba(52,211,153,.08);
+
+    border:
+        1px solid
+        rgba(52,211,153,.20);
+
+    color:#6ee7b7;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    font-size:.72rem;
+}
+
+
+/* =========================================================
+   DRY RUN
+========================================================= */
+
+.dry-run{
+    margin-top:30px;
+
+    padding:30px;
+
+    border-radius:26px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+}
+
+.dry-row{
+    display:grid;
+
+    grid-template-columns:
+        55px 100px 1fr;
+
+    align-items:center;
+
+    gap:18px;
+
+    padding:17px 0;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.06);
+}
+
+.dry-row:last-child{
+    border-bottom:0;
+}
+
+.step-number{
+    width:38px;
+    height:38px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:12px;
+
+    background:
+        rgba(139,92,246,.12);
+
+    color:#c4b5fd;
+
+    font-weight:900;
+}
+
+.dry-array{
+    display:flex;
+
+    gap:5px;
+
+    flex-wrap:wrap;
+}
+
+.dry-box{
+    width:40px;
+    height:40px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:8px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid var(--border);
+
+    font-size:.62rem;
+}
+
+.dry-box.current{
+    background:
+        rgba(245,158,11,.12);
+
+    border-color:
+        var(--orange);
+
+    color:#fbbf24;
+}
+
+.dry-box.discard{
+    opacity:.25;
+
+    border-color:
+        var(--red);
+}
+
+.dry-text{
+    color:var(--muted);
+
+    font-size:.72rem;
+}
+
+
+/* =========================================================
+   COMPLEXITY
+========================================================= */
+
+.complexity-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:16px;
+
+    margin-top:30px;
+}
+
+.complexity{
+    padding:25px;
+
+    text-align:center;
+
+    border-radius:20px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+}
+
+.complexity strong{
+    display:block;
+
+    font-size:2rem;
+
+    color:var(--cyan);
+
+    margin-bottom:5px;
+}
+
+.complexity span{
+    color:var(--muted);
+
+    font-size:.7rem;
+}
+
+.complexity.highlight-box strong{
+    color:var(--orange);
+}
+
+
+/* =========================================================
+   COMPARISON TABLE
+========================================================= */
+
+.table-wrap{
+    margin-top:30px;
+
+    overflow-x:auto;
+
+    border-radius:20px;
+
+    border:
+        1px solid var(--border);
+}
+
+table{
+    width:100%;
+
+    min-width:650px;
+
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:16px;
+
+    text-align:left;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+
+    font-size:.74rem;
+}
+
+th{
+    color:#ddd6fe;
+
+    background:
+        rgba(139,92,246,.08);
+}
+
+td{
+    color:var(--muted);
+}
+
+td strong{
+    color:var(--cyan);
+}
+
+
+/* =========================================================
+   REAL WORLD
+========================================================= */
+
+.real-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+
+    margin-top:30px;
+}
+
+.real-card{
+    padding:25px;
+
+    border-radius:22px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    transition:.35s;
+}
+
+.real-card:hover{
+    transform:
+        translateY(-8px)
+        rotateX(2deg);
+}
+
+.real-icon{
+    font-size:1.8rem;
+
+    margin-bottom:12px;
+}
+
+.real-card h3{
+    margin-bottom:7px;
+}
+
+.real-card p{
+    color:var(--muted);
+
+    font-size:.75rem;
+
+    line-height:1.8;
+}
+
+
+/* =========================================================
+   AKTU
+========================================================= */
+
+.aktu{
+    padding:32px;
+
+    border-radius:26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139,92,246,.09),
+            rgba(34,211,238,.06)
+        );
+
+    border:
+        1px solid
+        rgba(139,92,246,.22);
+}
+
+.question{
+    padding:18px;
+
+    margin-top:12px;
+
+    border-radius:14px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    transition:.3s;
+}
+
+.question:hover{
+    transform:
+        translateX(5px);
+
+    border-color:
+        var(--cyan);
+}
+
+.question strong{
+    display:block;
+
+    color:
+        var(--text);
+
+    margin-bottom:5px;
+
+    font-size:.82rem;
+}
+
+.question span{
+    color:var(--muted);
+
+    font-size:.72rem;
+}
+
+
+/* =========================================================
+   QUICK REVISION
+========================================================= */
+
+.summary-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-top:30px;
+}
+
+.summary-box{
+    padding:22px;
+
+    text-align:center;
+
+    border-radius:18px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+}
+
+.summary-box strong{
+    display:block;
+
+    color:var(--cyan);
+
+    font-size:1.5rem;
+
+    margin-bottom:5px;
+}
+
+.summary-box span{
+    color:var(--muted);
+
+    font-size:.7rem;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.topic-navigation{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin:
+        20px auto 70px;
+}
+
+.topic-nav{
+    padding:
+        16px 21px;
+
+    border-radius:15px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    font-size:.76rem;
+
+    transition:.3s;
+}
+
+.topic-nav:hover{
+    transform:
+        translateY(-4px);
+
+    border-color:
+        var(--purple);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    padding:45px 0;
+
+    border-top:
+        1px solid var(--border);
+}
+
+.footer-inner{
+    width:min(1150px,92%);
+
+    margin:auto;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+}
+
+.developer{
+    color:var(--muted);
+
+    font-size:.8rem;
+}
+
+.developer strong{
+    color:var(--text);
+}
+
+.socials{
+    display:flex;
+
+    gap:9px;
+}
+
+.social{
+    padding:
+        9px 14px;
+
+    border-radius:10px;
+
+    background:
+        var(--card);
+
+    border:
+        1px solid var(--border);
+
+    color:var(--muted);
+
+    font-size:.74rem;
+
+    transition:.3s;
+}
+
+.social:hover{
+    color:var(--text);
+
+    border-color:
+        var(--purple);
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+.reveal{
+    opacity:0;
+
+    transform:
+        translateY(30px);
+
+    transition:
+        opacity .8s ease,
+        transform .8s ease;
+}
+
+.reveal.active{
+    opacity:1;
+
+    transform:
+        translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:950px){
+
+    .hero{
+        grid-template-columns:1fr;
+
+        text-align:center;
+    }
+
+    .hero-description{
+        margin:
+            0 auto 25px;
+    }
+
+    .hero-meta{
+        justify-content:center;
+    }
+
+    .search-types,
+    .example{
+        grid-template-columns:1fr;
+    }
+
+    .real-grid{
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .summary-grid{
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    nav{
+        gap:10px;
+    }
+
+    .brand > div:last-child{
+        display:none;
+    }
+
+    .nav-btn{
+        display:none;
+    }
+
+    .hero h1{
+        letter-spacing:-4px;
+    }
+
+    .search-array,
+    .array-visual,
+    .lab-array{
+        overflow-x:auto;
+
+        justify-content:flex-start;
+
+        flex-wrap:nowrap;
+
+        padding-bottom:10px;
+    }
+
+    .complexity-grid,
+    .real-grid,
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .content-card,
+    .lab,
+    .visual-box,
+    .binary-visual,
+    .dry-run,
+    .aktu{
+        padding:23px;
+    }
+
+    .dry-row{
+        grid-template-columns:
+            45px 1fr;
+    }
+
+    .dry-text{
+        grid-column:
+            1 / -1;
+    }
+
+    .topic-navigation{
+        flex-direction:column;
+    }
+
+    .topic-nav{
+        text-align:center;
+    }
+
+    .footer-inner{
+        justify-content:center;
+
+        text-align:center;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     BACKGROUND
+========================================================= -->
+
+<div class="background">
+
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+
+</div>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+<nav>
+
+    <a
+        href="index.html"
+        class="brand"
+    >
+
+        <div class="logo">
+            DS
+        </div>
+
+        <div>
+            DSA <span>MASTER</span>
+        </div>
+
+    </a>
+
+
+    <div class="nav-links">
+
+        <a
+            href="array-deletion.html"
+            class="nav-btn"
+        >
+            ← Deletion
+        </a>
+
+
+        <a
+            href="index.html"
+            class="nav-btn"
+        >
+            Unit 1
+        </a>
+
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Toggle day night mode"
+        >
+            🌙
+        </button>
+
+    </div>
+
+</nav>
+
+</header>
+
+
+<main>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="container hero">
+
+
+    <div class="hero-content">
+
+        <div class="topic-badge">
+
+            <span class="dot"></span>
+
+            UNIT 01 • TOPIC 11
+
+        </div>
+
+
+        <h1>
+
+            <span class="gradient-text">
+                ARRAY
+            </span>
+
+            <br>
+
+            SEARCHING
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Searching means finding whether a particular
+            element exists inside an array and determining
+            its position.
+
+            In this topic you will master
+
+            <strong>
+                Linear Search
+            </strong>
+
+            and
+
+            <strong>
+                Binary Search
+            </strong>
+
+            — both important for AKTU examinations.
+
+        </p>
+
+
+        <div class="hero-meta">
+
+            <span class="meta">
+                Linear Search
+            </span>
+
+            <span class="meta">
+                Binary Search
+            </span>
+
+            <span class="meta">
+                Sorted Array
+            </span>
+
+            <span class="meta">
+                O(n)
+            </span>
+
+            <span class="meta">
+                O(log n)
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH VISUAL -->
+
+    <div class="visual">
+
+        <div class="search-card">
+
+            <div class="card-top">
+
+                <strong>
+                    SEARCH ENGINE
+                </strong>
+
+                <span class="search-status">
+                    ● SCANNING
+                </span>
+
+            </div>
+
+
+            <div
+                class="search-array"
+                id="heroArray"
+            >
+
+                <div class="search-cell">
+                    10
+                    <small>[0]</small>
+                </div>
+
+                <div class="search-cell">
+                    25
+                    <small>[1]</small>
+                </div>
+
+                <div class="search-cell">
+                    35
+                    <small>[2]</small>
+                </div>
+
+                <div class="search-cell active">
+                    42
+                    <small>[3]</small>
+                </div>
+
+                <div class="search-cell">
+                    60
+                    <small>[4]</small>
+                </div>
+
+            </div>
+
+
+            <div class="card-message">
+
+                Searching for:
+
+                <strong>
+                    42
+                </strong>
+
+                <br>
+
+                ↓
+
+                Found at
+
+                <strong>
+                    index 3
+                </strong>
+
+            </div>
+
+
+            <div class="card-footer">
+
+                <span>
+                    TARGET = 42
+                </span>
+
+                <span>
+                    RESULT = FOUND
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DEFINITION
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        CONCEPT 01
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        What is
+        <span class="gradient-text">
+            Searching?
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <h3>
+            Simple Definition
+        </h3>
+
+
+        <p>
+
+            <strong>
+                Searching
+            </strong>
+
+            is the process of finding a particular
+            element, called the
+
+            <span class="highlight">
+                key / target
+            </span>
+
+            , in a data structure.
+
+        </p>
+
+
+        <p>
+
+            For example, if we have:
+
+        </p>
+
+
+        <div class="flow">
+
+            <div class="flow-item">
+                10
+            </div>
+
+            <div class="flow-item">
+                25
+            </div>
+
+            <div class="flow-item">
+                35
+            </div>
+
+            <div class="flow-item">
+                42
+            </div>
+
+            <div class="flow-item">
+                60
+            </div>
+
+        </div>
+
+
+        <p style="margin-top:25px;">
+
+            And our target is
+
+            <strong class="highlight">
+                42
+            </strong>
+
+            , searching tells us that it exists at
+
+            <strong class="highlight">
+                index 3
+            </strong>
+
+            .
+
+        </p>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     TWO TYPES
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        CORE CONCEPT
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Two Major
+        <span class="gradient-text">
+            Searching Techniques
+        </span>
+
+    </h2>
+
+
+    <div class="search-types">
+
+
+        <div class="type-card linear reveal">
+
+            <div class="type-icon">
+                🔍
+            </div>
+
+            <h3>
+                Linear Search
+            </h3>
+
+            <p>
+
+                Checks every element one by one from
+                beginning to end until the target is found.
+
+            </p>
+
+
+            <div class="formula">
+                Best: O(1) • Worst: O(n)
+            </div>
+
+
+            <div class="formula">
+                Works on sorted + unsorted arrays
+            </div>
+
+        </div>
+
+
+        <div class="type-card binary reveal">
+
+            <div class="type-icon">
+                ⚡
+            </div>
+
+            <h3>
+                Binary Search
+            </h3>
+
+            <p>
+
+                Repeatedly divides a sorted array into
+                two halves and eliminates the impossible
+                half.
+
+            </p>
+
+
+            <div class="formula">
+                Best: O(1) • Worst: O(log n)
+            </div>
+
+
+            <div class="formula">
+                Array must be sorted
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     LINEAR SEARCH
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        TECHNIQUE 01
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        <span class="gradient-text">
+            Linear Search
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <h3>
+            One by One Checking
+        </h3>
+
+
+        <p>
+
+            Linear Search starts from the first element
+            and compares each element with the target.
+
+            It continues until:
+
+        </p>
+
+
+        <div class="flow">
+
+            <div class="flow-item">
+                Target Found
+            </div>
+
+            <div class="arrow">
+                OR
+            </div>
+
+            <div class="flow-item">
+                Array Ends
+            </div>
+
+        </div>
+
+
+        <p style="margin-top:25px;">
+
+            Example:
+
+            Search for
+
+            <strong class="highlight">
+                35
+            </strong>
+
+            in
+
+            <strong>
+                [10, 25, 35, 42, 60]
+            </strong>
+
+        </p>
+
+    </div>
+
+
+    <!-- VISUAL -->
+
+    <div class="visual-box reveal">
+
+        <div class="visual-title">
+
+            <h3>
+                Linear Search Visualization
+            </h3>
+
+            <span>
+                LEFT → RIGHT
+            </span>
+
+        </div>
+
+
+        <div
+            class="array-visual"
+            id="linearVisual"
+        >
+
+            <div class="array-box">
+                10
+                <small>[0]</small>
+            </div>
+
+            <div class="array-box">
+                25
+                <small>[1]</small>
+            </div>
+
+            <div class="array-box">
+                35
+                <small>[2]</small>
+            </div>
+
+            <div class="array-box">
+                42
+                <small>[3]</small>
+            </div>
+
+            <div class="array-box">
+                60
+                <small>[4]</small>
+            </div>
+
+        </div>
+
+
+        <div class="flow">
+
+            <div class="flow-item">
+                Check 10
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-item">
+                Check 25
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div
+                class="flow-item"
+                style="
+                    border-color:var(--green);
+                    color:#6ee7b7;
+                "
+            >
+                Found 35
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     LINEAR ALGORITHM
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        ALGORITHM
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Linear Search
+        <span class="gradient-text">
+            Algorithm
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <p>
+            <strong>Step 1:</strong>
+            Start from index 0.
+        </p>
+
+        <p>
+            <strong>Step 2:</strong>
+            Compare current element with the target.
+        </p>
+
+        <p>
+            <strong>Step 3:</strong>
+            If equal, return the index.
+        </p>
+
+        <p>
+            <strong>Step 4:</strong>
+            Otherwise move to the next element.
+        </p>
+
+        <p>
+            <strong>Step 5:</strong>
+            If array ends, return -1.
+        </p>
+
+
+        <div class="flow">
+
+            <div class="flow-item">
+                Start
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-item">
+                Compare
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-item">
+                Found?
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-item">
+                Yes → Index
+            </div>
+
+            <div class="arrow">
+                /
+            </div>
+
+            <div class="flow-item">
+                No → Next
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     BINARY SEARCH
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        TECHNIQUE 02
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        <span class="gradient-text">
+            Binary Search
+        </span>
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <h3>
+            Divide and Conquer
+        </h3>
+
+
+        <p>
+
+            Binary Search is much faster than Linear Search,
+            but there is one very important condition:
+
+        </p>
+
+
+        <div class="flow">
+
+            <div
+                class="flow-item"
+                style="
+                    border-color:var(--orange);
+                    color:#fbbf24;
+                "
+            >
+                ARRAY MUST BE SORTED
+            </div>
+
+        </div>
+
+
+        <p style="margin-top:25px;">
+
+            It calculates the middle element and compares
+            it with the target.
+
+            Based on the comparison, half of the array
+            is discarded.
+
+        </p>
+
+    </div>
+
+
+    <!-- BINARY VISUAL -->
+
+    <div class="binary-visual reveal">
+
+        <div class="visual-title">
+
+            <h3>
+                Search Target = 50
+            </h3>
+
+            <span
+                style="
+                background:rgba(34,211,238,.08);
+                color:#67e8f9;
+                "
+            >
+                DIVIDE → DISCARD
+            </span>
+
+        </div>
+
+
+        <div class="binary-array">
+
+            <div
+                class="binary-box discarded"
+                data-index="0"
+            >
+                10
+            </div>
+
+            <div
+                class="binary-box discarded"
+                data-index="1"
+            >
+                20
+            </div>
+
+            <div
+                class="binary-box discarded"
+                data-index="2"
+            >
+                30
+            </div>
+
+            <div
+                class="binary-box low"
+                data-index="3"
+            >
+                40
+            </div>
+
+            <div
+                class="binary-box mid"
+                data-index="4"
+            >
+                50
+            </div>
+
+            <div
+                class="binary-box high"
+                data-index="5"
+            >
+                60
+            </div>
+
+            <div
+                class="binary-box high"
+                data-index="6"
+            >
+                70
+            </div>
+
+            <div
+                class="binary-box high"
+                data-index="7"
+            >
+                80
+            </div>
+
+        </div>
+
+
+        <div class="flow">
+
+            <div class="flow-item">
+                low
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-item">
+                mid = 4
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div
+                class="flow-item"
+                style="
+                    border-color:var(--green);
+                    color:#6ee7b7;
+                "
+            >
+                arr[mid] = 50 ✓
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     BINARY STEPS
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        HOW IT WORKS
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Binary Search
+        <span class="gradient-text">
+            Step-by-Step
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <div class="flow">
+
+            <div class="flow-item">
+                low = 0
+            </div>
+
+            <div class="arrow">
+                +
+            </div>
+
+            <div class="flow-item">
+                high = n-1
+            </div>
+
+            <div class="arrow">
+                →
+            </div>
+
+            <div class="flow-item">
+                mid = (low+high)/2
+            </div>
+
+        </div>
+
+
+        <div class="content-card">
+
+            <p>
+
+                If
+
+                <strong class="highlight">
+                    arr[mid] == target
+                </strong>
+
+                → element found.
+
+            </p>
+
+
+            <p>
+
+                If
+
+                <strong class="highlight">
+                    arr[mid] &lt; target
+                </strong>
+
+                → search the right half.
+
+            </p>
+
+
+            <p>
+
+                If
+
+                <strong class="highlight">
+                    arr[mid] &gt; target
+                </strong>
+
+                → search the left half.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     INTERACTIVE SEARCH LAB
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        INTERACTIVE LAB
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Search it
+        <span class="gradient-text">
+            Yourself
+        </span>
+
+    </h2>
+
+
+    <div class="lab reveal">
+
+        <div class="lab-header">
+
+            <h3>
+                Linear Search Simulator
+            </h3>
+
+            <div
+                class="lab-status"
+                id="labStatus"
+            >
+                READY
+            </div>
+
+        </div>
+
+
+        <div
+            class="lab-array"
+            id="labArray"
+        >
+
+            <div class="lab-cell">
+                10
+                <small>[0]</small>
+            </div>
+
+            <div class="lab-cell">
+                25
+                <small>[1]</small>
+            </div>
+
+            <div class="lab-cell">
+                35
+                <small>[2]</small>
+            </div>
+
+            <div class="lab-cell">
+                42
+                <small>[3]</small>
+            </div>
+
+            <div class="lab-cell">
+                60
+                <small>[4]</small>
+            </div>
+
+        </div>
+
+
+        <div class="lab-controls">
+
+            <button
+                class="control-btn primary"
+                id="startSearch"
+            >
+                🔍 Search 42
+            </button>
+
+
+            <button
+                class="control-btn"
+                id="search25"
+            >
+                Search 25
+            </button>
+
+
+            <button
+                class="control-btn"
+                id="search99"
+            >
+                Search 99
+            </button>
+
+
+            <button
+                class="control-btn"
+                id="resetSearch"
+            >
+                ↺ Reset
+            </button>
+
+        </div>
+
+
+        <div class="lab-message">
+
+            Status:
+
+            <strong id="labMessage">
+                Waiting for search...
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     LINEAR C++ CODE
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        C++ IMPLEMENTATION
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Linear Search
+        <span class="gradient-text">
+            in C++
+        </span>
+
+    </h2>
+
+
+    <div class="example">
+
+
+        <div class="code-card reveal">
+
+            <div class="code-header">
+
+                <span class="circle"></span>
+                <span class="circle"></span>
+                <span class="circle"></span>
+
+                <span style="margin-left:8px;">
+                    linear-search.cpp
+                </span>
+
+            </div>
+
+
+<pre><code><span class="keyword">#include</span> &lt;iostream&gt;
+
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> main()
+{
+    <span class="type">int</span> arr[] =
+        {<span class="number">10</span>, <span class="number">25</span>,
+         <span class="number">35</span>, <span class="number">42</span>,
+         <span class="number">60</span>};
+
+    <span class="type">int</span> n = <span class="number">5</span>;
+
+    <span class="type">int</span> target = <span class="number">42</span>;
+
+    <span class="type">int</span> position = -<span class="number">1</span>;
+
+    <span class="keyword">for</span>(
+        <span class="type">int</span> i = <span class="number">0</span>;
+        i &lt; n;
+        i++
+    )
+    {
+        <span class="keyword">if</span>(
+            arr[i] == target
+        )
+        {
+            position = i;
+            <span class="keyword">break</span>;
+        }
+    }
+
+    <span class="keyword">if</span>(
+        position != -<span class="number">1</span>
+    )
+    {
+        cout &lt;&lt;
+        <span class="string">"Found at index: "</span>
+        &lt;&lt; position;
+    }
+    <span class="keyword">else</span>
+    {
+        cout &lt;&lt;
+        <span class="string">"Element not found"</span>;
+    }
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+
+        </div>
+
+
+        <div class="explain reveal">
+
+            <h3>
+                Code Logic
+            </h3>
+
+
+            <p>
+
+                The loop starts at index 0 and checks every
+                element.
+
+            </p>
+
+
+            <p>
+
+                When
+
+                <strong>
+                    arr[i] == target
+                </strong>
+
+                becomes true, we store the index and
+                stop the loop using
+
+                <strong>
+                    break
+                </strong>.
+
+            </p>
+
+
+            <p>
+
+                If the loop completes without finding
+                the target, position remains -1.
+
+            </p>
+
+
+            <div class="result">
+
+                Input:
+
+                10 25 35 42 60
+
+                <br><br>
+
+                Target: 42
+
+                <br><br>
+
+                Output:
+
+                Found at index: 3
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     BINARY C++ CODE
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        C++ IMPLEMENTATION
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Binary Search
+        <span class="gradient-text">
+            in C++
+        </span>
+
+    </h2>
+
+
+    <div class="example">
+
+
+        <div class="code-card reveal">
+
+            <div class="code-header">
+
+                <span class="circle"></span>
+                <span class="circle"></span>
+                <span class="circle"></span>
+
+                <span style="margin-left:8px;">
+                    binary-search.cpp
+                </span>
+
+            </div>
+
+
+<pre><code><span class="keyword">#include</span> &lt;iostream&gt;
+
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> main()
+{
+    <span class="type">int</span> arr[] =
+        {<span class="number">10</span>, <span class="number">20</span>,
+         <span class="number">30</span>, <span class="number">40</span>,
+         <span class="number">50</span>, <span class="number">60</span>,
+         <span class="number">70</span>};
+
+    <span class="type">int</span> n = <span class="number">7</span>;
+
+    <span class="type">int</span> target = <span class="number">50</span>;
+
+    <span class="type">int</span> low = <span class="number">0</span>;
+
+    <span class="type">int</span> high = n - <span class="number">1</span>;
+
+    <span class="type">int</span> position = -<span class="number">1</span>;
+
+    <span class="keyword">while</span>(
+        low &lt;= high
+    )
+    {
+        <span class="type">int</span> mid =
+            low + (high - low) / <span class="number">2</span>;
+
+        <span class="keyword">if</span>(
+            arr[mid] == target
+        )
+        {
+            position = mid;
+            <span class="keyword">break</span>;
+        }
+
+        <span class="keyword">else if</span>(
+            arr[mid] &lt; target
+        )
+        {
+            low = mid + <span class="number">1</span>;
+        }
+
+        <span class="keyword">else</span>
+        {
+            high = mid - <span class="number">1</span>;
+        }
+    }
+
+    <span class="keyword">if</span>(
+        position != -<span class="number">1</span>
+    )
+    {
+        cout &lt;&lt;
+        <span class="string">"Found at index: "</span>
+        &lt;&lt; position;
+    }
+    <span class="keyword">else</span>
+    {
+        cout &lt;&lt;
+        <span class="string">"Element not found"</span>;
+    }
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+
+        </div>
+
+
+        <div class="explain reveal">
+
+            <h3>
+                Most Important Formula
+            </h3>
+
+
+            <p>
+
+                The middle index is calculated as:
+
+            </p>
+
+
+            <div class="result">
+
+                mid = low + (high - low) / 2
+
+            </div>
+
+
+            <p style="margin-top:18px;">
+
+                If target is greater than arr[mid],
+                move to the right:
+
+            </p>
+
+
+            <div class="result">
+
+                low = mid + 1
+
+            </div>
+
+
+            <p style="margin-top:18px;">
+
+                Otherwise search the left half:
+
+            </p>
+
+
+            <div class="result">
+
+                high = mid - 1
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     BINARY DRY RUN
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        DRY RUN
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Binary Search:
+        <span class="gradient-text">
+            Target = 60
+        </span>
+
+    </h2>
+
+
+    <div class="dry-run reveal">
+
+
+        <div class="dry-row">
+
+            <div class="step-number">
+                1
+            </div>
+
+            <div>
+                mid = 3
+            </div>
+
+            <div class="dry-array">
+
+                <div class="dry-box discard">
+                    10
+                </div>
+
+                <div class="dry-box discard">
+                    20
+                </div>
+
+                <div class="dry-box discard">
+                    30
+                </div>
+
+                <div class="dry-box current">
+                    40
+                </div>
+
+                <div class="dry-box">
+                    50
+                </div>
+
+                <div class="dry-box">
+                    60
+                </div>
+
+                <div class="dry-box">
+                    70
+                </div>
+
+            </div>
+
+            <div class="dry-text">
+
+                40 &lt; 60
+
+                <br>
+
+                Search right half.
+
+            </div>
+
+        </div>
+
+
+        <div class="dry-row">
+
+            <div class="step-number">
+                2
+            </div>
+
+            <div>
+                mid = 5
+            </div>
+
+            <div class="dry-array">
+
+                <div class="dry-box discard">
+                    40
+                </div>
+
+                <div class="dry-box discard">
+                    50
+                </div>
+
+                <div class="dry-box current">
+                    60
+                </div>
+
+                <div class="dry-box discard">
+                    70
+                </div>
+
+            </div>
+
+            <div class="dry-text">
+
+                60 == 60
+
+                <br>
+
+                Target Found!
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     COMPLEXITY
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        COMPLEXITY
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Linear vs
+        <span class="gradient-text">
+            Binary Search
+        </span>
+
+    </h2>
+
+
+    <div class="complexity-grid">
+
+
+        <div class="complexity reveal">
+
+            <strong>
+                O(n)
+            </strong>
+
+            <span>
+                Linear Search — Worst Case
+            </span>
+
+        </div>
+
+
+        <div class="complexity highlight-box reveal">
+
+            <strong>
+                O(log n)
+            </strong>
+
+            <span>
+                Binary Search — Worst Case
+            </span>
+
+        </div>
+
+
+        <div class="complexity reveal">
+
+            <strong>
+                O(1)
+            </strong>
+
+            <span>
+                Best Case — Both
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-wrap reveal">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Feature
+                    </th>
+
+                    <th>
+                        Linear Search
+                    </th>
+
+                    <th>
+                        Binary Search
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        Basic Idea
+                    </td>
+
+                    <td>
+                        Check one by one
+                    </td>
+
+                    <td>
+                        Divide into halves
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Sorted Array Required?
+                    </td>
+
+                    <td>
+                        No
+                    </td>
+
+                    <td>
+                        <strong>Yes</strong>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Best Case
+                    </td>
+
+                    <td>
+                        <strong>O(1)</strong>
+                    </td>
+
+                    <td>
+                        <strong>O(1)</strong>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Worst Case
+                    </td>
+
+                    <td>
+                        <strong>O(n)</strong>
+                    </td>
+
+                    <td>
+                        <strong>O(log n)</strong>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Easy to Implement
+                    </td>
+
+                    <td>
+                        Yes
+                    </td>
+
+                    <td>
+                        Moderate
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Main Advantage
+                    </td>
+
+                    <td>
+                        Works on unsorted data
+                    </td>
+
+                    <td>
+                        Very fast
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="content-card reveal">
+
+        <p>
+
+            <strong class="highlight">
+                AKTU Shortcut:
+            </strong>
+
+            If the question says the array is
+
+            <strong>
+                sorted
+            </strong>
+
+            and asks for efficient searching,
+            immediately think:
+
+            <strong class="highlight">
+                Binary Search → O(log n)
+            </strong>
+
+        </p>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     REAL WORLD
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        REAL WORLD
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Searching in
+        <span class="gradient-text">
+            Real Life
+        </span>
+
+    </h2>
+
+
+    <div class="real-grid">
+
+
+        <div class="real-card reveal">
+
+            <div class="real-icon">
+                📞
+            </div>
+
+            <h3>
+                Contacts
+            </h3>
+
+            <p>
+
+                Finding a person's name or phone number
+                from a collection of contacts.
+
+            </p>
+
+        </div>
+
+
+        <div class="real-card reveal">
+
+            <div class="real-icon">
+                📚
+            </div>
+
+            <h3>
+                Library
+            </h3>
+
+            <p>
+
+                Searching for a book using its ID,
+                title or accession number.
+
+            </p>
+
+        </div>
+
+
+        <div class="real-card reveal">
+
+            <div class="real-icon">
+                🛒
+            </div>
+
+            <h3>
+                E-Commerce
+            </h3>
+
+            <p>
+
+                Searching products by product ID,
+                category or price.
+
+            </p>
+
+        </div>
+
+
+        <div class="real-card reveal">
+
+            <div class="real-icon">
+                🧑‍🎓
+            </div>
+
+            <h3>
+                Student Records
+            </h3>
+
+            <p>
+
+                Finding a student's roll number or
+                academic record.
+
+            </p>
+
+        </div>
+
+
+        <div class="real-card reveal">
+
+            <div class="real-icon">
+                🔎
+            </div>
+
+            <h3>
+                Search Engines
+            </h3>
+
+            <p>
+
+                Searching through massive collections
+                of indexed information.
+
+            </p>
+
+        </div>
+
+
+        <div class="real-card reveal">
+
+            <div class="real-icon">
+                🏦
+            </div>
+
+            <h3>
+                Banking
+            </h3>
+
+            <p>
+
+                Finding customer or transaction records
+                using unique identifiers.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     AKTU QUESTIONS
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="aktu reveal">
+
+        <div class="eyebrow">
+            AKTU EXAM ZONE
+        </div>
+
+
+        <h2 class="section-title">
+
+            Important Questions
+
+        </h2>
+
+
+        <div class="question">
+
+            <strong>
+                Q1. Define searching. Explain Linear Search with algorithm.
+            </strong>
+
+            <span>
+                Also write its best and worst-case time complexity.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q2. Write a C++ program to implement Linear Search.
+            </strong>
+
+            <span>
+                Display the position of the searched element.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q3. Explain Binary Search with a suitable example.
+            </strong>
+
+            <span>
+                Clearly explain low, high and mid.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q4. Write an algorithm/program for Binary Search.
+            </strong>
+
+            <span>
+                Analyze its time complexity.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q5. Differentiate between Linear Search and Binary Search.
+            </strong>
+
+            <span>
+                Compare their requirements and complexities.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q6. Why is a sorted array required for Binary Search?
+            </strong>
+
+            <span>
+                Explain with an example.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q7. Perform Binary Search for a given key using a dry run.
+            </strong>
+
+            <span>
+                Show low, high and mid at every step.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q8. Compare O(n) and O(log n) searching techniques.
+            </strong>
+
+            <span>
+                Give a practical example where Binary Search is preferred.
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     QUICK REVISION
+========================================================= -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        QUICK REVISION
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Searching in
+        <span class="gradient-text">
+            30 Seconds
+        </span>
+
+    </h2>
+
+
+    <div class="summary-grid">
+
+
+        <div class="summary-box reveal">
+
+            <strong>
+                O(n)
+            </strong>
+
+            <span>
+                Linear Search
+            </span>
+
+        </div>
+
+
+        <div class="summary-box reveal">
+
+            <strong>
+                O(log n)
+            </strong>
+
+            <span>
+                Binary Search
+            </span>
+
+        </div>
+
+
+        <div class="summary-box reveal">
+
+            <strong>
+                Sorted
+            </strong>
+
+            <span>
+                Required for Binary
+            </span>
+
+        </div>
+
+
+        <div class="summary-box reveal">
+
+            <strong>
+                mid
+            </strong>
+
+            <span>
+                Binary Search Key
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="content-card reveal">
+
+        <h3>
+            🧠 Exam Memory Trick
+        </h3>
+
+
+        <p>
+
+            <span class="highlight">
+                Linear = Line by Line
+            </span>
+
+        </p>
+
+
+        <p>
+
+            <span class="highlight">
+                Binary = Break into 2
+            </span>
+
+        </p>
+
+
+        <p>
+
+            Linear Search:
+
+            <strong>
+                Sorted? Not required.
+            </strong>
+
+        </p>
+
+
+        <p>
+
+            Binary Search:
+
+            <strong>
+                Sorted? MUST be sorted.
+            </strong>
+
+        </p>
+
+
+        <p>
+
+            Linear:
+
+            <strong>
+                O(n)
+            </strong>
+
+            &nbsp; | &nbsp;
+
+            Binary:
+
+            <strong>
+                O(log n)
+            </strong>
+
+        </p>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<section class="container">
+
+<div class="topic-navigation">
+
+
+    <a
+        href="array-deletion.html"
+        class="topic-nav"
+    >
+        ← Previous: Array Deletion
+    </a>
+
+
+    <a
+        href="array-shorting.html"
+        class="topic-nav"
+    >
+        Next: Array Shorting →
+    </a>
+
+
+</div>
+
+</section>
+
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+<div class="footer-inner">
+
+
+    <div class="developer">
+
+        Built with ❤️ by
+
+        <strong>
+            Web Developer Vaibhav
+        </strong>
+
+        <br>
+
+        <span>
+            DSA Master • Unit 1 • Array Searching
+        </span>
+
+    </div>
+
+
+    <div class="socials">
+
+        <!-- Apne actual profile links yahan daalna -->
+
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener"
+            class="social"
+        >
+            💻 GitHub
+        </a>
+
+
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener"
+            class="social"
+        >
+            🔗 LinkedIn
+        </a>
+
+    </div>
+
+</div>
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   DAY / NIGHT MODE
+========================================================= */
+
+const themeToggle =
+    document.getElementById(
+        "themeToggle"
+    );
+
+
+const savedTheme =
+    localStorage.getItem(
+        "dsa-theme"
+    );
+
+
+if(savedTheme === "light"){
+
+    document.body.classList
+        .add("light");
+
+    themeToggle.textContent =
+        "☀️";
+
+}
+
+
+themeToggle.addEventListener(
+    "click",
+    () => {
+
+        document.body.classList
+            .toggle("light");
+
+
+        const isLight =
+            document.body.classList
+                .contains("light");
+
+
+        themeToggle.textContent =
+            isLight
+                ? "☀️"
+                : "🌙";
+
+
+        localStorage.setItem(
+            "dsa-theme",
+            isLight
+                ? "light"
+                : "dark"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+const reveals =
+    document.querySelectorAll(
+        ".reveal"
+    );
+
+
+const observer =
+    new IntersectionObserver(
+
+        entries => {
+
+            entries.forEach(
+                entry => {
+
+                    if(
+                        entry.isIntersecting
+                    ){
+
+                        entry.target
+                            .classList
+                            .add("active");
+
+                        observer.unobserve(
+                            entry.target
+                        );
+
+                    }
+
+                }
+            );
+
+        },
+
+        {
+            threshold:.12
+        }
+
+    );
+
+
+reveals.forEach(
+    element =>
+    observer.observe(element)
+);
+
+
+/* =========================================================
+   HERO SEARCH ANIMATION
+========================================================= */
+
+const heroCells =
+    document.querySelectorAll(
+        "#heroArray .search-cell"
+    );
+
+
+let heroIndex = 0;
+
+
+setInterval(
+    () => {
+
+        heroCells.forEach(
+            cell =>
+            cell.classList
+                .remove(
+                    "active",
+                    "found"
+                )
+        );
+
+
+        if(heroIndex >= heroCells.length){
+
+            heroIndex = 0;
+
+        }
+
+
+        heroCells[heroIndex]
+            .classList
+            .add("active");
+
+
+        if(heroIndex === 3){
+
+            setTimeout(
+                () => {
+
+                    heroCells[3]
+                        .classList
+                        .remove(
+                            "active"
+                        );
+
+                    heroCells[3]
+                        .classList
+                        .add("found");
+
+                },
+                400
+            );
+
+        }
+
+
+        heroIndex++;
+
+    },
+
+    900
+);
+
+
+/* =========================================================
+   LINEAR VISUAL ANIMATION
+========================================================= */
+
+const linearCells =
+    document.querySelectorAll(
+        "#linearVisual .array-box"
+    );
+
+
+let linearIndex = 0;
+
+
+setInterval(
+    () => {
+
+        linearCells.forEach(
+            cell =>
+            cell.classList
+                .remove(
+                    "checking",
+                    "found",
+                    "not-found"
+                )
+        );
+
+
+        if(
+            linearIndex >=
+            linearCells.length
+        ){
+
+            linearIndex = 0;
+
+        }
+
+
+        linearCells[linearIndex]
+            .classList
+            .add("checking");
+
+
+        if(linearIndex === 2){
+
+            setTimeout(
+                () => {
+
+                    linearCells[2]
+                        .classList
+                        .remove(
+                            "checking"
+                        );
+
+                    linearCells[2]
+                        .classList
+                        .add("found");
+
+                },
+                450
+            );
+
+        }
+
+
+        linearIndex++;
+
+    },
+
+    800
+);
+
+
+/* =========================================================
+   INTERACTIVE LAB
+========================================================= */
+
+const labArray =
+    document.getElementById(
+        "labArray"
+    );
+
+const labMessage =
+    document.getElementById(
+        "labMessage"
+    );
+
+const labStatus =
+    document.getElementById(
+        "labStatus"
+    );
+
+
+const values =
+    [10,25,35,42,60];
+
+
+function renderLab(){
+
+    labArray.innerHTML = "";
+
+
+    values.forEach(
+        (value,index) => {
+
+            const cell =
+                document.createElement(
+                    "div"
+                );
+
+
+            cell.className =
+                "lab-cell";
+
+
+            cell.innerHTML = `
+
+                ${value}
+
+                <small>
+                    [${index}]
+                </small>
+
+            `;
+
+
+            labArray.appendChild(
+                cell
+            );
+
+        }
+    );
+
+}
+
+
+async function runSearch(
+    target
+){
+
+    renderLab();
+
+
+    const cells =
+        document.querySelectorAll(
+            "#labArray .lab-cell"
+        );
+
+
+    labStatus.textContent =
+        "SEARCHING";
+
+
+    labStatus.style.color =
+        "#fbbf24";
+
+
+    labMessage.textContent =
+        `Looking for ${target}...`;
+
+
+    let found = false;
+
+
+    for(
+        let i = 0;
+        i < values.length;
+        i++
+    ){
+
+        cells[i]
+            .classList
+            .add("check");
+
+
+        labMessage.textContent =
+            `Checking index ${i} → ${values[i]}`;
+
+
+        await new Promise(
+            resolve =>
+            setTimeout(
+                resolve,
+                500
+            )
+        );
+
+
+        if(
+            values[i] === target
+        ){
+
+            cells[i]
+                .classList
+                .remove("check");
+
+
+            cells[i]
+                .classList
+                .add("found");
+
+
+            labStatus.textContent =
+                "FOUND";
+
+
+            labStatus.style.color =
+                "#6ee7b7";
+
+
+            labMessage.innerHTML =
+                `Target <strong>${target}</strong>
+                 found at index
+                 <strong>${i}</strong>`;
+
+            found = true;
+
+            break;
+
+        }
+
+
+        cells[i]
+            .classList
+            .remove("check");
+
+    }
+
+
+    if(!found){
+
+        labStatus.textContent =
+            "NOT FOUND";
+
+
+        labStatus.style.color =
+            "#fda4af";
+
+
+        labMessage.innerHTML =
+            `Target <strong>${target}</strong>
+             does not exist in the array.`;
+
+    }
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+document
+    .getElementById("startSearch")
+    .addEventListener(
+        "click",
+        () =>
+        runSearch(42)
+    );
+
+
+document
+    .getElementById("search25")
+    .addEventListener(
+        "click",
+        () =>
+        runSearch(25)
+    );
+
+
+document
+    .getElementById("search99")
+    .addEventListener(
+        "click",
+        () =>
+        runSearch(99)
+    );
+
+
+document
+    .getElementById("resetSearch")
+    .addEventListener(
+        "click",
+        () => {
+
+            renderLab();
+
+
+            labStatus.textContent =
+                "READY";
+
+
+            labStatus.style.color =
+                "#6ee7b7";
+
+
+            labMessage.textContent =
+                "Waiting for search...";
+
+        }
+    );
+
+
+/* =========================================================
+   3D HOVER
+========================================================= */
+
+document
+    .querySelectorAll(
+        ".type-card,.real-card"
+    )
+    .forEach(
+        card => {
+
+            card.addEventListener(
+                "mousemove",
+                e => {
+
+                    const rect =
+                        card.getBoundingClientRect();
+
+
+                    const x =
+                        e.clientX -
+                        rect.left;
+
+
+                    const y =
+                        e.clientY -
+                        rect.top;
+
+
+                    const rotateX =
+                        (y -
+                            rect.height / 2)
+                        / 35;
+
+
+                    const rotateY =
+                        (x -
+                            rect.width / 2)
+                        / 35;
+
+
+                    card.style.transform =
+                        `perspective(700px)
+                         rotateX(${-rotateX}deg)
+                         rotateY(${rotateY}deg)
+                         translateY(-8px)`;
+
+                }
+            );
+
+
+            card.addEventListener(
+                "mouseleave",
+                () => {
+
+                    card.style.transform =
+                        "";
+
+                }
+            );
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
