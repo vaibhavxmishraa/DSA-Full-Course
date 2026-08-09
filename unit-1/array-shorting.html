@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Array Sorting | DSA Vault | Vaibhav</title>
+
+    <style>
+
+        /* =====================================================
+           GLOBAL VARIABLES
+        ===================================================== */
+
+        :root {
+            --bg: #f6f7fb;
+            --bg2: #ffffff;
+            --text: #171827;
+            --muted: #686b7c;
+
+            --primary: #6c4df6;
+            --primary2: #9b7cff;
+            --pink: #ff4f81;
+            --orange: #ff9f43;
+            --cyan: #00bfa6;
+            --yellow: #ffc857;
+            --green: #28c76f;
+
+            --card: rgba(255,255,255,0.78);
+            --border: rgba(0,0,0,0.08);
+
+            --shadow:
+                0 20px 60px rgba(38,32,80,0.12);
+
+            --code-bg: #17151f;
+            --code-text: #f5f5f5;
+        }
+
+        body.dark {
+
+            --bg: #090a12;
+            --bg2: #10111b;
+            --text: #f5f5ff;
+            --muted: #a9acc0;
+
+            --card: rgba(20,21,34,0.82);
+            --border: rgba(255,255,255,0.09);
+
+            --shadow:
+                0 25px 80px rgba(0,0,0,0.45);
+
+            --code-bg: #06070c;
+            --code-text: #eeeeee;
+        }
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(108,77,246,0.15),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 90% 20%,
+                    rgba(255,79,129,0.12),
+                    transparent 25%
+                ),
+
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(0,191,166,0.08),
+                    transparent 25%
+                ),
+
+                var(--bg);
+
+            color: var(--text);
+
+            line-height: 1.7;
+
+            transition:
+                background .4s ease,
+                color .4s ease;
+
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* =====================================================
+           BACKGROUND ORBS
+        ===================================================== */
+
+        .orb {
+
+            position: fixed;
+
+            width: 300px;
+            height: 300px;
+
+            border-radius: 50%;
+
+            filter: blur(90px);
+
+            opacity: .15;
+
+            pointer-events: none;
+
+            z-index: -1;
+
+            animation: floating 9s ease-in-out infinite;
+        }
+
+        .orb1 {
+            background: var(--primary);
+            left: -130px;
+            top: 15%;
+        }
+
+        .orb2 {
+            background: var(--pink);
+            right: -130px;
+            top: 50%;
+            animation-delay: 2s;
+        }
+
+        .orb3 {
+            background: var(--cyan);
+            left: 40%;
+            bottom: -150px;
+            animation-delay: 4s;
+        }
+
+        @keyframes floating {
+
+            0%,100% {
+                transform: translate(0,0);
+            }
+
+            50% {
+                transform: translate(0,-40px);
+            }
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            position: sticky;
+            top: 0;
+
+            z-index: 999;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 16px 6%;
+
+            background:
+                color-mix(
+                    in srgb,
+                    var(--bg) 80%,
+                    transparent
+                );
+
+            backdrop-filter: blur(20px);
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+        .logo {
+
+            font-size: 1.4rem;
+
+            font-weight: 900;
+
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+
+            border: 1px solid var(--border);
+
+            background: var(--card);
+
+            color: var(--text);
+
+            padding: 9px 15px;
+
+            border-radius: 50px;
+
+            cursor: pointer;
+
+            transition: .3s;
+
+            font-size: .9rem;
+        }
+
+        .nav-btn:hover {
+
+            transform: translateY(-3px);
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 10px 25px
+                rgba(108,77,246,.15);
+        }
+
+
+        /* =====================================================
+           PROGRESS BAR
+        ===================================================== */
+
+        .progress-container {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            height: 4px;
+
+            z-index: 2000;
+        }
+
+        .progress {
+
+            height: 100%;
+
+            width: 0%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary),
+                    var(--pink),
+                    var(--cyan)
+                );
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            min-height: 82vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            padding:
+                80px 6%;
+        }
+
+        .hero-content {
+            max-width: 1100px;
+        }
+
+        .badge {
+
+            display: inline-block;
+
+            padding:
+                8px 18px;
+
+            border-radius: 50px;
+
+            background:
+                rgba(108,77,246,.12);
+
+            color: var(--primary);
+
+            font-weight: 800;
+
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+
+            font-size:
+                clamp(
+                    3rem,
+                    8vw,
+                    7rem
+                );
+
+            line-height: .95;
+
+            letter-spacing: -5px;
+
+            background:
+                linear-gradient(
+                    110deg,
+                    var(--primary),
+                    var(--pink),
+                    var(--orange),
+                    var(--cyan)
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            margin-bottom: 28px;
+        }
+
+        .hero p {
+
+            max-width: 780px;
+
+            margin: auto;
+
+            color: var(--muted);
+
+            font-size: 1.1rem;
+        }
+
+
+        /* =====================================================
+           COMMON SECTION
+        ===================================================== */
+
+        section {
+
+            width:
+                min(1150px, 90%);
+
+            margin: auto;
+
+            padding: 70px 0;
+        }
+
+        .section-heading {
+
+            font-size:
+                clamp(
+                    2rem,
+                    5vw,
+                    3rem
+                );
+
+            margin-bottom: 10px;
+        }
+
+        .section-heading span {
+            color: var(--primary);
+        }
+
+        .section-subtitle {
+
+            color: var(--muted);
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            background: var(--card);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 26px;
+
+            padding: 30px;
+
+            box-shadow: var(--shadow);
+
+            backdrop-filter: blur(20px);
+
+            transition:
+                transform .35s ease,
+                box-shadow .35s ease;
+        }
+
+        .card:hover {
+
+            transform:
+                translateY(-8px)
+                rotateX(1deg);
+
+            box-shadow:
+                0 30px 80px
+                rgba(108,77,246,.15);
+        }
+
+
+        /* =====================================================
+           ARRAY VISUAL
+        ===================================================== */
+
+        .array-wrapper {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            margin: 30px 0;
+        }
+
+        .array-element {
+
+            width: 75px;
+            height: 75px;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            border-radius: 18px;
+
+            color: white;
+
+            font-size: 1.4rem;
+
+            font-weight: 900;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--pink)
+                );
+
+            box-shadow:
+                0 12px 30px
+                rgba(108,77,246,.22);
+
+            animation:
+                elementAppear .7s ease both;
+        }
+
+        .array-element:nth-child(2) {
+            animation-delay: .1s;
+        }
+
+        .array-element:nth-child(3) {
+            animation-delay: .2s;
+        }
+
+        .array-element:nth-child(4) {
+            animation-delay: .3s;
+        }
+
+        .array-element:nth-child(5) {
+            animation-delay: .4s;
+        }
+
+        .array-element:nth-child(6) {
+            animation-delay: .5s;
+        }
+
+        @keyframes elementAppear {
+
+            from {
+                opacity: 0;
+                transform:
+                    translateY(30px)
+                    scale(.7);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+
+        /* =====================================================
+           FLOW DIAGRAM
+        ===================================================== */
+
+        .flow {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin: 30px 0;
+        }
+
+        .flow-box {
+
+            padding:
+                17px 24px;
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(108,77,246,.12),
+                    rgba(255,79,129,.10)
+                );
+
+            border:
+                1px solid var(--border);
+
+            font-weight: 800;
+        }
+
+        .arrow {
+
+            color: var(--primary);
+
+            font-size: 2rem;
+
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           GRID
+        ===================================================== */
+
+        .grid-2 {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap: 25px;
+        }
+
+        .grid-3 {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 20px;
+        }
+
+
+        /* =====================================================
+           ALGORITHM CARDS
+        ===================================================== */
+
+        .algorithm-card {
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        .algorithm-number {
+
+            font-size: 3rem;
+
+            font-weight: 900;
+
+            color:
+                rgba(108,77,246,.13);
+
+            position: absolute;
+
+            right: 20px;
+
+            top: 10px;
+        }
+
+        .algorithm-card h3 {
+
+            color: var(--primary);
+
+            margin-bottom: 12px;
+        }
+
+        .algorithm-card ul {
+
+            padding-left: 20px;
+
+            color: var(--muted);
+        }
+
+
+        /* =====================================================
+           CODE
+        ===================================================== */
+
+        .code-title {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 10px;
+        }
+
+        pre {
+
+            background: var(--code-bg);
+
+            color: var(--code-text);
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            overflow-x: auto;
+
+            border:
+                1px solid var(--border);
+
+            box-shadow: var(--shadow);
+        }
+
+        code {
+
+            font-family:
+                Consolas,
+                "Courier New",
+                monospace;
+
+            font-size: .95rem;
+        }
+
+
+        /* =====================================================
+           TABLE
+        ===================================================== */
+
+        .table-wrapper {
+
+            overflow-x: auto;
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse:
+                collapse;
+
+            min-width: 650px;
+        }
+
+        th,
+        td {
+
+            padding: 16px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            text-align: left;
+        }
+
+        th {
+
+            color: var(--primary);
+
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           INFO LIST
+        ===================================================== */
+
+        .info-list {
+
+            display: grid;
+
+            gap: 15px;
+
+            margin-top: 20px;
+        }
+
+        .info-item {
+
+            padding: 17px 20px;
+
+            border-radius: 16px;
+
+            background:
+                rgba(108,77,246,.07);
+
+            border-left:
+                4px solid var(--primary);
+        }
+
+
+        /* =====================================================
+           REAL WORLD
+        ===================================================== */
+
+        .world-card {
+
+            text-align: center;
+        }
+
+        .world-icon {
+
+            font-size: 3rem;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* =====================================================
+           QUIZ
+        ===================================================== */
+
+        .option {
+
+            display: block;
+
+            padding: 15px 18px;
+
+            margin: 10px 0;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 14px;
+
+            cursor: pointer;
+
+            transition: .3s;
+        }
+
+        .option:hover {
+
+            border-color:
+                var(--primary);
+
+            transform:
+                translateX(6px);
+        }
+
+        .quiz-button {
+
+            border: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--pink)
+                );
+
+            color: white;
+
+            padding:
+                12px 24px;
+
+            border-radius: 50px;
+
+            cursor: pointer;
+
+            font-weight: 800;
+
+            margin-top: 15px;
+        }
+
+        #quizResult {
+
+            margin-top: 20px;
+
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .topic-navigation {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr auto 1fr;
+
+            gap: 15px;
+
+            align-items: center;
+
+            margin-top: 40px;
+        }
+
+        .topic-nav {
+
+            padding: 20px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 20px;
+
+            background: var(--card);
+
+            transition: .3s;
+        }
+
+        .topic-nav:hover {
+
+            transform:
+                translateY(-5px);
+
+            border-color:
+                var(--primary);
+        }
+
+        .topic-nav.next {
+            text-align: right;
+        }
+
+        .unit-home {
+
+            text-align: center;
+
+            padding: 15px 25px;
+
+            border-radius: 50px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--pink)
+                );
+
+            color: white;
+
+            font-weight: 900;
+        }
+
+        .nav-label {
+
+            font-size: .8rem;
+
+            color: var(--muted);
+
+            display: block;
+        }
+
+        .nav-topic {
+
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            margin-top: 50px;
+
+            padding: 60px 20px;
+
+            text-align: center;
+
+            border-top:
+                1px solid var(--border);
+        }
+
+        .developer {
+
+            font-size: 1.5rem;
+
+            font-weight: 900;
+        }
+
+        .developer span {
+            color: var(--primary);
+        }
+
+        .social-links {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            margin-top: 20px;
+        }
+
+        .social-links a {
+
+            padding:
+                10px 20px;
+
+            border-radius: 50px;
+
+            border:
+                1px solid var(--border);
+
+            background: var(--card);
+
+            transition: .3s;
+        }
+
+        .social-links a:hover {
+
+            background:
+                var(--primary);
+
+            color: white;
+
+            transform:
+                translateY(-4px);
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:850px) {
+
+            .grid-2,
+            .grid-3 {
+
+                grid-template-columns: 1fr;
+            }
+
+            .topic-navigation {
+
+                grid-template-columns: 1fr;
+
+                text-align: center;
+            }
+
+            .topic-nav.next {
+
+                text-align: center;
+            }
+
+            .hero h1 {
+
+                letter-spacing: -2px;
+            }
+
+            .navbar {
+
+                align-items: flex-start;
+
+                gap: 15px;
+
+                flex-direction: column;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- Decorative Background -->
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+
+
+    <!-- Reading Progress -->
+    <div class="progress-container">
+        <div class="progress" id="progressBar"></div>
+    </div>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            DSA<span>Vault</span>
+        </a>
+
+        <div class="nav-actions">
+
+            <a href="index.html" class="nav-btn">
+                🏠 Home
+            </a>
+
+            <a href="unit-1.html" class="nav-btn">
+                📚 Unit 1
+            </a>
+
+            <button
+                class="nav-btn"
+                id="themeToggle">
+                🌙
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <header class="hero">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                UNIT 1 • ARRAY • TOPIC 07
+            </div>
+
+            <h1>
+                Array Sorting
+            </h1>
+
+            <p>
+                Learn how arrays are arranged in ascending
+                or descending order using important sorting
+                techniques required for DSA and AKTU examinations.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         INTRODUCTION
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            What is <span>Sorting?</span>
+        </h2>
+
+        <p class="section-subtitle">
+            Sorting is one of the fundamental operations in Data Structures.
+        </p>
+
+        <div class="card">
+
+            <p>
+                Sorting means arranging elements of a collection
+                in a particular order.
+            </p>
+
+            <br>
+
+            <p>
+                Usually elements are arranged in:
+            </p>
+
+            <div class="info-list">
+
+                <div class="info-item">
+                    ⬆️ <strong>Ascending Order:</strong>
+                    Smallest → Largest
+                </div>
+
+                <div class="info-item">
+                    ⬇️ <strong>Descending Order:</strong>
+                    Largest → Smallest
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DIAGRAM
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Sorting <span>Visualization</span>
+        </h2>
+
+        <div class="card">
+
+            <h3>Before Sorting</h3>
+
+            <div class="array-wrapper">
+
+                <div class="array-element">40</div>
+                <div class="array-element">10</div>
+                <div class="array-element">50</div>
+                <div class="array-element">20</div>
+                <div class="array-element">30</div>
+
+            </div>
+
+
+            <div class="flow">
+
+                <div class="flow-box">
+                    Compare
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+                <div class="flow-box">
+                    Swap
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+                <div class="flow-box">
+                    Repeat
+                </div>
+
+            </div>
+
+
+            <h3>After Sorting</h3>
+
+            <div class="array-wrapper">
+
+                <div class="array-element">10</div>
+                <div class="array-element">20</div>
+                <div class="array-element">30</div>
+                <div class="array-element">40</div>
+                <div class="array-element">50</div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         IMPORTANT ALGORITHMS
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Important Sorting <span>Algorithms</span>
+        </h2>
+
+        <p class="section-subtitle">
+            AKTU preparation ke liye in sorting algorithms ko
+            conceptually samajhna important hai.
+        </p>
+
+        <div class="grid-2">
+
+
+            <div class="card algorithm-card">
+
+                <div class="algorithm-number">
+                    01
+                </div>
+
+                <h3>
+                    Bubble Sort
+                </h3>
+
+                <p>
+                    Adjacent elements ko compare karke
+                    incorrect order mein hone par swap karta hai.
+                </p>
+
+                <br>
+
+                <ul>
+                    <li>Easy to understand</li>
+                    <li>Repeated adjacent comparison</li>
+                    <li>Simple implementation</li>
+                </ul>
+
+            </div>
+
+
+            <div class="card algorithm-card">
+
+                <div class="algorithm-number">
+                    02
+                </div>
+
+                <h3>
+                    Selection Sort
+                </h3>
+
+                <p>
+                    Har pass mein minimum element find karke
+                    usko correct position par place karta hai.
+                </p>
+
+                <br>
+
+                <ul>
+                    <li>Minimum element select karta hai</li>
+                    <li>Number of swaps relatively low</li>
+                </ul>
+
+            </div>
+
+
+            <div class="card algorithm-card">
+
+                <div class="algorithm-number">
+                    03
+                </div>
+
+                <h3>
+                    Insertion Sort
+                </h3>
+
+                <p>
+                    Element ko sorted portion mein
+                    appropriate position par insert karta hai.
+                </p>
+
+                <br>
+
+                <ul>
+                    <li>Nearly sorted data ke liye useful</li>
+                    <li>Small datasets ke liye useful</li>
+                </ul>
+
+            </div>
+
+
+            <div class="card algorithm-card">
+
+                <div class="algorithm-number">
+                    04
+                </div>
+
+                <h3>
+                    Merge Sort
+                </h3>
+
+                <p>
+                    Array ko repeatedly divide karke
+                    sorted arrays ko merge karta hai.
+                </p>
+
+                <br>
+
+                <ul>
+                    <li>Divide and Conquer</li>
+                    <li>O(n log n) complexity</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BUBBLE SORT WORKING
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Bubble Sort <span>Working</span>
+        </h2>
+
+        <div class="card">
+
+            <p>
+                Example:
+            </p>
+
+            <div class="array-wrapper">
+
+                <div class="array-element">5</div>
+                <div class="array-element">3</div>
+                <div class="array-element">8</div>
+                <div class="array-element">1</div>
+
+            </div>
+
+
+            <div class="flow">
+
+                <div class="flow-box">
+                    5 &gt; 3
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+                <div class="flow-box">
+                    Swap
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+                <div class="flow-box">
+                    3 5
+                </div>
+
+            </div>
+
+
+            <p>
+                Comparison aur swapping continue karne par
+                largest element har pass ke end mein apni
+                correct position par pahunchta hai.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PSEUDOCODE
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Bubble Sort <span>Pseudocode</span>
+        </h2>
+
+        <div class="card">
+
+<pre><code>BubbleSort(A, n)
+
+for i = 0 to n-2
+
+    for j = 0 to n-i-2
+
+        if A[j] > A[j+1]
+
+            swap(A[j], A[j+1])
+
+        end if
+
+    end for
+
+end for</code></pre>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         C++ CODE
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Bubble Sort <span>C++ Code</span>
+        </h2>
+
+        <div class="card">
+
+            <div class="code-title">
+                <strong>
+                    C++ Implementation
+                </strong>
+
+                <span>
+                    💻 DSA
+                </span>
+            </div>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+
+    int arr[] = {5, 3, 8, 1, 2};
+
+    int n = 5;
+
+    for(int i = 0; i &lt; n - 1; i++) {
+
+        for(int j = 0; j &lt; n - i - 1; j++) {
+
+            if(arr[j] &gt; arr[j + 1]) {
+
+                int temp = arr[j];
+
+                arr[j] = arr[j + 1];
+
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    cout &lt;&lt; "Sorted Array: ";
+
+    for(int i = 0; i &lt; n; i++) {
+
+        cout &lt;&lt; arr[i] &lt;&lt; " ";
+    }
+
+    return 0;
+}</code></pre>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DRY RUN
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Bubble Sort <span>Dry Run</span>
+        </h2>
+
+        <div class="card">
+
+            <p>
+                Array:
+            </p>
+
+            <div class="array-wrapper">
+
+                <div class="array-element">5</div>
+                <div class="array-element">3</div>
+                <div class="array-element">1</div>
+
+            </div>
+
+            <div class="info-list">
+
+                <div class="info-item">
+                    <strong>Pass 1:</strong>
+                    5 and 3 compare → swap
+                </div>
+
+                <div class="info-item">
+                    <strong>Pass 1:</strong>
+                    5 and 1 compare → swap
+                </div>
+
+                <div class="info-item">
+                    <strong>Pass 2:</strong>
+                    3 and 1 compare → swap
+                </div>
+
+                <div class="info-item">
+                    <strong>Result:</strong>
+                    1 3 5
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COMPLEXITY
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Time & Space <span>Complexity</span>
+        </h2>
+
+        <div class="card">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Best</th>
+                            <th>Average</th>
+                            <th>Worst</th>
+                            <th>Space</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Bubble Sort</td>
+                            <td>O(n)</td>
+                            <td>O(n²)</td>
+                            <td>O(n²)</td>
+                            <td>O(1)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Selection Sort</td>
+                            <td>O(n²)</td>
+                            <td>O(n²)</td>
+                            <td>O(n²)</td>
+                            <td>O(1)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Insertion Sort</td>
+                            <td>O(n)</td>
+                            <td>O(n²)</td>
+                            <td>O(n²)</td>
+                            <td>O(1)</td>
+                        </tr>
+
+                        <tr>
+                            <td>Merge Sort</td>
+                            <td>O(n log n)</td>
+                            <td>O(n log n)</td>
+                            <td>O(n log n)</td>
+                            <td>O(n)</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COMPARISON
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Sorting Algorithms <span>Comparison</span>
+        </h2>
+
+        <div class="card">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <tr>
+                        <th>Feature</th>
+                        <th>Bubble</th>
+                        <th>Selection</th>
+                        <th>Insertion</th>
+                        <th>Merge</th>
+                    </tr>
+
+                    <tr>
+                        <td>Easy</td>
+                        <td>⭐⭐⭐⭐⭐</td>
+                        <td>⭐⭐⭐⭐</td>
+                        <td>⭐⭐⭐⭐</td>
+                        <td>⭐⭐⭐</td>
+                    </tr>
+
+                    <tr>
+                        <td>Best Case</td>
+                        <td>O(n)</td>
+                        <td>O(n²)</td>
+                        <td>O(n)</td>
+                        <td>O(n log n)</td>
+                    </tr>
+
+                    <tr>
+                        <td>Worst Case</td>
+                        <td>O(n²)</td>
+                        <td>O(n²)</td>
+                        <td>O(n²)</td>
+                        <td>O(n log n)</td>
+                    </tr>
+
+                    <tr>
+                        <td>Approach</td>
+                        <td>Comparison</td>
+                        <td>Selection</td>
+                        <td>Insertion</td>
+                        <td>Divide & Conquer</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         REAL WORLD
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Real World <span>Examples</span>
+        </h2>
+
+        <div class="grid-3">
+
+            <div class="card world-card">
+
+                <div class="world-icon">
+                    🏆
+                </div>
+
+                <h3>
+                    Leaderboard
+                </h3>
+
+                <p>
+                    Players ko scores ke basis par
+                    arrange karna.
+                </p>
+
+            </div>
+
+
+            <div class="card world-card">
+
+                <div class="world-icon">
+                    🛒
+                </div>
+
+                <h3>
+                    E-Commerce
+                </h3>
+
+                <p>
+                    Products ko price,
+                    rating ya popularity ke basis par arrange karna.
+                </p>
+
+            </div>
+
+
+            <div class="card world-card">
+
+                <div class="world-icon">
+                    🎓
+                </div>
+
+                <h3>
+                    Student Marks
+                </h3>
+
+                <p>
+                    Students ko marks ke according
+                    rank karna.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ADVANTAGES
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            Advantages & <span>Disadvantages</span>
+        </h2>
+
+        <div class="grid-2">
+
+            <div class="card">
+
+                <h3>✅ Advantages</h3>
+
+                <div class="info-list">
+
+                    <div class="info-item">
+                        Easy to understand
+                    </div>
+
+                    <div class="info-item">
+                        Easy to implement
+                    </div>
+
+                    <div class="info-item">
+                        Useful for learning sorting concepts
+                    </div>
+
+                    <div class="info-item">
+                        Some algorithms work well for nearly
+                        sorted data
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>❌ Disadvantages</h3>
+
+                <div class="info-list">
+
+                    <div class="info-item">
+                        Simple sorting algorithms can be slow
+                        for large datasets
+                    </div>
+
+                    <div class="info-item">
+                        O(n²) algorithms are inefficient for
+                        large inputs
+                    </div>
+
+                    <div class="info-item">
+                        Better algorithms exist for large datasets
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         AKTU EXAM
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            AKTU <span>Exam Zone</span>
+        </h2>
+
+        <div class="card">
+
+            <div class="info-list">
+
+                <div class="info-item">
+                    ⭐ Define sorting and explain its types.
+                </div>
+
+                <div class="info-item">
+                    ⭐ Explain Bubble Sort with algorithm.
+                </div>
+
+                <div class="info-item">
+                    ⭐ Write a C/C++ program for Bubble Sort.
+                </div>
+
+                <div class="info-item">
+                    ⭐ Explain Selection Sort.
+                </div>
+
+                <div class="info-item">
+                    ⭐ Explain Insertion Sort with example.
+                </div>
+
+                <div class="info-item">
+                    ⭐ Compare Bubble, Selection and Insertion Sort.
+                </div>
+
+                <div class="info-item">
+                    ⭐ Write time and space complexity of sorting algorithms.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUICK REVISION
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            ⚡ Quick <span>Revision</span>
+        </h2>
+
+        <div class="card">
+
+            <div class="info-list">
+
+                <div class="info-item">
+                    Sorting = elements ko particular order mein arrange karna.
+                </div>
+
+                <div class="info-item">
+                    Ascending = Small → Large.
+                </div>
+
+                <div class="info-item">
+                    Descending = Large → Small.
+                </div>
+
+                <div class="info-item">
+                    Bubble Sort = Adjacent comparison + swapping.
+                </div>
+
+                <div class="info-item">
+                    Selection Sort = Minimum/maximum select karna.
+                </div>
+
+                <div class="info-item">
+                    Insertion Sort = Element ko sorted portion mein insert karna.
+                </div>
+
+                <div class="info-item">
+                    Merge Sort = Divide and Conquer.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+    <section>
+
+        <h2 class="section-heading">
+            🧠 Test Your <span>Knowledge</span>
+        </h2>
+
+        <div class="card">
+
+            <h3>
+                Q1. Which sorting algorithm compares adjacent elements?
+            </h3>
+
+            <label class="option">
+                <input
+                    type="radio"
+                    name="q1"
+                    value="wrong">
+                Selection Sort
+            </label>
+
+            <label class="option">
+                <input
+                    type="radio"
+                    name="q1"
+                    value="correct">
+                Bubble Sort
+            </label>
+
+            <label class="option">
+                <input
+                    type="radio"
+                    name="q1"
+                    value="wrong">
+                Merge Sort
+            </label>
+
+            <label class="option">
+                <input
+                    type="radio"
+                    name="q1"
+                    value="wrong">
+                Binary Search
+            </label>
+
+
+            <h3 style="margin-top:30px;">
+                Q2. Average complexity of Bubble Sort is?
+            </h3>
+
+            <label class="option">
+                <input
+                    type="radio"
+                    name="q2"
+                    value="wrong">
+                O(n)
+            </label>
+
+            <label class="option">
+                <input
+                    type="radio"
+                    name="q2"
+                    value="correct">
+                O(n²)
+            </label>
+
+            <label class="option">
+                <input
+                    type="radio"
+                    name="q2"
+                    value="wrong">
+                O(log n)
+            </label>
+
+            <label class="option">
+                <input
+                    type="radio"
+                    name="q2"
+                    value="wrong">
+                O(n log n)
+            </label>
+
+
+            <button
+                class="quiz-button"
+                onclick="checkQuiz()">
+                Check Answers
+            </button>
+
+            <div id="quizResult"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TOPIC NAVIGATION
+    ====================================================== -->
+
+    <section>
+
+        <div class="topic-navigation">
+
+            <!-- Previous -->
+
+            <a
+                href="array-searching.html"
+                class="topic-nav">
+
+                <span class="nav-label">
+                    ← PREVIOUS TOPIC
+                </span>
+
+                <span class="nav-topic">
+                    Array Searching
+                </span>
+
+            </a>
+
+
+            <!-- Home -->
+
+            <a
+                href="unit-1.html"
+                class="unit-home">
+
+                🏠 Unit 1
+
+            </a>
+
+
+            <!-- Next -->
+
+            <a
+                href="two-dimensional-array.html"
+                class="topic-nav next">
+
+                <span class="nav-label">
+                    NEXT TOPIC →
+                </span>
+
+                <span class="nav-topic">
+                    2D Array
+                </span>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <div class="developer">
+            Web Developer <span>Vaibhav</span>
+        </div>
+
+        <p>
+            DSA Vault • AKTU Data Structures & Algorithms
+        </p>
+
+        <div class="social-links">
+
+            <!-- Replace # with your actual links -->
+
+            <a
+                href="#"
+                target="_blank">
+                GitHub
+            </a>
+
+            <a
+                href="#"
+                target="_blank">
+                LinkedIn
+            </a>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        /* =================================================
+           DARK / LIGHT MODE
+        ================================================= */
+
+        const themeToggle =
+            document.getElementById("themeToggle");
+
+        const savedTheme =
+            localStorage.getItem("dsa-theme");
+
+
+        if(savedTheme === "dark") {
+
+            document.body.classList.add("dark");
+
+            themeToggle.textContent = "☀️";
+
+        }
+
+
+        themeToggle.addEventListener(
+            "click",
+            function() {
+
+                document.body.classList.toggle("dark");
+
+                const isDark =
+                    document.body.classList.contains("dark");
+
+
+                localStorage.setItem(
+                    "dsa-theme",
+                    isDark
+                        ? "dark"
+                        : "light"
+                );
+
+
+                themeToggle.textContent =
+                    isDark
+                        ? "☀️"
+                        : "🌙";
+
+            }
+        );
+
+
+        /* =================================================
+           READING PROGRESS
+        ================================================= */
+
+        window.addEventListener(
+            "scroll",
+            function() {
+
+                const scrollTop =
+                    document.documentElement.scrollTop;
+
+                const scrollHeight =
+                    document.documentElement.scrollHeight -
+                    document.documentElement.clientHeight;
+
+                const percentage =
+                    (scrollTop / scrollHeight) * 100;
+
+                document.getElementById(
+                    "progressBar"
+                ).style.width =
+                    percentage + "%";
+
+            }
+        );
+
+
+        /* =================================================
+           QUIZ
+        ================================================= */
+
+        function checkQuiz() {
+
+            const q1 =
+                document.querySelector(
+                    'input[name="q1"]:checked'
+                );
+
+            const q2 =
+                document.querySelector(
+                    'input[name="q2"]:checked'
+                );
+
+            const result =
+                document.getElementById(
+                    "quizResult"
+                );
+
+
+            if(!q1 || !q2) {
+
+                result.innerHTML =
+                    "⚠️ Please answer both questions.";
+
+                return;
+            }
+
+
+            let score = 0;
+
+
+            if(q1.value === "correct") {
+                score++;
+            }
+
+            if(q2.value === "correct") {
+                score++;
+            }
+
+
+            if(score === 2) {
+
+                result.innerHTML =
+                    "🎉 Excellent! 2/2 Correct.";
+
+            }
+
+            else if(score === 1) {
+
+                result.innerHTML =
+                    "👍 Good! 1/2 Correct. Revise once.";
+
+            }
+
+            else {
+
+                result.innerHTML =
+                    "📚 0/2. Don't worry — revise the topic and try again.";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>
