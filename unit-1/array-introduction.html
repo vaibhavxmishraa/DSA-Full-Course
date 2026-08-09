@@ -1,0 +1,3248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Array Introduction | DSA Master</title>
+<link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+
+<style>
+
+:root{
+    --bg:#080914;
+    --bg2:#111329;
+    --card:rgba(255,255,255,.055);
+    --text:#f7f8ff;
+    --muted:#a7aec8;
+
+    --purple:#8b5cf6;
+    --violet:#a855f7;
+    --blue:#3b82f6;
+    --cyan:#22d3ee;
+    --pink:#ec4899;
+    --orange:#f59e0b;
+    --green:#34d399;
+    --red:#fb7185;
+
+    --border:rgba(255,255,255,.10);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:
+        radial-gradient(circle at 10% 10%,rgba(139,92,246,.16),transparent 28%),
+        radial-gradient(circle at 90% 35%,rgba(34,211,238,.10),transparent 30%),
+        radial-gradient(circle at 50% 100%,rgba(236,72,153,.08),transparent 25%),
+        var(--bg);
+
+    color:var(--text);
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height:1.6;
+    overflow-x:hidden;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+/* BACKGROUND */
+
+.background{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    overflow:hidden;
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(110px);
+    opacity:.16;
+    animation:float 12s ease-in-out infinite;
+}
+
+.orb1{
+    width:390px;
+    height:390px;
+    background:var(--purple);
+    left:-180px;
+    top:5%;
+}
+
+.orb2{
+    width:330px;
+    height:330px;
+    background:var(--cyan);
+    right:-150px;
+    top:45%;
+    animation-delay:-4s;
+}
+
+.orb3{
+    width:320px;
+    height:320px;
+    background:var(--pink);
+    bottom:-160px;
+    left:40%;
+    animation-delay:-7s;
+}
+
+@keyframes float{
+
+    0%,100%{
+        transform:translate(0,0) scale(1);
+    }
+
+    50%{
+        transform:translate(30px,-40px) scale(1.1);
+    }
+
+}
+
+/* NAVBAR */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    background:rgba(8,9,20,.78);
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid var(--border);
+}
+
+nav{
+    width:min(1200px,92%);
+    min-height:72px;
+    margin:auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    font-weight:900;
+}
+
+.logo{
+    width:43px;
+    height:43px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            120deg,
+            var(--purple),
+            var(--blue),
+            var(--cyan)
+        );
+
+    box-shadow:
+        0 0 30px rgba(139,92,246,.35);
+}
+
+.brand span{
+    color:var(--cyan);
+}
+
+.nav-links{
+    display:flex;
+    gap:9px;
+}
+
+.nav-btn{
+    padding:9px 15px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.045);
+
+    border:1px solid var(--border);
+
+    color:var(--muted);
+
+    font-size:.78rem;
+
+    transition:.3s;
+}
+
+.nav-btn:hover{
+    color:white;
+
+    transform:translateY(-2px);
+
+    border-color:rgba(139,92,246,.5);
+}
+
+/* COMMON */
+
+.container{
+    width:min(1150px,92%);
+    margin:auto;
+}
+
+.section{
+    padding:90px 0;
+}
+
+.eyebrow{
+    color:var(--cyan);
+
+    font-size:.7rem;
+
+    font-weight:900;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+}
+
+.section-title{
+    font-size:clamp(2rem,4vw,3.3rem);
+
+    line-height:1.1;
+
+    letter-spacing:-2px;
+
+    margin:10px 0 15px;
+}
+
+.gradient-text{
+    background:
+        linear-gradient(
+            100deg,
+            white,
+            #a78bfa,
+            #22d3ee,
+            #ec4899
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+}
+
+.muted{
+    color:var(--muted);
+}
+
+/* HERO */
+
+.hero{
+    min-height:680px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:65px;
+
+    align-items:center;
+
+    padding:80px 0 70px;
+}
+
+.hero-content{
+    animation:heroIn .9s ease forwards;
+}
+
+@keyframes heroIn{
+
+    from{
+        opacity:0;
+        transform:translateY(35px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+.topic-badge{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:rgba(139,92,246,.10);
+
+    border:1px solid rgba(139,92,246,.30);
+
+    color:#ddd6fe;
+
+    font-size:.73rem;
+
+    margin-bottom:24px;
+}
+
+.dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--cyan);
+
+    box-shadow:0 0 15px var(--cyan);
+}
+
+.hero h1{
+    font-size:clamp(3rem,6vw,5.5rem);
+
+    line-height:.92;
+
+    letter-spacing:-6px;
+
+    margin-bottom:27px;
+}
+
+.hero-description{
+    max-width:650px;
+
+    color:var(--muted);
+
+    font-size:1.02rem;
+
+    line-height:1.85;
+
+    margin-bottom:26px;
+}
+
+.hero-meta{
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:9px;
+}
+
+.meta{
+    padding:8px 12px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.045);
+
+    border:1px solid var(--border);
+
+    color:#cbd3ef;
+
+    font-size:.73rem;
+}
+
+/* ARRAY VISUAL */
+
+.visual{
+    min-height:500px;
+
+    display:grid;
+
+    place-items:center;
+}
+
+.array-card{
+
+    width:min(520px,100%);
+
+    padding:30px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.09),
+            rgba(255,255,255,.025)
+        );
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 35px 90px rgba(0,0,0,.4);
+
+    animation:cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat{
+
+    0%,100%{
+        transform:translateY(0) rotateY(-2deg);
+    }
+
+    50%{
+        transform:translateY(-13px) rotateY(2deg);
+    }
+
+}
+
+.card-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+}
+
+.card-top strong{
+    font-size:.85rem;
+}
+
+.memory-status{
+    color:var(--green);
+
+    font-size:.68rem;
+}
+
+.array-wrapper{
+    overflow-x:auto;
+
+    padding:15px 0 25px;
+}
+
+.array{
+    min-width:470px;
+
+    display:flex;
+
+    gap:7px;
+
+    justify-content:center;
+}
+
+.cell{
+    position:relative;
+
+    width:58px;
+    height:72px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139,92,246,.20),
+            rgba(34,211,238,.08)
+        );
+
+    border:1px solid rgba(139,92,246,.35);
+
+    font-size:1.25rem;
+
+    font-weight:900;
+
+    transition:.35s;
+
+    animation:cellPulse 3s ease-in-out infinite;
+}
+
+.cell:nth-child(2){
+    animation-delay:.2s;
+}
+
+.cell:nth-child(3){
+    animation-delay:.4s;
+}
+
+.cell:nth-child(4){
+    animation-delay:.6s;
+}
+
+.cell:nth-child(5){
+    animation-delay:.8s;
+}
+
+.cell:nth-child(6){
+    animation-delay:1s;
+}
+
+.cell:hover{
+    transform:
+        translateY(-12px)
+        scale(1.08);
+
+    border-color:var(--cyan);
+
+    box-shadow:
+        0 15px 30px rgba(34,211,238,.16);
+}
+
+@keyframes cellPulse{
+
+    0%,100%{
+        box-shadow:0 0 0 rgba(139,92,246,0);
+    }
+
+    50%{
+        box-shadow:
+            0 0 25px rgba(139,92,246,.10);
+    }
+
+}
+
+.index{
+    position:absolute;
+
+    bottom:-28px;
+
+    font-size:.62rem;
+
+    color:var(--cyan);
+
+    font-weight:700;
+}
+
+.address{
+    position:absolute;
+
+    top:-27px;
+
+    font-size:.55rem;
+
+    color:var(--muted);
+
+    white-space:nowrap;
+}
+
+.memory-line{
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:28px;
+
+    color:var(--muted);
+
+    font-size:.65rem;
+}
+
+/* CONTENT */
+
+.content-card{
+
+    margin-top:30px;
+
+    padding:32px;
+
+    border-radius:25px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    backdrop-filter:blur(15px);
+}
+
+.content-card h3{
+    font-size:1.4rem;
+
+    margin-bottom:12px;
+}
+
+.content-card p{
+    color:var(--muted);
+
+    line-height:1.9;
+
+    margin-bottom:14px;
+}
+
+.highlight{
+    color:#ddd6fe;
+
+    font-weight:800;
+}
+
+/* FEATURE GRID */
+
+.feature-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:17px;
+
+    margin-top:30px;
+}
+
+.feature-card{
+
+    padding:28px;
+
+    border-radius:23px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.feature-card:hover{
+
+    transform:
+        translateY(-9px)
+        rotateX(2deg);
+
+    border-color:
+        rgba(139,92,246,.45);
+}
+
+.feature-icon{
+    width:48px;
+    height:48px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:14px;
+
+    background:
+        rgba(139,92,246,.12);
+
+    font-size:1.4rem;
+
+    margin-bottom:16px;
+}
+
+.feature-card:nth-child(2)
+.feature-icon{
+    background:rgba(34,211,238,.10);
+}
+
+.feature-card:nth-child(3)
+.feature-icon{
+    background:rgba(52,211,153,.10);
+}
+
+.feature-card h3{
+    margin-bottom:8px;
+}
+
+.feature-card p{
+    color:var(--muted);
+
+    font-size:.78rem;
+
+    line-height:1.75;
+}
+
+/* MEMORY DIAGRAM */
+
+.memory-diagram{
+
+    margin-top:30px;
+
+    padding:35px;
+
+    border-radius:28px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:1px solid var(--border);
+
+    overflow-x:auto;
+}
+
+.diagram-title{
+
+    text-align:center;
+
+    color:#dbe4ff;
+
+    font-weight:800;
+
+    margin-bottom:35px;
+}
+
+.memory-content{
+
+    min-width:760px;
+}
+
+.address-row,
+.index-row,
+.value-row{
+
+    display:flex;
+
+    justify-content:center;
+}
+
+.address-box,
+.index-box,
+.value-box{
+
+    width:105px;
+
+    min-height:58px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-right:1px solid var(--border);
+
+    font-size:.72rem;
+
+}
+
+.address-box{
+
+    color:var(--muted);
+
+    background:rgba(255,255,255,.025);
+
+}
+
+.index-box{
+
+    color:var(--cyan);
+
+    background:rgba(34,211,238,.05);
+
+}
+
+.value-box{
+
+    min-height:78px;
+
+    font-size:1.1rem;
+
+    font-weight:900;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139,92,246,.13),
+            rgba(236,72,153,.07)
+        );
+
+    border-top:1px solid rgba(139,92,246,.3);
+
+    border-bottom:1px solid rgba(139,92,246,.3);
+
+}
+
+.row-label{
+
+    width:100px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    padding-right:14px;
+
+    color:var(--muted);
+
+    font-size:.65rem;
+
+}
+
+.memory-row{
+
+    display:flex;
+
+    justify-content:center;
+}
+
+/* FORMULA */
+
+.formula{
+
+    margin-top:25px;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    background:#050611;
+
+    border:1px solid var(--border);
+
+    text-align:center;
+
+    font-family:Georgia,serif;
+
+    font-size:1.3rem;
+
+    color:#e9e7ff;
+
+    overflow-x:auto;
+}
+
+.formula small{
+
+    display:block;
+
+    margin-top:10px;
+
+    color:var(--muted);
+
+    font-family:Inter,sans-serif;
+
+    font-size:.68rem;
+}
+
+/* ADDRESS CALC */
+
+.calc-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+    margin-top:30px;
+}
+
+.calc-card{
+
+    padding:28px;
+
+    border-radius:23px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+}
+
+.calc-card h3{
+
+    margin-bottom:12px;
+}
+
+.calc-card p{
+
+    color:var(--muted);
+
+    font-size:.8rem;
+
+    line-height:1.8;
+}
+
+.address-formula{
+
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    background:#050611;
+
+    border:1px solid var(--border);
+
+    color:#ddd6fe;
+
+    font-family:Georgia,serif;
+
+    text-align:center;
+
+}
+
+/* CODE */
+
+.example{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+    margin-top:30px;
+}
+
+.code-card{
+
+    overflow:hidden;
+
+    border-radius:22px;
+
+    background:#050611;
+
+    border:1px solid var(--border);
+}
+
+.code-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:13px 17px;
+
+    border-bottom:1px solid var(--border);
+
+    color:var(--muted);
+
+    font-size:.73rem;
+}
+
+.circle{
+
+    width:9px;
+
+    height:9px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.25);
+}
+
+pre{
+
+    padding:25px;
+
+    overflow-x:auto;
+
+    color:#dce3ff;
+
+    font-family:Consolas,monospace;
+
+    font-size:.8rem;
+
+    line-height:1.85;
+}
+
+.keyword{
+    color:#c084fc;
+}
+
+.number{
+    color:#fbbf24;
+}
+
+.type{
+    color:#67e8f9;
+}
+
+.comment{
+    color:#64748b;
+}
+
+.explain{
+
+    padding:28px;
+
+    border-radius:22px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+}
+
+.explain h3{
+
+    margin-bottom:12px;
+}
+
+.explain p{
+
+    color:var(--muted);
+
+    font-size:.82rem;
+
+    line-height:1.8;
+
+    margin-bottom:12px;
+}
+
+.result{
+
+    margin-top:18px;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    background:rgba(52,211,153,.08);
+
+    border:1px solid rgba(52,211,153,.2);
+
+    color:#6ee7b7;
+
+    font-size:.75rem;
+}
+
+/* OPERATIONS */
+
+.operation-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-top:30px;
+}
+
+.operation{
+
+    padding:23px;
+
+    border-radius:20px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    transition:.35s;
+}
+
+.operation:hover{
+
+    transform:translateY(-7px);
+
+}
+
+.operation strong{
+
+    display:block;
+
+    font-size:1.35rem;
+
+    color:var(--cyan);
+
+    margin-bottom:7px;
+}
+
+.operation span{
+
+    color:var(--muted);
+
+    font-size:.7rem;
+}
+
+/* REAL WORLD */
+
+.real-world{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:17px;
+
+    margin-top:30px;
+}
+
+.world-card{
+
+    padding:25px;
+
+    border-radius:21px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    transition:.35s;
+}
+
+.world-card:hover{
+
+    transform:translateY(-8px);
+
+    border-color:
+        rgba(34,211,238,.35);
+}
+
+.world-icon{
+
+    font-size:2rem;
+
+    margin-bottom:12px;
+}
+
+.world-card h3{
+
+    margin-bottom:8px;
+}
+
+.world-card p{
+
+    color:var(--muted);
+
+    font-size:.78rem;
+
+    line-height:1.7;
+}
+
+/* AKTU */
+
+.aktu{
+
+    padding:32px;
+
+    border-radius:26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(236,72,153,.08),
+            rgba(139,92,246,.08)
+        );
+
+    border:1px solid rgba(236,72,153,.20);
+}
+
+.question{
+
+    padding:18px;
+
+    margin-top:12px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid var(--border);
+}
+
+.question strong{
+
+    display:block;
+
+    color:#ddd6fe;
+
+    margin-bottom:5px;
+
+    font-size:.84rem;
+}
+
+.question span{
+
+    color:var(--muted);
+
+    font-size:.74rem;
+}
+
+/* SUMMARY */
+
+.summary-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin-top:30px;
+}
+
+.summary-box{
+
+    padding:22px;
+
+    text-align:center;
+
+    border-radius:18px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+}
+
+.summary-box strong{
+
+    display:block;
+
+    color:var(--cyan);
+
+    font-size:1.5rem;
+
+    margin-bottom:6px;
+}
+
+.summary-box span{
+
+    color:var(--muted);
+
+    font-size:.72rem;
+}
+
+/* NAVIGATION */
+
+.topic-navigation{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin:
+        20px auto 70px;
+}
+
+.topic-nav{
+
+    padding:16px 21px;
+
+    border-radius:15px;
+
+    background:rgba(255,255,255,.045);
+
+    border:1px solid var(--border);
+
+    font-size:.78rem;
+
+    transition:.3s;
+}
+
+.topic-nav:hover{
+
+    transform:translateY(-4px);
+
+    border-color:
+        rgba(139,92,246,.45);
+}
+
+/* FOOTER */
+
+footer{
+
+    padding:45px 0;
+
+    border-top:1px solid var(--border);
+}
+
+.footer-inner{
+
+    width:min(1150px,92%);
+
+    margin:auto;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+}
+
+.developer{
+
+    color:var(--muted);
+
+    font-size:.82rem;
+}
+
+.developer strong{
+
+    color:white;
+}
+
+.socials{
+
+    display:flex;
+
+    gap:9px;
+}
+
+.social{
+
+    padding:9px 14px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid var(--border);
+
+    color:#cbd4f5;
+
+    font-size:.76rem;
+
+    transition:.3s;
+}
+
+.social:hover{
+
+    color:white;
+
+    border-color:
+        rgba(139,92,246,.5);
+}
+
+/* REVEAL */
+
+.reveal{
+
+    opacity:0;
+
+    transform:translateY(30px);
+
+    transition:.8s ease;
+}
+
+.reveal.active{
+
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:950px){
+
+    .hero{
+
+        grid-template-columns:1fr;
+
+        text-align:center;
+    }
+
+    .hero-description{
+
+        margin:
+            0 auto 25px;
+    }
+
+    .hero-meta{
+
+        justify-content:center;
+    }
+
+    .feature-grid,
+    .real-world{
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .calc-grid,
+    .example{
+
+        grid-template-columns:1fr;
+    }
+
+    .operation-grid,
+    .summary-grid{
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .nav-links
+    .nav-btn:first-child{
+
+        display:none;
+    }
+
+    .hero h1{
+
+        letter-spacing:-4px;
+    }
+
+    .feature-grid,
+    .real-world,
+    .operation-grid,
+    .summary-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .content-card,
+    .aktu{
+
+        padding:23px;
+    }
+
+    .topic-navigation{
+
+        flex-direction:column;
+    }
+
+    .topic-nav{
+
+        text-align:center;
+    }
+
+    .footer-inner{
+
+        justify-content:center;
+
+        text-align:center;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="background">
+
+    <div class="orb orb1"></div>
+
+    <div class="orb orb2"></div>
+
+    <div class="orb orb3"></div>
+
+</div>
+
+
+<!-- NAVBAR -->
+
+<header>
+
+<nav>
+
+    <a href="index.html" class="brand">
+
+        <div class="logo">
+            DS
+        </div>
+
+        <div>
+            DSA <span>MASTER</span>
+        </div>
+
+    </a>
+
+
+    <div class="nav-links">
+
+        <a
+            href="asymptotic.html"
+            class="nav-btn"
+        >
+            ← Asymptotic
+        </a>
+
+        <a
+            href="index.html"
+            class="nav-btn"
+        >
+            Unit 1
+        </a>
+
+    </div>
+
+</nav>
+
+</header>
+
+
+
+<main>
+
+
+<!-- HERO -->
+
+<section class="container hero">
+
+
+    <div class="hero-content">
+
+        <div class="topic-badge">
+
+            <span class="dot"></span>
+
+            UNIT 01 • TOPIC 06
+
+        </div>
+
+
+        <h1>
+
+            <span class="gradient-text">
+                ARRAY
+            </span>
+
+            <br>
+
+            INTRODUCTION
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Array is one of the most fundamental data
+            structures in DSA. It stores multiple values
+            of the <strong>same data type</strong> in
+            contiguous memory locations.
+
+            Master arrays first — because arrays are the
+            foundation for many advanced data structures.
+
+        </p>
+
+
+        <div class="hero-meta">
+
+            <span class="meta">
+                📚 AKTU
+            </span>
+
+            <span class="meta">
+                Contiguous Memory
+            </span>
+
+            <span class="meta">
+                Same Data Type
+            </span>
+
+            <span class="meta">
+                Zero-Based Index
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- VISUAL -->
+
+    <div class="visual">
+
+        <div class="array-card">
+
+            <div class="card-top">
+
+                <strong>
+                    MEMORY REPRESENTATION
+                </strong>
+
+                <span class="memory-status">
+                    ● CONTIGUOUS
+                </span>
+
+            </div>
+
+
+            <div class="array-wrapper">
+
+                <div class="array">
+
+
+                    <div class="cell">
+
+                        10
+
+                        <span class="address">
+                            1000
+                        </span>
+
+                        <span class="index">
+                            [0]
+                        </span>
+
+                    </div>
+
+
+                    <div class="cell">
+
+                        25
+
+                        <span class="address">
+                            1004
+                        </span>
+
+                        <span class="index">
+                            [1]
+                        </span>
+
+                    </div>
+
+
+                    <div class="cell">
+
+                        40
+
+                        <span class="address">
+                            1008
+                        </span>
+
+                        <span class="index">
+                            [2]
+                        </span>
+
+                    </div>
+
+
+                    <div class="cell">
+
+                        55
+
+                        <span class="address">
+                            1012
+                        </span>
+
+                        <span class="index">
+                            [3]
+                        </span>
+
+                    </div>
+
+
+                    <div class="cell">
+
+                        70
+
+                        <span class="address">
+                            1016
+                        </span>
+
+                        <span class="index">
+                            [4]
+                        </span>
+
+                    </div>
+
+
+                    <div class="cell">
+
+                        85
+
+                        <span class="address">
+                            1020
+                        </span>
+
+                        <span class="index">
+                            [5]
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="memory-line">
+
+                <span>
+                    Base Address: 1000
+                </span>
+
+                <span>
+                    int = 4 bytes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- WHAT IS ARRAY -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        CONCEPT 01
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        What is an
+        <span class="gradient-text">
+            Array?
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <h3>
+            Simple Definition
+        </h3>
+
+
+        <p>
+
+            An array is a linear data structure that stores
+            a fixed number of elements of the
+            <strong>same data type</strong> in
+            <strong>contiguous memory locations</strong>.
+
+        </p>
+
+
+        <p>
+
+            Example:
+
+        </p>
+
+
+        <div class="formula">
+
+            int marks[5] = {85, 72, 91, 67, 88};
+
+        </div>
+
+
+        <p>
+
+            Here:
+
+        </p>
+
+
+        <p>
+
+            <span class="highlight">
+                marks
+            </span>
+            → array name
+
+        </p>
+
+
+        <p>
+
+            <span class="highlight">
+                5
+            </span>
+            → number of elements
+
+        </p>
+
+
+        <p>
+
+            <span class="highlight">
+                int
+            </span>
+            → data type
+
+        </p>
+
+
+        <p>
+
+            Each element can be accessed using its
+            <strong>index</strong>.
+
+        </p>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- CHARACTERISTICS -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        CORE PROPERTIES
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Characteristics of
+        <span class="gradient-text">
+            Arrays
+        </span>
+
+    </h2>
+
+
+    <div class="feature-grid">
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">
+                🧩
+            </div>
+
+            <h3>
+                Same Data Type
+            </h3>
+
+            <p>
+
+                Normally, elements of an array
+                have the same data type.
+
+                Example:
+                int array stores integers.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">
+                🧠
+            </div>
+
+            <h3>
+                Contiguous Memory
+            </h3>
+
+            <p>
+
+                Array elements are stored next to
+                each other in memory.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature-card reveal">
+
+            <div class="feature-icon">
+                ⚡
+            </div>
+
+            <h3>
+                Fast Access
+            </h3>
+
+            <p>
+
+                Using an index, an element can be
+                directly accessed in O(1) time.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- INDEXING -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        MOST IMPORTANT
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Array
+        <span class="gradient-text">
+            Indexing
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <p>
+
+            C++ arrays use
+            <strong>zero-based indexing</strong>.
+
+        </p>
+
+
+        <p>
+
+            That means the first element is stored at
+            index <strong>0</strong>, not 1.
+
+        </p>
+
+
+        <div class="formula">
+
+            arr[0] → First Element
+
+            <br>
+
+            arr[1] → Second Element
+
+            <br>
+
+            arr[n-1] → Last Element
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MEMORY DIAGRAM -->
+
+    <div class="memory-diagram reveal">
+
+        <div class="diagram-title">
+
+            Visual Memory Representation
+
+        </div>
+
+
+        <div class="memory-content">
+
+
+            <div class="memory-row">
+
+                <div class="row-label">
+                    Address
+                </div>
+
+                <div class="address-box">
+                    1000
+                </div>
+
+                <div class="address-box">
+                    1004
+                </div>
+
+                <div class="address-box">
+                    1008
+                </div>
+
+                <div class="address-box">
+                    1012
+                </div>
+
+                <div class="address-box">
+                    1016
+                </div>
+
+            </div>
+
+
+            <div class="memory-row">
+
+                <div class="row-label">
+                    Index
+                </div>
+
+                <div class="index-box">
+                    0
+                </div>
+
+                <div class="index-box">
+                    1
+                </div>
+
+                <div class="index-box">
+                    2
+                </div>
+
+                <div class="index-box">
+                    3
+                </div>
+
+                <div class="index-box">
+                    4
+                </div>
+
+            </div>
+
+
+            <div class="memory-row">
+
+                <div class="row-label">
+                    Value
+                </div>
+
+                <div class="value-box">
+                    10
+                </div>
+
+                <div class="value-box">
+                    25
+                </div>
+
+                <div class="value-box">
+                    40
+                </div>
+
+                <div class="value-box">
+                    55
+                </div>
+
+                <div class="value-box">
+                    70
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- ADDRESS CALCULATION -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        MEMORY CONCEPT
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Address Calculation
+        <span class="gradient-text">
+            in Array
+        </span>
+
+    </h2>
+
+
+    <div class="calc-grid">
+
+
+        <div class="calc-card reveal">
+
+            <h3>
+                Why is Array Access O(1)?
+            </h3>
+
+
+            <p>
+
+                Because the address of any element can
+                be calculated directly using its index.
+
+            </p>
+
+
+            <p>
+
+                Suppose:
+
+            </p>
+
+
+            <p>
+
+                Base address = 1000
+
+                <br>
+
+                Size of int = 4 bytes
+
+                <br>
+
+                Required index = 3
+
+            </p>
+
+
+            <div class="address-formula">
+
+                Address =
+                Base + (Index × Size)
+
+            </div>
+
+        </div>
+
+
+        <div class="calc-card reveal">
+
+            <h3>
+                Example
+            </h3>
+
+
+            <p>
+
+                Address of arr[3]:
+
+            </p>
+
+
+            <div class="address-formula">
+
+                1000 + (3 × 4)
+
+                <br><br>
+
+                = 1012
+
+            </div>
+
+
+            <div class="result">
+
+                arr[3] is located at memory address 1012.
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- DECLARATION -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        C++ IMPLEMENTATION
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Declaring an
+        <span class="gradient-text">
+            Array
+        </span>
+
+    </h2>
+
+
+    <div class="example">
+
+
+        <div class="code-card reveal">
+
+            <div class="code-header">
+
+                <span class="circle"></span>
+
+                <span class="circle"></span>
+
+                <span class="circle"></span>
+
+                <span style="margin-left:8px;">
+                    array.cpp
+                </span>
+
+            </div>
+
+
+<pre><code><span class="keyword">#include</span> &lt;iostream&gt;
+
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> main()
+{
+    <span class="type">int</span> marks[<span class="number">5</span>];
+
+    marks[<span class="number">0</span>] = <span class="number">85</span>;
+    marks[<span class="number">1</span>] = <span class="number">72</span>;
+    marks[<span class="number">2</span>] = <span class="number">91</span>;
+    marks[<span class="number">3</span>] = <span class="number">67</span>;
+    marks[<span class="number">4</span>] = <span class="number">88</span>;
+
+    cout &lt;&lt; marks[<span class="number">2</span>];
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+
+        </div>
+
+
+        <div class="explain reveal">
+
+            <h3>
+                What happened?
+            </h3>
+
+
+            <p>
+
+                We created an integer array containing
+                5 positions.
+
+            </p>
+
+
+            <p>
+
+                Then values were inserted using indexes
+                from 0 to 4.
+
+            </p>
+
+
+            <p>
+
+                Finally:
+
+            </p>
+
+
+            <div class="result">
+
+                marks[2] = 91
+
+            </div>
+
+
+            <p style="margin-top:15px;">
+
+                Direct access makes array retrieval
+                extremely fast.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- INITIALIZATION -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        SYNTAX
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Array
+        <span class="gradient-text">
+            Initialization
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+
+        <p class="highlight">
+
+            Method 1 — Declaration only
+
+        </p>
+
+
+        <div class="formula">
+
+            int arr[5];
+
+        </div>
+
+
+        <p class="highlight">
+
+            Method 2 — Declaration + Initialization
+
+        </p>
+
+
+        <div class="formula">
+
+            int arr[5] = {10,20,30,40,50};
+
+        </div>
+
+
+        <p class="highlight">
+
+            Method 3 — Size automatically determined
+
+        </p>
+
+
+        <div class="formula">
+
+            int arr[] = {10,20,30,40,50};
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- OPERATIONS -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        ARRAY OPERATIONS
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        What Can We Do
+        <span class="gradient-text">
+            With Arrays?
+        </span>
+
+    </h2>
+
+
+    <div class="operation-grid">
+
+
+        <div class="operation reveal">
+
+            <strong>
+                Traverse
+            </strong>
+
+            <span>
+                Visit every element
+            </span>
+
+        </div>
+
+
+        <div class="operation reveal">
+
+            <strong>
+                Insert
+            </strong>
+
+            <span>
+                Add an element
+            </span>
+
+        </div>
+
+
+        <div class="operation reveal">
+
+            <strong>
+                Delete
+            </strong>
+
+            <span>
+                Remove an element
+            </span>
+
+        </div>
+
+
+        <div class="operation reveal">
+
+            <strong>
+                Search
+            </strong>
+
+            <span>
+                Find an element
+            </span>
+
+        </div>
+
+
+        <div class="operation reveal">
+
+            <strong>
+                Update
+            </strong>
+
+            <span>
+                Change a value
+            </span>
+
+        </div>
+
+
+        <div class="operation reveal">
+
+            <strong>
+                Sort
+            </strong>
+
+            <span>
+                Arrange elements
+            </span>
+
+        </div>
+
+
+        <div class="operation reveal">
+
+            <strong>
+                Merge
+            </strong>
+
+            <span>
+                Combine arrays
+            </span>
+
+        </div>
+
+
+        <div class="operation reveal">
+
+            <strong>
+                Reverse
+            </strong>
+
+            <span>
+                Reverse elements
+            </span>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- COMPLEXITY -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        COMPLEXITY
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Array Operation
+        <span class="gradient-text">
+            Complexity
+        </span>
+
+    </h2>
+
+
+    <div class="memory-diagram reveal">
+
+        <div class="diagram-title">
+
+            Basic Array Operations
+
+        </div>
+
+
+        <div class="content-card" style="margin-top:0;">
+
+            <p>
+
+                <strong>Access:</strong>
+
+                O(1)
+
+            </p>
+
+
+            <p>
+
+                <strong>Search:</strong>
+
+                O(n)
+
+                <br>
+
+                (Linear Search)
+
+            </p>
+
+
+            <p>
+
+                <strong>Insertion:</strong>
+
+                O(n)
+
+                <br>
+
+                Insertion in the middle may require shifting.
+
+            </p>
+
+
+            <p>
+
+                <strong>Deletion:</strong>
+
+                O(n)
+
+                <br>
+
+                Elements may need to be shifted.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- REAL WORLD -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        REAL WORLD
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Arrays Around
+        <span class="gradient-text">
+            You
+        </span>
+
+    </h2>
+
+
+    <div class="real-world">
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🎓
+            </div>
+
+            <h3>
+                Student Marks
+            </h3>
+
+            <p>
+
+                Marks of multiple students can be
+                stored in an array.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🌡️
+            </div>
+
+            <h3>
+                Temperature
+            </h3>
+
+            <p>
+
+                Daily temperatures can be stored
+                using an array.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🛒
+            </div>
+
+            <h3>
+                Product Prices
+            </h3>
+
+            <p>
+
+                Prices of products can be represented
+                using arrays.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🎮
+            </div>
+
+            <h3>
+                Game Scores
+            </h3>
+
+            <p>
+
+                Scores of players can be stored
+                efficiently.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                📊
+            </div>
+
+            <h3>
+                Statistics
+            </h3>
+
+            <p>
+
+                Numerical datasets are commonly
+                represented using arrays.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🖼️
+            </div>
+
+            <h3>
+                Images
+            </h3>
+
+            <p>
+
+                Pixels in an image are internally
+                represented using arrays.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- AKTU -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="aktu reveal">
+
+        <div class="eyebrow">
+            AKTU EXAM ZONE
+        </div>
+
+
+        <h2 class="section-title">
+
+            Important Questions
+
+        </h2>
+
+
+        <div class="question">
+
+            <strong>
+                Q1. Define an array.
+            </strong>
+
+            <span>
+                Explain its characteristics with suitable example.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q2. Explain one-dimensional array.
+            </strong>
+
+            <span>
+                Explain declaration and initialization in C/C++.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q3. Explain memory representation of an array.
+            </strong>
+
+            <span>
+                Draw a suitable diagram.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q4. Why does array provide O(1) access?
+            </strong>
+
+            <span>
+                Explain using address calculation.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q5. Explain different array operations.
+            </strong>
+
+            <span>
+                Discuss traversal, insertion, deletion and searching.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q6. Write a C++ program to traverse an array.
+            </strong>
+
+            <span>
+                Explain the time complexity.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q7. Explain advantages and limitations of arrays.
+            </strong>
+
+            <span>
+                Compare arrays with other linear data structures.
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- SUMMARY -->
+
+<section class="section">
+
+<div class="container">
+
+    <div class="eyebrow reveal">
+        QUICK REVISION
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Array in
+        <span class="gradient-text">
+            60 Seconds
+        </span>
+
+    </h2>
+
+
+    <div class="summary-grid">
+
+
+        <div class="summary-box reveal">
+
+            <strong>
+                Same
+            </strong>
+
+            <span>
+                Data Type
+            </span>
+
+        </div>
+
+
+        <div class="summary-box reveal">
+
+            <strong>
+                Contiguous
+            </strong>
+
+            <span>
+                Memory
+            </span>
+
+        </div>
+
+
+        <div class="summary-box reveal">
+
+            <strong>
+                O(1)
+            </strong>
+
+            <span>
+                Direct Access
+            </span>
+
+        </div>
+
+
+        <div class="summary-box reveal">
+
+            <strong>
+                0
+            </strong>
+
+            <span>
+                First Index
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="content-card reveal">
+
+        <h3>
+            🧠 Remember This
+        </h3>
+
+
+        <p>
+
+            Array =
+            <span class="highlight">
+                Same Data Type + Contiguous Memory +
+                Index Based Access
+            </span>
+
+        </p>
+
+
+        <p>
+
+            First index:
+
+            <span class="highlight">
+                0
+            </span>
+
+        </p>
+
+
+        <p>
+
+            Last index:
+
+            <span class="highlight">
+                n - 1
+            </span>
+
+        </p>
+
+
+        <p>
+
+            Direct access:
+
+            <span class="highlight">
+                O(1)
+            </span>
+
+        </p>
+
+
+        <p>
+
+            Address formula:
+
+        </p>
+
+
+        <div class="formula">
+
+            Address(arr[i])
+            =
+            Base Address + (i × Size of Element)
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- NAVIGATION -->
+
+<section class="container">
+
+<div class="topic-navigation">
+
+
+    <a
+        href="asymptotic.html"
+        class="topic-nav"
+    >
+        ← Previous: Asymptotic Notations
+    </a>
+
+
+    <a
+        href="array-representation.html"
+        class="topic-nav"
+    >
+        Next: Array Representation →
+    </a>
+
+
+</div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<div class="footer-inner">
+
+
+    <div class="developer">
+
+        Built with ❤️ by
+
+        <strong>
+            Web Developer Vaibhav
+        </strong>
+
+        <br>
+
+        <span>
+            DSA Master • Unit 1 • Array Introduction
+        </span>
+
+    </div>
+
+
+    <div class="socials">
+
+
+        <!-- Apne actual profile links yahan lagana -->
+
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener"
+            class="social"
+        >
+            💻 GitHub
+        </a>
+
+
+        <a
+            href="#"
+            target="_blank"
+            rel="noopener"
+            class="social"
+        >
+            🔗 LinkedIn
+        </a>
+
+
+    </div>
+
+
+</div>
+
+</footer>
+
+
+
+<script>
+
+/* SCROLL REVEAL */
+
+const reveals =
+    document.querySelectorAll(".reveal");
+
+
+const observer =
+    new IntersectionObserver(
+
+        entries => {
+
+            entries.forEach(entry => {
+
+                if(entry.isIntersecting){
+
+                    entry.target
+                        .classList
+                        .add("active");
+
+                    observer.unobserve(
+                        entry.target
+                    );
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold:.12
+        }
+
+    );
+
+
+reveals.forEach(
+    element =>
+    observer.observe(element)
+);
+
+
+/* ARRAY CELL INTERACTION */
+
+const cells =
+    document.querySelectorAll(".cell");
+
+
+cells.forEach(cell => {
+
+    cell.addEventListener(
+        "click",
+        () => {
+
+            cells.forEach(
+                c =>
+                c.style.borderColor =
+                "rgba(139,92,246,.35)"
+            );
+
+            cell.style.borderColor =
+                "var(--cyan)";
+
+            cell.style.boxShadow =
+                "0 0 35px rgba(34,211,238,.25)";
+
+        }
+    );
+
+});
+
+
+/* FEATURE CARD 3D EFFECT */
+
+document
+    .querySelectorAll(".feature-card,.world-card")
+    .forEach(card => {
+
+        card.addEventListener(
+            "mousemove",
+            e => {
+
+                const rect =
+                    card.getBoundingClientRect();
+
+                const x =
+                    e.clientX - rect.left;
+
+                const y =
+                    e.clientY - rect.top;
+
+                const rotateX =
+                    (y - rect.height / 2) / 25;
+
+                const rotateY =
+                    (x - rect.width / 2) / 25;
+
+                card.style.transform =
+                    `perspective(700px)
+                     rotateX(${-rotateX}deg)
+                     rotateY(${rotateY}deg)
+                     translateY(-7px)`;
+
+            }
+        );
+
+
+        card.addEventListener(
+            "mouseleave",
+            () => {
+
+                card.style.transform = "";
+
+            }
+        );
+
+    });
+
+</script>
+
+
+</body>
+</html>
