@@ -1,0 +1,2815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Queue | DSA Vault | Vaibhav</title>
+
+<style>
+
+:root{
+    --bg:#f7f8fc;
+    --bg2:#ffffff;
+    --text:#171827;
+    --muted:#686b7c;
+
+    --primary:#6c4df6;
+    --purple:#9b7cff;
+    --pink:#ff4f81;
+    --orange:#ff9f43;
+    --cyan:#00bfa6;
+    --green:#28c76f;
+    --yellow:#ffc857;
+    --red:#ff5b5b;
+
+    --card:rgba(255,255,255,.84);
+    --border:rgba(0,0,0,.08);
+    --shadow:0 20px 60px rgba(38,32,80,.12);
+
+    --code-bg:#17151f;
+    --code-text:#f5f5f5;
+}
+
+body.dark{
+    --bg:#090a12;
+    --bg2:#10111b;
+    --text:#f5f5ff;
+    --muted:#a9acc0;
+
+    --card:rgba(20,21,34,.88);
+    --border:rgba(255,255,255,.09);
+    --shadow:0 25px 80px rgba(0,0,0,.45);
+
+    --code-bg:#06070c;
+    --code-text:#eeeeee;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:
+    Inter,system-ui,-apple-system,
+    BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+    background:
+    radial-gradient(
+        circle at 10% 10%,
+        rgba(108,77,246,.15),
+        transparent 28%
+    ),
+    radial-gradient(
+        circle at 90% 20%,
+        rgba(255,79,129,.12),
+        transparent 25%
+    ),
+    radial-gradient(
+        circle at 50% 90%,
+        rgba(0,191,166,.08),
+        transparent 25%
+    ),
+    var(--bg);
+
+    color:var(--text);
+    line-height:1.7;
+    transition:.4s;
+    overflow-x:hidden;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+button{
+    font-family:inherit;
+}
+
+/* =========================
+   FLOATING BACKGROUND
+========================= */
+
+.orb{
+    position:fixed;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.14;
+    pointer-events:none;
+    z-index:-1;
+    animation:floating 9s ease-in-out infinite;
+}
+
+.orb1{
+    background:var(--primary);
+    left:-130px;
+    top:15%;
+}
+
+.orb2{
+    background:var(--pink);
+    right:-130px;
+    top:50%;
+    animation-delay:2s;
+}
+
+.orb3{
+    background:var(--cyan);
+    left:40%;
+    bottom:-150px;
+    animation-delay:4s;
+}
+
+@keyframes floating{
+    0%,100%{
+        transform:translate(0,0);
+    }
+
+    50%{
+        transform:translate(0,-40px);
+    }
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-container{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:4px;
+    z-index:2000;
+}
+
+.progress{
+    width:0%;
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--primary),
+        var(--pink),
+        var(--orange),
+        var(--cyan)
+    );
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:999;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:16px 6%;
+
+    background:var(--card);
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    font-size:1.4rem;
+    font-weight:900;
+}
+
+.logo span{
+    color:var(--primary);
+}
+
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.nav-btn{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+
+    padding:9px 15px;
+    border-radius:50px;
+
+    cursor:pointer;
+    transition:.3s;
+}
+
+.nav-btn:hover{
+    transform:translateY(-3px);
+    border-color:var(--primary);
+    box-shadow:
+    0 10px 25px rgba(108,77,246,.15);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:82vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:80px 6%;
+}
+
+.hero-content{
+    max-width:1050px;
+}
+
+.badge{
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    background:
+    rgba(108,77,246,.12);
+
+    color:var(--primary);
+
+    font-weight:800;
+
+    margin-bottom:22px;
+}
+
+.hero h1{
+    font-size:
+    clamp(3rem,8vw,7rem);
+
+    line-height:.95;
+
+    letter-spacing:-5px;
+
+    background:
+    linear-gradient(
+        110deg,
+        var(--primary),
+        var(--pink),
+        var(--orange),
+        var(--cyan)
+    );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    margin-bottom:28px;
+}
+
+.hero p{
+    max-width:780px;
+    margin:auto;
+    color:var(--muted);
+    font-size:1.1rem;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+section{
+    width:min(1150px,90%);
+    margin:auto;
+    padding:70px 0;
+}
+
+.section-heading{
+    font-size:
+    clamp(2rem,5vw,3rem);
+
+    margin-bottom:10px;
+}
+
+.section-heading span{
+    color:var(--primary);
+}
+
+.section-subtitle{
+    color:var(--muted);
+    margin-bottom:30px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.card{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:26px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+    backdrop-filter:blur(20px);
+
+    transition:.35s;
+}
+
+.card:hover{
+    transform:translateY(-7px);
+
+    box-shadow:
+    0 30px 80px rgba(108,77,246,.15);
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid-2{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+}
+
+.grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+/* =========================
+   QUEUE DIAGRAM
+========================= */
+
+.queue-area{
+    position:relative;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    min-height:300px;
+
+    margin:40px 0;
+}
+
+.queue{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:25px;
+
+    border-top:5px solid var(--primary);
+    border-bottom:5px solid var(--primary);
+
+    background:
+    rgba(108,77,246,.04);
+
+    border-radius:20px;
+}
+
+.queue-item{
+
+    width:105px;
+    height:80px;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    border-radius:16px;
+
+    color:white;
+
+    font-size:1.25rem;
+
+    font-weight:900;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--pink)
+    );
+
+    box-shadow:
+    0 12px 30px rgba(108,77,246,.2);
+
+    animation:
+    queueAppear .6s ease both;
+}
+
+@keyframes queueAppear{
+
+    from{
+        opacity:0;
+        transform:
+        translateX(-30px)
+        scale(.8);
+    }
+
+    to{
+        opacity:1;
+        transform:
+        translateX(0)
+        scale(1);
+    }
+}
+
+.queue-label{
+    position:absolute;
+
+    font-weight:900;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    color:white;
+}
+
+.front-label{
+    left:5%;
+    top:40%;
+
+    background:var(--pink);
+}
+
+.rear-label{
+    right:5%;
+    top:40%;
+
+    background:var(--cyan);
+}
+
+/* =========================
+   FLOW
+========================= */
+
+.flow{
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin:30px 0;
+}
+
+.flow-box{
+
+    padding:17px 24px;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(108,77,246,.12),
+        rgba(255,79,129,.10)
+    );
+
+    border:1px solid var(--border);
+
+    font-weight:800;
+
+    text-align:center;
+}
+
+.arrow{
+    color:var(--primary);
+    font-size:2rem;
+    font-weight:900;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.info-list{
+    display:grid;
+    gap:15px;
+    margin-top:20px;
+}
+
+.info-item{
+
+    padding:17px 20px;
+
+    border-radius:16px;
+
+    background:
+    rgba(108,77,246,.07);
+
+    border-left:4px solid var(--primary);
+}
+
+/* =========================
+   OPERATIONS
+========================= */
+
+.operation-icon{
+
+    width:55px;
+    height:55px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:16px;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--pink)
+    );
+
+    color:white;
+
+    font-size:1.5rem;
+
+    margin-bottom:15px;
+}
+
+/* =========================
+   REAL WORLD
+========================= */
+
+.world-card{
+    text-align:center;
+}
+
+.world-icon{
+    font-size:3rem;
+    margin-bottom:10px;
+}
+
+/* =========================
+   CODE
+========================= */
+
+pre{
+
+    background:var(--code-bg);
+
+    color:var(--code-text);
+
+    padding:25px;
+
+    border-radius:20px;
+
+    overflow-x:auto;
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+}
+
+code{
+
+    font-family:
+    Consolas,
+    "Courier New",
+    monospace;
+
+    font-size:.95rem;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px;
+}
+
+th,
+td{
+
+    padding:16px;
+
+    border-bottom:
+    1px solid var(--border);
+
+    text-align:left;
+}
+
+th{
+    color:var(--primary);
+}
+
+/* =========================
+   QUIZ
+========================= */
+
+.option{
+
+    display:block;
+
+    padding:15px 18px;
+
+    margin:10px 0;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.option:hover{
+
+    border-color:var(--primary);
+
+    transform:translateX(6px);
+}
+
+.quiz-button{
+
+    border:none;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--pink)
+    );
+
+    color:white;
+
+    padding:12px 24px;
+
+    border-radius:50px;
+
+    cursor:pointer;
+
+    font-weight:800;
+
+    margin-top:15px;
+}
+
+#quizResult{
+    margin-top:20px;
+    font-weight:800;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.topic-navigation{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr auto 1fr;
+
+    gap:15px;
+
+    align-items:center;
+}
+
+.topic-nav{
+
+    padding:20px;
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    background:var(--card);
+
+    transition:.3s;
+}
+
+.topic-nav:hover{
+
+    transform:translateY(-5px);
+
+    border-color:var(--primary);
+}
+
+.topic-nav.next{
+    text-align:right;
+}
+
+.unit-home{
+
+    text-align:center;
+
+    padding:15px 25px;
+
+    border-radius:50px;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--pink)
+    );
+
+    color:white;
+
+    font-weight:900;
+}
+
+.nav-label{
+
+    display:block;
+
+    font-size:.8rem;
+
+    color:var(--muted);
+}
+
+.nav-topic{
+    font-weight:900;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+    margin-top:50px;
+
+    padding:60px 20px;
+
+    text-align:center;
+
+    border-top:1px solid var(--border);
+}
+
+.developer{
+
+    font-size:1.5rem;
+
+    font-weight:900;
+}
+
+.developer span{
+    color:var(--primary);
+}
+
+.social-links{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin-top:20px;
+}
+
+.social-links a{
+
+    padding:10px 20px;
+
+    border-radius:50px;
+
+    border:1px solid var(--border);
+
+    background:var(--card);
+
+    transition:.3s;
+}
+
+.social-links a:hover{
+
+    background:var(--primary);
+
+    color:white;
+
+    transform:translateY(-4px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:850px){
+
+    .grid-2,
+    .grid-3{
+        grid-template-columns:1fr;
+    }
+
+    .topic-navigation{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+
+    .topic-nav.next{
+        text-align:center;
+    }
+
+    .navbar{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .queue{
+        transform:scale(.8);
+    }
+
+    .front-label,
+    .rear-label{
+        display:none;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Background -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- Reading Progress -->
+<div class="progress-container">
+    <div class="progress" id="progressBar"></div>
+</div>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <a href="index.html" class="logo">
+        DSA<span>Vault</span>
+    </a>
+
+    <div class="nav-actions">
+
+        <a href="index.html" class="nav-btn">
+            🏠 Home
+        </a>
+
+        <a href="unit-1.html" class="nav-btn">
+            📚 Unit 1
+        </a>
+
+        <button
+            class="nav-btn"
+            id="themeToggle">
+            🌙
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<header class="hero">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            UNIT 1 • QUEUE
+        </div>
+
+        <h1>
+            Queue
+        </h1>
+
+        <p>
+            Master Queue from the AKTU Data Structures
+            syllabus using visual diagrams, real-world
+            examples, algorithms, C++ implementation,
+            complexity and exam-oriented questions.
+        </p>
+
+    </div>
+
+</header>
+
+
+<!-- DEFINITION -->
+
+<section>
+
+<h2 class="section-heading">
+    What is a <span>Queue?</span>
+</h2>
+
+<p class="section-subtitle">
+    Queue ek linear data structure hai jo FIFO
+    principle follow karta hai.
+</p>
+
+<div class="card">
+
+    <h3>
+        FIFO — First In, First Out
+    </h3>
+
+    <p>
+        Queue mein jo element sabse pehle insert hota hai,
+        wahi sabse pehle remove hota hai.
+    </p>
+
+
+    <div class="queue-area">
+
+        <div class="queue-label front-label">
+            FRONT → DELETE
+        </div>
+
+        <div class="queue">
+
+            <div class="queue-item">
+                10
+            </div>
+
+            <div class="queue-item">
+                20
+            </div>
+
+            <div class="queue-item">
+                30
+            </div>
+
+            <div class="queue-item">
+                40
+            </div>
+
+            <div class="queue-item">
+                50
+            </div>
+
+        </div>
+
+        <div class="queue-label rear-label">
+            INSERT ← REAR
+        </div>
+
+    </div>
+
+    <p style="text-align:center">
+
+        <strong>
+            10 sabse pehle aaya,
+            isliye 10 sabse pehle niklega.
+        </strong>
+
+    </p>
+
+</div>
+
+</section>
+
+
+<!-- FIFO -->
+
+<section>
+
+<h2 class="section-heading">
+    Understand <span>FIFO</span>
+</h2>
+
+<div class="card">
+
+<div class="flow">
+
+    <div class="flow-box">
+        Person A
+    </div>
+
+    <div class="arrow">
+        →
+    </div>
+
+    <div class="flow-box">
+        Person B
+    </div>
+
+    <div class="arrow">
+        →
+    </div>
+
+    <div class="flow-box">
+        Person C
+    </div>
+
+</div>
+
+<div class="flow">
+
+    <div class="flow-box">
+        Person A
+        <br>
+        First Entry
+    </div>
+
+    <div class="arrow">
+        →
+    </div>
+
+    <div class="flow-box">
+        Person A
+        <br>
+        First Exit
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- REAL WORLD -->
+
+<section>
+
+<h2 class="section-heading">
+    Queue in <span>Real Life</span>
+</h2>
+
+<div class="grid-3">
+
+<div class="card world-card">
+
+<div class="world-icon">
+🎟️
+</div>
+
+<h3>
+Ticket Counter
+</h3>
+
+<p>
+Jo person pehle line mein aata hai,
+use pehle ticket milti hai.
+</p>
+
+</div>
+
+
+<div class="card world-card">
+
+<div class="world-icon">
+🏦
+</div>
+
+<h3>
+Bank Queue
+</h3>
+
+<p>
+Customers FIFO order mein service receive karte hain.
+</p>
+
+</div>
+
+
+<div class="card world-card">
+
+<div class="world-icon">
+🖨️
+</div>
+
+<h3>
+Printer Queue
+</h3>
+
+<p>
+Print jobs queue mein wait karti hain.
+</p>
+
+</div>
+
+
+<div class="card world-card">
+
+<div class="world-icon">
+🚦
+</div>
+
+<h3>
+Traffic
+</h3>
+
+<p>
+Vehicles waiting line ke order mein move karte hain.
+</p>
+
+</div>
+
+
+<div class="card world-card">
+
+<div class="world-icon">
+📞
+</div>
+
+<h3>
+Customer Support
+</h3>
+
+<p>
+Customers waiting queue mein handle kiye ja sakte hain.
+</p>
+
+</div>
+
+
+<div class="card world-card">
+
+<div class="world-icon">
+💻
+</div>
+
+<h3>
+CPU Scheduling
+</h3>
+
+<p>
+Certain scheduling algorithms queue concepts use karte hain.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FRONT REAR -->
+
+<section>
+
+<h2 class="section-heading">
+    Front & <span>Rear</span>
+</h2>
+
+<div class="grid-2">
+
+<div class="card">
+
+<div class="operation-icon">
+🚪
+</div>
+
+<h3>
+Front
+</h3>
+
+<p>
+Queue ke front se element delete hota hai.
+</p>
+
+<pre><code>
+FRONT → DELETE
+</code></pre>
+
+</div>
+
+
+<div class="card">
+
+<div class="operation-icon">
+➕
+</div>
+
+<h3>
+Rear
+</h3>
+
+<p>
+Queue ke rear par new element insert hota hai.
+</p>
+
+<pre><code>
+REAR → INSERT
+</code></pre>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- OPERATIONS -->
+
+<section>
+
+<h2 class="section-heading">
+    Queue ke <span>Operations</span>
+</h2>
+
+<div class="grid-3">
+
+<div class="card">
+
+<div class="operation-icon">
+➕
+</div>
+
+<h3>
+Enqueue
+</h3>
+
+<p>
+Queue ke rear mein element insert karna.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="operation-icon">
+➖
+</div>
+
+<h3>
+Dequeue
+</h3>
+
+<p>
+Queue ke front se element remove karna.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="operation-icon">
+👁️
+</div>
+
+<h3>
+Front / Peek
+</h3>
+
+<p>
+Front element ko remove kiye bina dekhna.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="operation-icon">
+❓
+</div>
+
+<h3>
+isEmpty
+</h3>
+
+<p>
+Check karta hai queue empty hai ya nahi.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="operation-icon">
+📏
+</div>
+
+<h3>
+Size
+</h3>
+
+<p>
+Queue mein present elements ki count.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="operation-icon">
+🚨
+</div>
+
+<h3>
+isFull
+</h3>
+
+<p>
+Array queue mein capacity full hai ya nahi.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ENQUEUE -->
+
+<section>
+
+<h2 class="section-heading">
+    Operation 1 — <span>Enqueue</span>
+</h2>
+
+<div class="card">
+
+<div class="flow">
+
+<div class="flow-box">
+10
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+20
+</div>
+
+<div class="arrow">
++
+</div>
+
+<div class="flow-box">
+Enqueue(30)
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+10 → 20 → 30
+</div>
+
+</div>
+
+<h3>
+Algorithm
+</h3>
+
+<pre><code>
+ENQUEUE(QUEUE, ITEM)
+
+1. Check if queue is full.
+2. If full, display OVERFLOW.
+3. Otherwise increment REAR.
+4. Insert ITEM at QUEUE[REAR].
+5. If this is the first element,
+   set FRONT = 0.
+6. Stop.
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- DEQUEUE -->
+
+<section>
+
+<h2 class="section-heading">
+    Operation 2 — <span>Dequeue</span>
+</h2>
+
+<div class="card">
+
+<div class="flow">
+
+<div class="flow-box">
+10 → 20 → 30
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+Dequeue()
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+20 → 30
+</div>
+
+</div>
+
+<p>
+Queue mein deletion hamesha <strong>FRONT</strong>
+se hota hai.
+</p>
+
+<h3>
+Algorithm
+</h3>
+
+<pre><code>
+DEQUEUE(QUEUE)
+
+1. Check if queue is empty.
+2. If empty, display UNDERFLOW.
+3. Store QUEUE[FRONT].
+4. Increment FRONT.
+5. Return deleted element.
+6. Stop.
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- PEEK -->
+
+<section>
+
+<h2 class="section-heading">
+    Operation 3 — <span>Front / Peek</span>
+</h2>
+
+<div class="card">
+
+<div class="queue-area">
+
+<div class="queue">
+
+<div class="queue-item">
+10
+</div>
+
+<div class="queue-item">
+20
+</div>
+
+<div class="queue-item">
+30
+</div>
+
+</div>
+
+<div class="queue-label front-label">
+FRONT = 10
+</div>
+
+</div>
+
+<p>
+Peek ya Front operation queue ke first element ko
+return karta hai without deleting it.
+</p>
+
+<pre><code>
+if(front == -1)
+{
+    cout &lt;&lt; "Queue Empty";
+}
+else
+{
+    cout &lt;&lt; queue[front];
+}
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- OVERFLOW UNDERFLOW -->
+
+<section>
+
+<h2 class="section-heading">
+    Overflow & <span>Underflow</span>
+</h2>
+
+<div class="grid-2">
+
+<div class="card">
+
+<h3>
+🚨 Queue Overflow
+</h3>
+
+<p>
+Jab queue full ho aur hum new element
+enqueue karne ki koshish karein.
+</p>
+
+<pre><code>
+if(rear == MAX - 1)
+{
+    cout &lt;&lt; "Overflow";
+}
+</code></pre>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+⚠️ Queue Underflow
+</h3>
+
+<p>
+Jab queue empty ho aur hum dequeue
+karne ki koshish karein.
+</p>
+
+<pre><code>
+if(front == -1 ||
+   front > rear)
+{
+    cout &lt;&lt; "Underflow";
+}
+</code></pre>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ARRAY IMPLEMENTATION -->
+
+<section>
+
+<h2 class="section-heading">
+    Queue using <span>Array</span>
+</h2>
+
+<div class="card">
+
+<pre><code>
+#include &lt;iostream&gt;
+
+using namespace std;
+
+#define MAX 5
+
+int queue[MAX];
+
+int front = -1;
+int rear = -1;
+
+void enqueue(int value)
+{
+    if(rear == MAX - 1)
+    {
+        cout &lt;&lt; "Queue Overflow\n";
+        return;
+    }
+
+    if(front == -1)
+    {
+        front = 0;
+    }
+
+    rear++;
+
+    queue[rear] = value;
+}
+
+void dequeue()
+{
+    if(front == -1 ||
+       front > rear)
+    {
+        cout &lt;&lt; "Queue Underflow\n";
+        return;
+    }
+
+    cout &lt;&lt;
+    "Deleted: "
+    &lt;&lt; queue[front]
+    &lt;&lt; endl;
+
+    front++;
+}
+
+void peek()
+{
+    if(front == -1 ||
+       front > rear)
+    {
+        cout &lt;&lt; "Queue Empty\n";
+        return;
+    }
+
+    cout &lt;&lt;
+    "Front: "
+    &lt;&lt; queue[front]
+    &lt;&lt; endl;
+}
+
+int main()
+{
+    enqueue(10);
+    enqueue(20);
+    enqueue(30);
+
+    peek();
+
+    dequeue();
+
+    peek();
+
+    return 0;
+}
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- LINKED LIST -->
+
+<section>
+
+<h2 class="section-heading">
+    Queue using <span>Linked List</span>
+</h2>
+
+<div class="card">
+
+<div class="flow">
+
+<div class="flow-box">
+FRONT
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+10
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+20
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+REAR
+</div>
+
+</div>
+
+<p>
+Linked List Queue mein generally do pointers maintain
+kiye jaate hain:
+</p>
+
+<div class="info-list">
+
+<div class="info-item">
+<strong>Front</strong> → first node ko point karta hai.
+</div>
+
+<div class="info-item">
+<strong>Rear</strong> → last node ko point karta hai.
+</div>
+
+</div>
+
+<pre><code>
+struct Node
+{
+    int data;
+    Node* next;
+};
+
+Node* front = NULL;
+Node* rear = NULL;
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- CIRCULAR QUEUE -->
+
+<section>
+
+<h2 class="section-heading">
+    Circular <span>Queue</span>
+</h2>
+
+<p class="section-subtitle">
+    Circular Queue normal queue ki unused memory problem
+    ko solve karne ke liye use hoti hai.
+</p>
+
+<div class="card">
+
+<div class="flow">
+
+<div class="flow-box">
+0
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+1
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+2
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+3
+</div>
+
+<div class="arrow">
+↩
+</div>
+
+<div class="flow-box">
+0
+</div>
+
+</div>
+
+<p>
+Circular Queue mein last position ke baad next position
+first position hoti hai.
+</p>
+
+<pre><code>
+rear = (rear + 1) % MAX;
+</code></pre>
+
+<div class="info-list">
+
+<div class="info-item">
+Normal Queue → Linear movement
+</div>
+
+<div class="info-item">
+Circular Queue → Circular movement
+</div>
+
+<div class="info-item">
+Main advantage → Better memory utilization
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DEQUE -->
+
+<section>
+
+<h2 class="section-heading">
+    Double Ended Queue — <span>Deque</span>
+</h2>
+
+<div class="card">
+
+<p>
+Deque mein insertion aur deletion dono ends se
+possible hota hai.
+</p>
+
+<div class="flow">
+
+<div class="flow-box">
+INSERT
+</div>
+
+<div class="arrow">
+←
+</div>
+
+<div class="flow-box">
+10 | 20 | 30
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+DELETE
+</div>
+
+</div>
+
+<div class="info-list">
+
+<div class="info-item">
+<strong>Input Restricted Deque:</strong>
+Insertion ek end se restricted.
+</div>
+
+<div class="info-item">
+<strong>Output Restricted Deque:</strong>
+Deletion ek end se restricted.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PRIORITY QUEUE -->
+
+<section>
+
+<h2 class="section-heading">
+    <span>Priority Queue</span>
+</h2>
+
+<div class="card">
+
+<p>
+Priority Queue mein element ko normal FIFO order ke
+bajay priority ke according process kiya ja sakta hai.
+</p>
+
+<div class="flow">
+
+<div class="flow-box">
+A
+<br>
+Priority 3
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+B
+<br>
+Priority 1
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+C
+<br>
+Priority 2
+</div>
+
+</div>
+
+<p>
+Highest/lowest priority implementation ke design ke
+according pehle process ho sakti hai.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- DRY RUN -->
+
+<section>
+
+<h2 class="section-heading">
+    Queue <span>Dry Run</span>
+</h2>
+
+<div class="card">
+
+<pre><code>
+Initially:
+
+FRONT = -1
+REAR  = -1
+
+
+Enqueue(10)
+
+FRONT = 0
+REAR  = 0
+
+10
+
+
+Enqueue(20)
+
+FRONT = 0
+REAR  = 1
+
+10 → 20
+
+
+Enqueue(30)
+
+FRONT = 0
+REAR  = 2
+
+10 → 20 → 30
+
+
+Dequeue()
+
+10 removed
+
+FRONT = 1
+REAR  = 2
+
+20 → 30
+
+
+Dequeue()
+
+20 removed
+
+FRONT = 2
+REAR  = 2
+
+30
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- ALGORITHM -->
+
+<section>
+
+<h2 class="section-heading">
+    Queue <span>Algorithm Flow</span>
+</h2>
+
+<div class="card">
+
+<pre><code>
+START
+
+      ↓
+
+Initialize FRONT & REAR
+
+      ↓
+
+Choose Operation
+
+      ↓
+
+ ┌───────────────┐
+ │               │
+Enqueue       Dequeue
+ │               │
+ ↓               ↓
+Check Full     Check Empty
+ │               │
+ ↓               ↓
+Insert          Delete
+at Rear         from Front
+ │               │
+ └───────┬───────┘
+         ↓
+       Stop
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- COMPLEXITY -->
+
+<section>
+
+<h2 class="section-heading">
+    Time <span>Complexity</span>
+</h2>
+
+<div class="card">
+
+<div class="table-wrapper">
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Array Queue</th>
+<th>Linked List Queue</th>
+</tr>
+
+<tr>
+<td>Enqueue</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>Dequeue</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>Front / Peek</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>isEmpty</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>isFull</td>
+<td>O(1)</td>
+<td>Not fixed</td>
+</tr>
+
+</table>
+
+</div>
+
+<br>
+
+<p>
+Efficient queue implementation mein standard operations
+generally <strong>O(1)</strong> hote hain.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- APPLICATIONS -->
+
+<section>
+
+<h2 class="section-heading">
+    Queue ke <span>Applications</span>
+</h2>
+
+<div class="grid-3">
+
+<div class="card">
+
+<h3>
+🖨️ Printer Spooling
+</h3>
+
+<p>
+Print requests ko order mein manage karna.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+💻 CPU Scheduling
+</h3>
+
+<p>
+Processes ko scheduling algorithms ke according manage karna.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🌐 Network
+</h3>
+
+<p>
+Packets ko buffering aur processing ke liye queue kiya ja sakta hai.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🎮 Gaming
+</h3>
+
+<p>
+Players aur events ke waiting systems.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+📞 Call Center
+</h3>
+
+<p>
+Incoming customer requests manage karna.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+🔎 BFS
+</h3>
+
+<p>
+Breadth First Search mein queue fundamental data structure hai.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BFS -->
+
+<section>
+
+<h2 class="section-heading">
+    Queue in <span>BFS</span>
+</h2>
+
+<div class="card">
+
+<p>
+Graph traversal algorithm Breadth First Search
+queue ka important application hai.
+</p>
+
+<pre><code>
+Start Node
+
+    ↓
+
+Put Node in Queue
+
+    ↓
+
+Remove Front Node
+
+    ↓
+
+Visit Neighbours
+
+    ↓
+
+Add Unvisited Nodes
+
+    ↓
+
+Repeat Until Queue Empty
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- QUEUE TYPES -->
+
+<section>
+
+<h2 class="section-heading">
+    Types of <span>Queue</span>
+</h2>
+
+<div class="grid-2">
+
+<div class="card">
+<h3>1. Simple Queue</h3>
+<p>
+Basic FIFO queue.
+</p>
+</div>
+
+<div class="card">
+<h3>2. Circular Queue</h3>
+<p>
+Last position ke baad first position reuse hoti hai.
+</p>
+</div>
+
+<div class="card">
+<h3>3. Priority Queue</h3>
+<p>
+Priority based processing.
+</p>
+</div>
+
+<div class="card">
+<h3>4. Deque</h3>
+<p>
+Insertion/deletion dono ends se.
+</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- AKTU EXAM -->
+
+<section>
+
+<h2 class="section-heading">
+    AKTU <span>Exam Zone</span>
+</h2>
+
+<div class="card">
+
+<div class="info-list">
+
+<div class="info-item">
+⭐ Define Queue and explain FIFO principle.
+</div>
+
+<div class="info-item">
+⭐ Explain Front and Rear pointers.
+</div>
+
+<div class="info-item">
+⭐ Explain Enqueue and Dequeue operations.
+</div>
+
+<div class="info-item">
+⭐ Write algorithm for Enqueue.
+</div>
+
+<div class="info-item">
+⭐ Write algorithm for Dequeue.
+</div>
+
+<div class="info-item">
+⭐ Explain Queue Overflow and Underflow.
+</div>
+
+<div class="info-item">
+⭐ Implement Queue using Array.
+</div>
+
+<div class="info-item">
+⭐ Implement Queue using Linked List.
+</div>
+
+<div class="info-item">
+⭐ Explain Circular Queue with diagram.
+</div>
+
+<div class="info-item">
+⭐ Explain Priority Queue.
+</div>
+
+<div class="info-item">
+⭐ Explain Deque.
+</div>
+
+<div class="info-item">
+⭐ Explain applications of Queue.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- QUICK REVISION -->
+
+<section>
+
+<h2 class="section-heading">
+    ⚡ Quick <span>Revision</span>
+</h2>
+
+<div class="card">
+
+<div class="info-list">
+
+<div class="info-item">
+Queue = <strong>Linear Data Structure</strong>
+</div>
+
+<div class="info-item">
+Principle = <strong>FIFO</strong>
+</div>
+
+<div class="info-item">
+Insertion = <strong>Enqueue</strong>
+</div>
+
+<div class="info-item">
+Deletion = <strong>Dequeue</strong>
+</div>
+
+<div class="info-item">
+Insertion happens at = <strong>Rear</strong>
+</div>
+
+<div class="info-item">
+Deletion happens at = <strong>Front</strong>
+</div>
+
+<div class="info-item">
+Empty Queue deletion = <strong>Underflow</strong>
+</div>
+
+<div class="info-item">
+Full Queue insertion = <strong>Overflow</strong>
+</div>
+
+<div class="info-item">
+Major applications = <strong>BFS, CPU Scheduling, Printer, Networking</strong>
+</div>
+
+<div class="info-item">
+Types = <strong>Simple, Circular, Priority, Deque</strong>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- QUIZ -->
+
+<section>
+
+<h2 class="section-heading">
+    🧠 Test Your <span>Knowledge</span>
+</h2>
+
+<div class="card">
+
+<h3>
+Q1. Queue kis principle ko follow karta hai?
+</h3>
+
+<label class="option">
+<input type="radio" name="q1" value="correct">
+FIFO
+</label>
+
+<label class="option">
+<input type="radio" name="q1" value="wrong">
+LIFO
+</label>
+
+<label class="option">
+<input type="radio" name="q1" value="wrong">
+Random
+</label>
+
+
+<h3 style="margin-top:30px">
+Q2. Queue mein insertion operation kya hai?
+</h3>
+
+<label class="option">
+<input type="radio" name="q2" value="correct">
+Enqueue
+</label>
+
+<label class="option">
+<input type="radio" name="q2" value="wrong">
+Dequeue
+</label>
+
+<label class="option">
+<input type="radio" name="q2" value="wrong">
+Pop
+</label>
+
+
+<h3 style="margin-top:30px">
+Q3. Queue mein deletion kahan se hota hai?
+</h3>
+
+<label class="option">
+<input type="radio" name="q3" value="correct">
+Front
+</label>
+
+<label class="option">
+<input type="radio" name="q3" value="wrong">
+Rear
+</label>
+
+<label class="option">
+<input type="radio" name="q3" value="wrong">
+Middle
+</label>
+
+
+<h3 style="margin-top:30px">
+Q4. Queue ka insertion kis end par hota hai?
+</h3>
+
+<label class="option">
+<input type="radio" name="q4" value="correct">
+Rear
+</label>
+
+<label class="option">
+<input type="radio" name="q4" value="wrong">
+Front
+</label>
+
+<label class="option">
+<input type="radio" name="q4" value="wrong">
+Middle
+</label>
+
+
+<h3 style="margin-top:30px">
+Q5. BFS mein kaunsa data structure use hota hai?
+</h3>
+
+<label class="option">
+<input type="radio" name="q5" value="correct">
+Queue
+</label>
+
+<label class="option">
+<input type="radio" name="q5" value="wrong">
+Stack
+</label>
+
+<label class="option">
+<input type="radio" name="q5" value="wrong">
+Array only
+</label>
+
+
+<button
+class="quiz-button"
+onclick="checkQuiz()">
+
+Check Answers
+
+</button>
+
+<div id="quizResult"></div>
+
+</div>
+
+</section>
+
+
+<!-- NAVIGATION -->
+
+<section>
+
+<div class="topic-navigation">
+
+<a
+href="stack.html"
+class="topic-nav">
+
+<span class="nav-label">
+← PREVIOUS TOPIC
+</span>
+
+<span class="nav-topic">
+Stack
+</span>
+
+</a>
+
+
+<a
+href="unit-1.html"
+class="unit-home">
+
+🏠 Unit 1
+
+</a>
+
+
+<a
+href="linked-list.html"
+class="topic-nav next">
+
+<span class="nav-label">
+NEXT TOPIC →
+</span>
+
+<span class="nav-topic">
+Linked List →
+</span>
+
+</a>
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<div class="developer">
+
+Web Developer
+<span>
+Vaibhav
+</span>
+
+</div>
+
+<p>
+DSA Vault • AKTU
+Data Structures & Algorithms
+</p>
+
+<div class="social-links">
+
+<a href="#" target="_blank">
+GitHub
+</a>
+
+<a href="#" target="_blank">
+LinkedIn
+</a>
+
+</div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   THEME
+========================= */
+
+const themeToggle =
+document.getElementById("themeToggle");
+
+const savedTheme =
+localStorage.getItem("dsa-theme");
+
+if(savedTheme === "dark"){
+
+    document.body.classList.add("dark");
+
+    themeToggle.textContent = "☀️";
+}
+
+themeToggle.addEventListener(
+"click",
+function(){
+
+    document.body.classList.toggle("dark");
+
+    const isDark =
+    document.body.classList.contains("dark");
+
+    localStorage.setItem(
+        "dsa-theme",
+        isDark ? "dark" : "light"
+    );
+
+    themeToggle.textContent =
+    isDark ? "☀️" : "🌙";
+
+});
+
+
+/* =========================
+   READING PROGRESS
+========================= */
+
+window.addEventListener(
+"scroll",
+function(){
+
+    const scrollTop =
+    document.documentElement.scrollTop;
+
+    const scrollHeight =
+    document.documentElement.scrollHeight -
+    document.documentElement.clientHeight;
+
+    const percentage =
+    (scrollTop / scrollHeight) * 100;
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+    percentage + "%";
+
+});
+
+
+/* =========================
+   QUIZ
+========================= */
+
+function checkQuiz(){
+
+    const questions = [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+    ];
+
+    let score = 0;
+    let answered = 0;
+
+    questions.forEach(function(q){
+
+        const selected =
+        document.querySelector(
+            'input[name="' +
+            q +
+            '"]:checked'
+        );
+
+        if(selected){
+
+            answered++;
+
+            if(
+                selected.value ===
+                "correct"
+            ){
+
+                score++;
+
+            }
+
+        }
+
+    });
+
+
+    const result =
+    document.getElementById(
+        "quizResult"
+    );
+
+
+    if(answered <
+       questions.length){
+
+        result.innerHTML =
+        "⚠️ Please answer all questions.";
+
+        return;
+
+    }
+
+
+    if(score === 5){
+
+        result.innerHTML =
+        "🎉 Perfect! 5/5 Correct. Queue Master!";
+
+    }
+
+    else if(score === 4){
+
+        result.innerHTML =
+        "🔥 Excellent! 4/5 Correct.";
+
+    }
+
+    else if(score === 3){
+
+        result.innerHTML =
+        "👍 Good! 3/5 Correct. Revise once.";
+
+    }
+
+    else{
+
+        result.innerHTML =
+        "📚 Revise Queue concepts and try again.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
