@@ -1,0 +1,2636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="DSA Unit 1 Topic 1 - Data">
+
+    <title>Data | DSA Master</title>
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+
+    <style>
+
+        /* =====================================================
+           ROOT
+        ===================================================== */
+
+        :root {
+            --bg: #070816;
+            --bg2: #0d1022;
+
+            --white: #ffffff;
+            --text: #e9edff;
+            --muted: #9aa5c6;
+
+            --purple: #8b5cf6;
+            --violet: #a855f7;
+            --cyan: #22d3ee;
+            --blue: #3b82f6;
+            --pink: #ec4899;
+            --orange: #f59e0b;
+            --green: #34d399;
+            --red: #fb7185;
+
+            --border: rgba(255,255,255,.10);
+
+            --glass: rgba(255,255,255,.045);
+
+            --gradient:
+                linear-gradient(
+                    135deg,
+                    #8b5cf6,
+                    #3b82f6,
+                    #22d3ee
+                );
+
+            --gradient2:
+                linear-gradient(
+                    135deg,
+                    #ec4899,
+                    #8b5cf6,
+                    #3b82f6
+                );
+        }
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            background:
+
+                radial-gradient(
+                    circle at 10% 5%,
+                    rgba(139,92,246,.16),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    circle at 90% 30%,
+                    rgba(34,211,238,.10),
+                    transparent 25%
+                ),
+
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            line-height: 1.6;
+
+            overflow-x: hidden;
+        }
+
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
+
+        .background {
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            z-index: -1;
+
+            overflow: hidden;
+        }
+
+
+        .orb {
+            position: absolute;
+
+            border-radius: 50%;
+
+            filter: blur(90px);
+
+            opacity: .18;
+
+            animation:
+                floating 12s ease-in-out infinite;
+        }
+
+
+        .orb.one {
+            width: 330px;
+            height: 330px;
+
+            background: var(--purple);
+
+            left: -150px;
+            top: 20%;
+        }
+
+
+        .orb.two {
+            width: 280px;
+            height: 280px;
+
+            background: var(--cyan);
+
+            right: -120px;
+            top: 50%;
+
+            animation-delay: -5s;
+        }
+
+
+        .orb.three {
+            width: 260px;
+            height: 260px;
+
+            background: var(--pink);
+
+            left: 45%;
+            bottom: -150px;
+
+            animation-delay: -8s;
+        }
+
+
+        @keyframes floating {
+
+            0%,100% {
+                transform:
+                    translate(0,0)
+                    scale(1);
+            }
+
+            50% {
+                transform:
+                    translate(35px,-40px)
+                    scale(1.12);
+            }
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        header {
+            position: sticky;
+
+            top: 0;
+
+            z-index: 100;
+
+            background:
+                rgba(7,8,22,.78);
+
+            backdrop-filter:
+                blur(20px);
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        nav {
+            width: min(1200px,92%);
+
+            min-height: 72px;
+
+            margin: auto;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .brand {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            font-weight: 800;
+        }
+
+
+        .logo {
+            width: 42px;
+            height: 42px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 13px;
+
+            background:
+                var(--gradient);
+
+            box-shadow:
+                0 0 30px
+                rgba(139,92,246,.3);
+        }
+
+
+        .brand span {
+            color: var(--cyan);
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .nav-btn {
+            padding: 9px 15px;
+
+            border-radius: 999px;
+
+            color: var(--muted);
+
+            background:
+                rgba(255,255,255,.04);
+
+            border:
+                1px solid var(--border);
+
+            transition: .3s;
+        }
+
+
+        .nav-btn:hover {
+            color: white;
+
+            border-color:
+                rgba(139,92,246,.5);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =====================================================
+           COMMON
+        ===================================================== */
+
+        .container {
+            width: min(1150px,92%);
+
+            margin: auto;
+        }
+
+
+        .section {
+            padding: 80px 0;
+        }
+
+
+        .eyebrow {
+            color: var(--cyan);
+
+            font-size: .75rem;
+
+            font-weight: 800;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+        }
+
+
+        .section-title {
+            font-size:
+                clamp(2rem,4vw,3.3rem);
+
+            line-height: 1.1;
+
+            letter-spacing: -2px;
+
+            margin-top: 10px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .gradient-text {
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff,
+                    #a78bfa,
+                    #22d3ee,
+                    #ec4899
+                );
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+            color: transparent;
+        }
+
+
+        .muted {
+            color: var(--muted);
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            min-height: 620px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            align-items: center;
+
+            gap: 70px;
+
+            padding:
+                80px 0 60px;
+        }
+
+
+        .hero-content {
+            animation:
+                appear .9s ease forwards;
+        }
+
+
+        @keyframes appear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        .topic-badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                8px 13px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(139,92,246,.10);
+
+            border:
+                1px solid
+                rgba(139,92,246,.3);
+
+            color: #d6d2ff;
+
+            font-size: .78rem;
+
+            margin-bottom: 24px;
+        }
+
+
+        .dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: var(--cyan);
+
+            box-shadow:
+                0 0 14px
+                var(--cyan);
+        }
+
+
+        .hero h1 {
+            font-size:
+                clamp(3.5rem,7vw,6.8rem);
+
+            line-height: .9;
+
+            letter-spacing: -6px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .hero-description {
+            color: var(--muted);
+
+            max-width: 620px;
+
+            font-size: 1.05rem;
+
+            line-height: 1.85;
+
+            margin-bottom: 28px;
+        }
+
+
+        .hero-meta {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+        }
+
+
+        .meta {
+            padding:
+                8px 12px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid var(--border);
+
+            color: #c9d1ef;
+
+            font-size: .75rem;
+        }
+
+
+        /* =====================================================
+           DATA VISUAL
+        ===================================================== */
+
+        .visual {
+            min-height: 440px;
+
+            display: grid;
+
+            place-items: center;
+
+            position: relative;
+        }
+
+
+        .data-board {
+            width: min(450px,100%);
+
+            padding: 25px;
+
+            border-radius: 28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.08),
+                    rgba(255,255,255,.025)
+                );
+
+            border:
+                1px solid
+                rgba(255,255,255,.12);
+
+            backdrop-filter:
+                blur(20px);
+
+            box-shadow:
+                0 30px 80px
+                rgba(0,0,0,.35);
+
+            transform:
+                perspective(900px)
+                rotateY(-8deg);
+
+            animation:
+                boardFloat 5s ease-in-out infinite;
+        }
+
+
+        @keyframes boardFloat {
+
+            0%,100% {
+                transform:
+                    perspective(900px)
+                    rotateY(-8deg)
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    perspective(900px)
+                    rotateY(-3deg)
+                    translateY(-12px);
+            }
+        }
+
+
+        .board-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 22px;
+
+            color: #dfe5ff;
+
+            font-size: .9rem;
+        }
+
+
+        .status {
+            color: var(--green);
+
+            font-size: .7rem;
+        }
+
+
+        .memory {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 8px;
+
+            margin: 25px 0;
+        }
+
+
+        .memory-cell {
+            height: 70px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            border-radius: 12px;
+
+            background:
+                rgba(59,130,246,.08);
+
+            border:
+                1px solid
+                rgba(59,130,246,.25);
+
+            animation:
+                cellPulse 3s ease-in-out infinite;
+        }
+
+
+        .memory-cell:nth-child(2) {
+            animation-delay: -.4s;
+        }
+
+
+        .memory-cell:nth-child(3) {
+            animation-delay: -.8s;
+        }
+
+
+        .memory-cell:nth-child(4) {
+            animation-delay: -1.2s;
+        }
+
+
+        @keyframes cellPulse {
+
+            50% {
+                transform:
+                    translateY(-5px);
+
+                border-color:
+                    rgba(34,211,238,.5);
+            }
+        }
+
+
+        .memory-cell strong {
+            color: white;
+
+            font-size: 1.15rem;
+        }
+
+
+        .memory-cell small {
+            color: var(--muted);
+
+            font-size: .6rem;
+        }
+
+
+        .arrow {
+            text-align: center;
+
+            color: var(--cyan);
+
+            font-size: 1.5rem;
+        }
+
+
+        .result-box {
+            margin-top: 18px;
+
+            padding: 16px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(139,92,246,.08);
+
+            border:
+                1px solid
+                rgba(139,92,246,.25);
+
+            text-align: center;
+        }
+
+
+        .result-box span {
+            color: var(--muted);
+
+            font-size: .7rem;
+        }
+
+
+        .result-box strong {
+            display: block;
+
+            color: #ddd6fe;
+
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           CONTENT CARD
+        ===================================================== */
+
+        .content-card {
+            padding: 32px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid var(--border);
+
+            backdrop-filter:
+                blur(15px);
+
+            margin-top: 30px;
+        }
+
+
+        .content-card h3 {
+            font-size: 1.5rem;
+
+            margin-bottom: 14px;
+        }
+
+
+        .content-card p {
+            color: var(--muted);
+
+            line-height: 1.9;
+
+            margin-bottom: 15px;
+        }
+
+
+        .highlight {
+            color: #ddd6fe;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           DEFINITION
+        ===================================================== */
+
+        .definition-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 22px;
+        }
+
+
+        .definition {
+            padding: 28px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(139,92,246,.10),
+                    rgba(255,255,255,.03)
+                );
+
+            border:
+                1px solid
+                rgba(139,92,246,.2);
+        }
+
+
+        .definition-number {
+            width: 40px;
+            height: 40px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 12px;
+
+            background:
+                var(--gradient);
+
+            margin-bottom: 18px;
+
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           TYPES
+        ===================================================== */
+
+        .types {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2,1fr);
+
+            gap: 20px;
+        }
+
+
+        .type-card {
+            padding: 28px;
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid var(--border);
+
+            transition: .35s;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .type-card:hover {
+            transform:
+                translateY(-8px);
+
+            border-color:
+                rgba(34,211,238,.35);
+        }
+
+
+        .type-icon {
+            font-size: 2rem;
+
+            margin-bottom: 15px;
+        }
+
+
+        .type-card h3 {
+            margin-bottom: 8px;
+        }
+
+
+        .type-card p {
+            color: var(--muted);
+
+            font-size: .88rem;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================================
+           VISUAL TREE
+        ===================================================== */
+
+        .tree-box {
+            margin-top: 35px;
+
+            padding: 35px;
+
+            border-radius: 25px;
+
+            background:
+                rgba(255,255,255,.035);
+
+            border:
+                1px solid var(--border);
+
+            overflow-x: auto;
+        }
+
+
+        .tree {
+            min-width: 620px;
+
+            min-height: 330px;
+
+            position: relative;
+
+            display: flex;
+
+            justify-content: center;
+        }
+
+
+        .tree-node {
+            position: absolute;
+
+            width: 95px;
+            height: 55px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 14px;
+
+            background:
+                rgba(139,92,246,.12);
+
+            border:
+                1px solid
+                rgba(139,92,246,.4);
+
+            font-size: .75rem;
+
+            font-weight: 700;
+
+            z-index: 2;
+        }
+
+
+        .tree-node.main {
+            top: 10px;
+
+            background:
+                var(--gradient);
+
+            border: none;
+
+            box-shadow:
+                0 0 35px
+                rgba(139,92,246,.25);
+        }
+
+
+        .tree-node.n1 {
+            top: 120px;
+            left: 100px;
+        }
+
+
+        .tree-node.n2 {
+            top: 120px;
+            right: 100px;
+        }
+
+
+        .tree-node.n3 {
+            bottom: 10px;
+            left: 40px;
+        }
+
+
+        .tree-node.n4 {
+            bottom: 10px;
+            left: 255px;
+        }
+
+
+        .tree-node.n5 {
+            bottom: 10px;
+            right: 40px;
+        }
+
+
+        .tree-line {
+            position: absolute;
+
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--cyan),
+                    transparent
+                );
+
+            opacity: .65;
+        }
+
+
+        .tl1 {
+            width: 210px;
+
+            top: 105px;
+
+            transform:
+                rotate(27deg);
+
+            left: 135px;
+        }
+
+
+        .tl2 {
+            width: 210px;
+
+            top: 105px;
+
+            transform:
+                rotate(-27deg);
+
+            right: 135px;
+        }
+
+
+        .tl3 {
+            width: 130px;
+
+            top: 190px;
+
+            transform:
+                rotate(22deg);
+
+            left: 95px;
+        }
+
+
+        .tl4 {
+            width: 130px;
+
+            top: 190px;
+
+            transform:
+                rotate(-22deg);
+
+            right: 95px;
+        }
+
+
+        .tl5 {
+            width: 120px;
+
+            top: 200px;
+
+            left: 300px;
+
+            transform:
+                rotate(90deg);
+        }
+
+
+        /* =====================================================
+           REAL WORLD
+        ===================================================== */
+
+        .real-world {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3,1fr);
+
+            gap: 18px;
+
+            margin-top: 30px;
+        }
+
+
+        .world-card {
+            padding: 25px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid var(--border);
+
+            transition: .3s;
+        }
+
+
+        .world-card:hover {
+            transform:
+                translateY(-7px);
+
+            border-color:
+                rgba(245,158,11,.35);
+        }
+
+
+        .world-icon {
+            font-size: 2rem;
+
+            margin-bottom: 15px;
+        }
+
+
+        .world-card h3 {
+            margin-bottom: 8px;
+        }
+
+
+        .world-card p {
+            color: var(--muted);
+
+            font-size: .82rem;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================================
+           C++ EXAMPLE
+        ===================================================== */
+
+        .code-card {
+            overflow: hidden;
+
+            border-radius: 22px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                #050611;
+
+            margin-top: 30px;
+        }
+
+
+        .code-top {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                13px 17px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            color: var(--muted);
+
+            font-size: .75rem;
+        }
+
+
+        .circle {
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,.3);
+        }
+
+
+        pre {
+            padding: 25px;
+
+            overflow-x: auto;
+
+            color: #d9e1ff;
+
+            font-family:
+                Consolas,
+                monospace;
+
+            font-size: .85rem;
+
+            line-height: 1.8;
+        }
+
+
+        .keyword {
+            color: #c084fc;
+        }
+
+
+        .type {
+            color: #67e8f9;
+        }
+
+
+        .number {
+            color: #fbbf24;
+        }
+
+
+        .comment {
+            color: #64748b;
+        }
+
+
+        /* =====================================================
+           AKTU
+        ===================================================== */
+
+        .aktu {
+            padding: 30px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(236,72,153,.08),
+                    rgba(139,92,246,.08)
+                );
+
+            border:
+                1px solid
+                rgba(236,72,153,.2);
+        }
+
+
+        .question {
+            padding: 18px;
+
+            margin-top: 12px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,.04);
+
+            border:
+                1px solid var(--border);
+        }
+
+
+        .question strong {
+            color: #ddd6fe;
+
+            display: block;
+
+            margin-bottom: 5px;
+        }
+
+
+        .question span {
+            color: var(--muted);
+
+            font-size: .82rem;
+        }
+
+
+        /* =====================================================
+           QUICK REVISION
+        ===================================================== */
+
+        .revision {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 15px;
+
+            margin-top: 30px;
+        }
+
+
+        .revision-box {
+            padding: 20px;
+
+            border-radius: 17px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid var(--border);
+
+            text-align: center;
+        }
+
+
+        .revision-box strong {
+            display: block;
+
+            font-size: 1.4rem;
+
+            color: var(--cyan);
+
+            margin-bottom: 5px;
+        }
+
+
+        .revision-box span {
+            color: var(--muted);
+
+            font-size: .72rem;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .topic-navigation {
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-top: 60px;
+        }
+
+
+        .topic-nav {
+            padding: 17px 22px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,.045);
+
+            border:
+                1px solid var(--border);
+
+            transition: .3s;
+        }
+
+
+        .topic-nav:hover {
+            transform:
+                translateY(-4px);
+
+            border-color:
+                rgba(139,92,246,.45);
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+            padding:
+                45px 0;
+
+            margin-top: 50px;
+
+            border-top:
+                1px solid var(--border);
+        }
+
+
+        .footer-inner {
+            width: min(1150px,92%);
+
+            margin: auto;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .developer {
+            color: var(--muted);
+
+            font-size: .85rem;
+        }
+
+
+        .developer strong {
+            color: white;
+        }
+
+
+        .socials {
+            display: flex;
+
+            gap: 9px;
+        }
+
+
+        .social {
+            padding:
+                9px 14px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,.05);
+
+            border:
+                1px solid var(--border);
+
+            color: #cbd4f5;
+
+            font-size: .78rem;
+
+            transition: .3s;
+        }
+
+
+        .social:hover {
+            color: white;
+
+            border-color:
+                rgba(139,92,246,.5);
+        }
+
+
+        /* =====================================================
+           REVEAL
+        ===================================================== */
+
+        .reveal {
+            opacity: 0;
+
+            transform:
+                translateY(30px);
+
+            transition:
+                .8s ease;
+        }
+
+
+        .reveal.active {
+            opacity: 1;
+
+            transform:
+                translateY(0);
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:900px) {
+
+            .hero {
+                grid-template-columns: 1fr;
+
+                text-align: center;
+            }
+
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+
+            .hero-meta {
+                justify-content: center;
+            }
+
+
+            .definition-grid,
+            .types {
+                grid-template-columns: 1fr;
+            }
+
+
+            .real-world {
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+
+            .revision {
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+        }
+
+
+        @media(max-width:600px) {
+
+            .nav-links .nav-btn:first-child {
+                display: none;
+            }
+
+
+            .hero h1 {
+                letter-spacing: -4px;
+            }
+
+
+            .real-world,
+            .revision {
+                grid-template-columns: 1fr;
+            }
+
+
+            .content-card,
+            .definition,
+            .type-card,
+            .aktu {
+                padding: 23px;
+            }
+
+
+            .topic-navigation {
+                flex-direction: column;
+            }
+
+
+            .topic-nav {
+                text-align: center;
+            }
+
+
+            .footer-inner {
+                justify-content: center;
+
+                text-align: center;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     BACKGROUND
+===================================================== -->
+
+<div class="background">
+
+    <div class="orb one"></div>
+
+    <div class="orb two"></div>
+
+    <div class="orb three"></div>
+
+</div>
+
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<header>
+
+    <nav>
+
+        <a href="index.html" class="brand">
+
+            <div class="logo">
+                DS
+            </div>
+
+            <div>
+                DSA <span>MASTER</span>
+            </div>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a
+                href="index.html"
+                class="nav-btn"
+            >
+                ← Unit 1
+            </a>
+
+
+            <a
+                href="../index.html"
+                class="nav-btn"
+            >
+                Main
+            </a>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<main>
+
+<section class="container hero">
+
+
+    <div class="hero-content">
+
+        <div class="topic-badge">
+
+            <span class="dot"></span>
+
+            UNIT 01 • TOPIC 01
+
+        </div>
+
+
+        <h1>
+
+            <span class="gradient-text">
+                DATA
+            </span>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Data is the fundamental building block of
+            every computer program. Before learning
+            Data Structures and Algorithms, we need to
+            understand what data is and how it is
+            represented and organized.
+
+        </p>
+
+
+        <div class="hero-meta">
+
+            <span class="meta">
+                📚 AKTU Focus
+            </span>
+
+            <span class="meta">
+                🧠 Foundation
+            </span>
+
+            <span class="meta">
+                💻 C++
+            </span>
+
+            <span class="meta">
+                🎯 Beginner
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- VISUAL -->
+
+    <div class="visual">
+
+        <div class="data-board">
+
+
+            <div class="board-header">
+
+                <strong>
+                    DATA MEMORY VIEW
+                </strong>
+
+                <span class="status">
+                    ● ACTIVE
+                </span>
+
+            </div>
+
+
+            <div class="memory">
+
+                <div class="memory-cell">
+
+                    <small>INDEX 0</small>
+
+                    <strong>25</strong>
+
+                </div>
+
+
+                <div class="memory-cell">
+
+                    <small>INDEX 1</small>
+
+                    <strong>42</strong>
+
+                </div>
+
+
+                <div class="memory-cell">
+
+                    <small>INDEX 2</small>
+
+                    <strong>17</strong>
+
+                </div>
+
+
+                <div class="memory-cell">
+
+                    <small>INDEX 3</small>
+
+                    <strong>89</strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="arrow">
+                ↓
+            </div>
+
+
+            <div class="result-box">
+
+                <span>
+                    INFORMATION STORED
+                </span>
+
+                <strong>
+                    25, 42, 17, 89
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     WHAT IS DATA
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="eyebrow reveal">
+        CONCEPT 01
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        What is
+        <span class="gradient-text">
+            Data?
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <h3>
+            Simple Definition
+        </h3>
+
+
+        <p>
+
+            <span class="highlight">Data</span>
+            means raw facts, values or information
+            that can be processed by a computer.
+
+        </p>
+
+
+        <p>
+
+            These values may represent numbers,
+            characters, text, images, audio, video,
+            measurements or any other form of
+            information.
+
+        </p>
+
+
+        <p>
+
+            In Data Structures, our main goal is to
+            understand how this data can be
+            <span class="highlight">
+                stored, organized and accessed efficiently.
+            </span>
+
+        </p>
+
+    </div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     DEFINITION EXAMPLES
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="eyebrow reveal">
+        UNDERSTAND WITH EXAMPLES
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Data in
+        <span class="gradient-text">
+            Real Life
+        </span>
+
+    </h2>
+
+
+    <div class="definition-grid">
+
+
+        <div class="definition reveal">
+
+            <div class="definition-number">
+                01
+            </div>
+
+            <h3>
+                Student Information
+            </h3>
+
+            <p class="muted">
+
+                Name, roll number, marks, age and
+                attendance are all examples of data.
+
+            </p>
+
+        </div>
+
+
+        <div class="definition reveal">
+
+            <div class="definition-number">
+                02
+            </div>
+
+            <h3>
+                E-Commerce
+            </h3>
+
+            <p class="muted">
+
+                Product name, price, quantity,
+                customer ID and order details are data.
+
+            </p>
+
+        </div>
+
+
+        <div class="definition reveal">
+
+            <div class="definition-number">
+                03
+            </div>
+
+            <h3>
+                Social Media
+            </h3>
+
+            <p class="muted">
+
+                Posts, comments, likes, usernames,
+                images and messages represent data.
+
+            </p>
+
+        </div>
+
+
+        <div class="definition reveal">
+
+            <div class="definition-number">
+                04
+            </div>
+
+            <h3>
+                Banking
+            </h3>
+
+            <p class="muted">
+
+                Account number, balance, transaction
+                amount and date are data.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TYPES OF DATA
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="eyebrow reveal">
+        DATA CLASSIFICATION
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Types of
+        <span class="gradient-text">
+            Data
+        </span>
+
+    </h2>
+
+
+    <p
+        class="muted reveal"
+        style="max-width:700px;"
+    >
+
+        Data can be classified in different ways.
+        For DSA, understanding primitive and
+        non-primitive data is especially important.
+
+    </p>
+
+
+    <div class="types">
+
+
+        <div class="type-card reveal">
+
+            <div class="type-icon">
+                🔢
+            </div>
+
+            <h3>
+                Primitive Data
+            </h3>
+
+            <p>
+
+                Basic data types provided by a
+                programming language.
+
+                Examples:
+
+                int, char, float, double and bool.
+
+            </p>
+
+        </div>
+
+
+        <div class="type-card reveal">
+
+            <div class="type-icon">
+                🧩
+            </div>
+
+            <h3>
+                Non-Primitive Data
+            </h3>
+
+            <p>
+
+                More complex structures created using
+                primitive data types.
+
+                Examples:
+
+                arrays, structures, linked lists,
+                stacks, queues and trees.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- VISUAL TREE -->
+
+    <div class="tree-box reveal">
+
+        <div class="tree">
+
+
+            <div class="tree-line tl1"></div>
+            <div class="tree-line tl2"></div>
+            <div class="tree-line tl3"></div>
+            <div class="tree-line tl4"></div>
+            <div class="tree-line tl5"></div>
+
+
+            <div class="tree-node main">
+                DATA
+            </div>
+
+
+            <div class="tree-node n1">
+                Primitive
+            </div>
+
+
+            <div class="tree-node n2">
+                Non-Primitive
+            </div>
+
+
+            <div class="tree-node n3">
+                int / char
+            </div>
+
+
+            <div class="tree-node n4">
+                Array
+            </div>
+
+
+            <div class="tree-node n5">
+                Linked List
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     REAL WORLD
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="eyebrow reveal">
+        REAL WORLD CONNECTION
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Where is Data
+        <span class="gradient-text">
+            Used?
+        </span>
+
+    </h2>
+
+
+    <div class="real-world">
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🏦
+            </div>
+
+            <h3>
+                Banking
+            </h3>
+
+            <p>
+
+                Banks store customer details,
+                transactions, account balances and
+                payment information.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🏥
+            </div>
+
+            <h3>
+                Healthcare
+            </h3>
+
+            <p>
+
+                Patient records, medical reports,
+                medicines and test results are stored
+                as data.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                📱
+            </div>
+
+            <h3>
+                Mobile Apps
+            </h3>
+
+            <p>
+
+                Contacts, messages, photos and
+                application settings are data.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🚗
+            </div>
+
+            <h3>
+                Transportation
+            </h3>
+
+            <p>
+
+                Vehicle locations, speed, routes and
+                traffic information are data.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🎮
+            </div>
+
+            <h3>
+                Gaming
+            </h3>
+
+            <p>
+
+                Player scores, health, position,
+                inventory and game state are data.
+
+            </p>
+
+        </div>
+
+
+        <div class="world-card reveal">
+
+            <div class="world-icon">
+                🤖
+            </div>
+
+            <h3>
+                Artificial Intelligence
+            </h3>
+
+            <p>
+
+                AI systems process huge amounts of
+                data to learn patterns and make
+                predictions.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     C++ EXAMPLE
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="eyebrow reveal">
+        DATA IN C++
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        How does a computer
+        <span class="gradient-text">
+            store data?
+        </span>
+
+    </h2>
+
+
+    <div class="content-card reveal">
+
+        <p>
+
+            In C++, variables are used to store data.
+            The data type tells the compiler what kind
+            of value is being stored.
+
+        </p>
+
+    </div>
+
+
+    <div class="code-card reveal">
+
+        <div class="code-top">
+
+            <span class="circle"></span>
+            <span class="circle"></span>
+            <span class="circle"></span>
+
+            <span style="margin-left:8px;">
+                data.cpp
+            </span>
+
+        </div>
+
+
+<pre><code><span class="comment">// Different types of data</span>
+
+<span class="keyword">int</span> age = <span class="number">20</span>;
+
+<span class="keyword">float</span> percentage = <span class="number">87.5</span>;
+
+<span class="keyword">char</span> grade = <span class="number">'A'</span>;
+
+<span class="keyword">bool</span> passed = <span class="keyword">true</span>;
+
+<span class="keyword">double</span> salary = <span class="number">45000.50</span>;</code></pre>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AKTU IMPORTANT
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="aktu reveal">
+
+
+        <div class="eyebrow">
+            AKTU EXAM ZONE
+        </div>
+
+
+        <h2 class="section-title">
+            Important Questions
+        </h2>
+
+
+        <div class="question">
+
+            <strong>
+                Q1. Define Data.
+            </strong>
+
+            <span>
+                Short-answer / definition based.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q2. What are primitive and
+                non-primitive data types?
+            </strong>
+
+            <span>
+                Explain with suitable examples.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q3. Differentiate between primitive
+                and non-primitive data.
+            </strong>
+
+            <span>
+                Frequently useful for theory preparation.
+            </span>
+
+        </div>
+
+
+        <div class="question">
+
+            <strong>
+                Q4. Explain different types of data
+                with examples.
+            </strong>
+
+            <span>
+                Prepare both definition and examples.
+            </span>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     QUICK REVISION
+===================================================== -->
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="eyebrow reveal">
+        30 SECOND REVISION
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Remember These
+        <span class="gradient-text">
+            Points
+        </span>
+
+    </h2>
+
+
+    <div class="revision">
+
+
+        <div class="revision-box reveal">
+
+            <strong>
+                01
+            </strong>
+
+            <span>
+                Data = Raw facts
+            </span>
+
+        </div>
+
+
+        <div class="revision-box reveal">
+
+            <strong>
+                02
+            </strong>
+
+            <span>
+                Primitive = Basic
+            </span>
+
+        </div>
+
+
+        <div class="revision-box reveal">
+
+            <strong>
+                03
+            </strong>
+
+            <span>
+                Non-Primitive = Complex
+            </span>
+
+        </div>
+
+
+        <div class="revision-box reveal">
+
+            <strong>
+                04
+            </strong>
+
+            <span>
+                Data is processed
+                to produce information
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TOPIC NAVIGATION
+===================================================== -->
+
+<section class="container">
+
+
+    <div class="topic-navigation">
+
+
+        <a
+            href="index.html"
+            class="topic-nav"
+        >
+
+            ← Back to Unit 1
+
+        </a>
+
+
+        <a
+            href="data-structure.html"
+            class="topic-nav"
+        >
+
+            Next: Data Structure →
+
+        </a>
+
+    </div>
+
+
+</section>
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="footer-inner">
+
+
+        <div class="developer">
+
+            Built with ❤️ by
+
+            <strong>
+                Web Developer Vaibhav
+            </strong>
+
+            <br>
+
+            <span>
+                DSA Master • Unit 1 • Data
+            </span>
+
+        </div>
+
+
+        <div class="socials">
+
+            <!-- Put your actual profile links here -->
+
+            <a
+                href="#"
+                target="_blank"
+                rel="noopener"
+                class="social"
+            >
+                💻 GitHub
+            </a>
+
+
+            <a
+                href="#"
+                target="_blank"
+                rel="noopener"
+                class="social"
+            >
+                🔗 LinkedIn
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+    /* =====================================================
+       SCROLL REVEAL
+    ===================================================== */
+
+    const reveals =
+        document.querySelectorAll(
+            ".reveal"
+        );
+
+
+    const observer =
+        new IntersectionObserver(
+            entries => {
+
+                entries.forEach(
+                    entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target
+                                .classList
+                                .add("active");
+
+                            observer.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+                threshold: .12
+            }
+        );
+
+
+    reveals.forEach(
+        element => {
+
+            observer.observe(element);
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+</html>

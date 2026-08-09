@@ -1,0 +1,2497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Linked List Operations | DSA Vault</title>
+
+<style>
+:root{
+    --bg:#f7f8fc;
+    --surface:#ffffff;
+    --surface2:#f0f1f7;
+    --text:#171827;
+    --muted:#686b7d;
+
+    --primary:#6757e8;
+    --secondary:#ff4f81;
+    --orange:#ff9f43;
+    --cyan:#00bfa6;
+    --green:#27c96f;
+    --red:#ff5b5b;
+    --yellow:#ffc857;
+
+    --border:rgba(20,20,40,.09);
+    --shadow:0 20px 60px rgba(40,30,90,.12);
+
+    --code:#15141c;
+    --codeText:#f5f5f7;
+}
+
+body.dark{
+    --bg:#080910;
+    --surface:#11121c;
+    --surface2:#191a26;
+    --text:#f6f6ff;
+    --muted:#a5a7b8;
+    --border:rgba(255,255,255,.09);
+    --shadow:0 25px 80px rgba(0,0,0,.55);
+    --code:#05060a;
+    --codeText:#f5f5f7;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,system-ui,-apple-system,
+    BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+    background:
+    radial-gradient(circle at 10% 10%,
+    rgba(103,87,232,.14),
+    transparent 28%),
+
+    radial-gradient(circle at 90% 20%,
+    rgba(255,79,129,.12),
+    transparent 25%),
+
+    radial-gradient(circle at 50% 100%,
+    rgba(0,191,166,.08),
+    transparent 30%),
+
+    var(--bg);
+
+    color:var(--text);
+    line-height:1.7;
+
+    overflow-x:hidden;
+    transition:.4s;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
+}
+
+
+/* =========================
+   BACKGROUND ORBS
+========================= */
+
+.orb{
+    position:fixed;
+
+    width:300px;
+    height:300px;
+
+    border-radius:50%;
+
+    filter:blur(100px);
+
+    opacity:.13;
+
+    pointer-events:none;
+
+    z-index:-1;
+
+    animation:floatOrb 10s ease-in-out infinite;
+}
+
+.orb.one{
+    background:var(--primary);
+    left:-150px;
+    top:10%;
+}
+
+.orb.two{
+    background:var(--secondary);
+    right:-150px;
+    top:40%;
+    animation-delay:2s;
+}
+
+.orb.three{
+    background:var(--cyan);
+    bottom:-160px;
+    left:40%;
+    animation-delay:4s;
+}
+
+@keyframes floatOrb{
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-45px);
+    }
+}
+
+
+/* =========================
+   PROGRESS BAR
+========================= */
+
+.progress-container{
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:4px;
+
+    z-index:3000;
+}
+
+.progress{
+    width:0%;
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--primary),
+        var(--secondary),
+        var(--orange),
+        var(--cyan)
+    );
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+
+    z-index:2000;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:16px 6%;
+
+    background:
+    color-mix(
+        in srgb,
+        var(--surface) 84%,
+        transparent
+    );
+
+    backdrop-filter:blur(20px);
+
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    font-size:1.45rem;
+    font-weight:950;
+}
+
+.logo span{
+    color:var(--primary);
+}
+
+.nav-actions{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.nav-btn{
+    border:1px solid var(--border);
+
+    background:var(--surface);
+    color:var(--text);
+
+    padding:9px 15px;
+
+    border-radius:50px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.nav-btn:hover{
+    transform:translateY(-3px);
+
+    border-color:var(--primary);
+
+    box-shadow:
+    0 10px 25px
+    rgba(103,87,232,.16);
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:72vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:80px 6%;
+}
+
+.hero-content{
+    max-width:1100px;
+}
+
+.badge{
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    background:
+    rgba(103,87,232,.12);
+
+    color:var(--primary);
+
+    font-weight:900;
+
+    margin-bottom:25px;
+}
+
+.hero h1{
+    font-size:
+    clamp(3rem,8vw,7rem);
+
+    line-height:.95;
+
+    letter-spacing:-5px;
+
+    background:
+    linear-gradient(
+        110deg,
+        var(--primary),
+        var(--secondary),
+        var(--orange),
+        var(--cyan)
+    );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    margin-bottom:28px;
+}
+
+.hero p{
+    max-width:850px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    font-size:1.1rem;
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+section{
+    width:min(1150px,90%);
+
+    margin:auto;
+
+    padding:70px 0;
+}
+
+.section-heading{
+    font-size:
+    clamp(2rem,5vw,3rem);
+
+    line-height:1.1;
+
+    margin-bottom:10px;
+}
+
+.section-heading span{
+    color:var(--primary);
+}
+
+.section-subtitle{
+    color:var(--muted);
+
+    margin-bottom:30px;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:26px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+    transition:.35s;
+}
+
+.card:hover{
+    transform:translateY(-7px);
+
+    box-shadow:
+    0 30px 80px
+    rgba(103,87,232,.16);
+}
+
+.grid-2{
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:25px;
+}
+
+.grid-3{
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+}
+
+.grid-4{
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:18px;
+}
+
+
+/* =========================
+   OPERATION CARDS
+========================= */
+
+.operation-card{
+    position:relative;
+
+    overflow:hidden;
+}
+
+.operation-number{
+    position:absolute;
+
+    right:18px;
+    top:5px;
+
+    font-size:5rem;
+
+    font-weight:950;
+
+    opacity:.06;
+}
+
+.operation-icon{
+    width:65px;
+    height:65px;
+
+    border-radius:20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+
+    font-size:1.8rem;
+
+    margin-bottom:20px;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+}
+
+.operation-card:nth-child(2)
+.operation-icon{
+    background:
+    linear-gradient(
+        135deg,
+        var(--cyan),
+        var(--primary)
+    );
+}
+
+.operation-card:nth-child(3)
+.operation-icon{
+    background:
+    linear-gradient(
+        135deg,
+        var(--orange),
+        var(--secondary)
+    );
+}
+
+.operation-card:nth-child(4)
+.operation-icon{
+    background:
+    linear-gradient(
+        135deg,
+        var(--green),
+        var(--cyan)
+    );
+}
+
+.operation-card:nth-child(5)
+.operation-icon{
+    background:
+    linear-gradient(
+        135deg,
+        var(--secondary),
+        var(--orange)
+    );
+}
+
+
+/* =========================
+   DIAGRAM
+========================= */
+
+.diagram{
+    overflow-x:auto;
+
+    padding:40px 10px;
+}
+
+.list{
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    min-width:max-content;
+}
+
+.node{
+    display:flex;
+
+    overflow:hidden;
+
+    border:2px solid var(--primary);
+
+    border-radius:17px;
+
+    background:var(--surface);
+
+    box-shadow:
+    0 15px 35px
+    rgba(103,87,232,.16);
+
+    transition:.4s;
+}
+
+.node:hover{
+    transform:
+    translateY(-8px)
+    rotate(-2deg);
+}
+
+.data{
+    min-width:75px;
+    min-height:60px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+
+    font-weight:950;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+}
+
+.next{
+    min-width:70px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:var(--surface2);
+
+    color:var(--primary);
+
+    font-weight:950;
+}
+
+.arrow{
+    margin:0 12px;
+
+    color:var(--primary);
+
+    font-size:2rem;
+
+    font-weight:950;
+}
+
+
+/* =========================
+   OPERATION VISUAL
+========================= */
+
+.visual-box{
+    min-height:260px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(103,87,232,.05),
+        rgba(255,79,129,.05)
+    );
+
+    border-radius:22px;
+
+    overflow:hidden;
+}
+
+.operation-flow{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+}
+
+.flow-node{
+    padding:17px 23px;
+
+    border-radius:17px;
+
+    color:white;
+
+    font-weight:950;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    box-shadow:
+    0 12px 30px
+    rgba(103,87,232,.22);
+
+    animation:nodePulse 3s ease-in-out infinite;
+}
+
+.flow-node:nth-child(3){
+    animation-delay:.5s;
+}
+
+.flow-node:nth-child(5){
+    animation-delay:1s;
+}
+
+@keyframes nodePulse{
+    0%,100%{
+        transform:translateY(0) scale(1);
+    }
+
+    50%{
+        transform:translateY(-8px) scale(1.04);
+    }
+}
+
+.flow-arrow{
+    font-size:1.8rem;
+
+    color:var(--primary);
+
+    font-weight:950;
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.info-list{
+    display:grid;
+
+    gap:13px;
+
+    margin-top:22px;
+}
+
+.info-item{
+    padding:15px 19px;
+
+    border-radius:15px;
+
+    background:
+    rgba(103,87,232,.07);
+
+    border-left:
+    4px solid var(--primary);
+}
+
+
+/* =========================
+   CODE
+========================= */
+
+pre{
+    background:var(--code);
+
+    color:var(--codeText);
+
+    padding:25px;
+
+    border-radius:20px;
+
+    overflow-x:auto;
+
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+    margin-top:20px;
+}
+
+code{
+    font-family:
+    Consolas,
+    "Courier New",
+    monospace;
+
+    font-size:.92rem;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    min-width:650px;
+
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:16px;
+
+    text-align:left;
+
+    border-bottom:
+    1px solid var(--border);
+}
+
+th{
+    color:var(--primary);
+}
+
+
+/* =========================
+   QUIZ
+========================= */
+
+.option{
+    display:block;
+
+    padding:14px 18px;
+
+    margin:10px 0;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.option:hover{
+    border-color:var(--primary);
+
+    transform:translateX(6px);
+}
+
+.quiz-btn{
+    border:none;
+
+    padding:13px 25px;
+
+    border-radius:50px;
+
+    color:white;
+
+    font-weight:950;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    cursor:pointer;
+
+    margin-top:15px;
+}
+
+#result{
+    margin-top:20px;
+
+    font-weight:950;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.topic-navigation{
+    display:grid;
+
+    grid-template-columns:
+    1fr auto 1fr;
+
+    gap:15px;
+
+    align-items:center;
+}
+
+.topic-nav{
+    padding:20px;
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    background:var(--surface);
+
+    transition:.3s;
+}
+
+.topic-nav:hover{
+    transform:translateY(-5px);
+
+    border-color:var(--primary);
+}
+
+.topic-nav.next{
+    text-align:right;
+}
+
+.nav-label{
+    display:block;
+
+    color:var(--muted);
+
+    font-size:.8rem;
+}
+
+.nav-topic{
+    font-weight:950;
+}
+
+.home-btn{
+    padding:15px 25px;
+
+    border-radius:50px;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    font-weight:950;
+
+    text-align:center;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    margin-top:50px;
+
+    padding:60px 20px;
+
+    text-align:center;
+
+    border-top:
+    1px solid var(--border);
+}
+
+.developer{
+    font-size:1.5rem;
+
+    font-weight:950;
+}
+
+.developer span{
+    color:var(--primary);
+}
+
+.social{
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin-top:20px;
+}
+
+.social a{
+    padding:10px 20px;
+
+    border:1px solid var(--border);
+
+    border-radius:50px;
+
+    transition:.3s;
+}
+
+.social a:hover{
+    background:var(--primary);
+
+    color:white;
+
+    transform:translateY(-4px);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:950px){
+
+    .grid-4{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .grid-3{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+
+    .grid-2,
+    .grid-4{
+        grid-template-columns:1fr;
+    }
+
+    .topic-navigation{
+        grid-template-columns:1fr;
+    }
+
+    .topic-nav.next{
+        text-align:center;
+    }
+
+    .navbar{
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:12px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div class="orb three"></div>
+
+
+<!-- PROGRESS -->
+
+<div class="progress-container">
+    <div class="progress" id="progressBar"></div>
+</div>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <a href="index.html" class="logo">
+        DSA<span>Vault</span>
+    </a>
+
+    <div class="nav-actions">
+
+        <a
+        href="linked-list-types.html"
+        class="nav-btn">
+
+        ← Types
+
+        </a>
+
+        <a
+        href="index.html"
+        class="nav-btn">
+
+        🏠 Home
+
+        </a>
+
+        <button
+        id="themeToggle"
+        class="nav-btn">
+
+        🌙
+
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<header class="hero">
+
+<div class="hero-content">
+
+    <div class="badge">
+        UNIT 1 • LINKED LIST
+    </div>
+
+    <h1>
+        Linked List
+        <br>
+        Operations
+    </h1>
+
+    <p>
+        Linked List mein nodes ko create, traverse, insert,
+        delete aur search kaise karte hain — diagrams,
+        algorithms aur C++ implementation ke saath.
+    </p>
+
+</div>
+
+</header>
+
+
+<!-- OVERVIEW -->
+
+<section>
+
+<h2 class="section-heading">
+    Core <span>Operations</span>
+</h2>
+
+<p class="section-subtitle">
+    Linked List ke most important operations jo AKTU exams
+    aur programming dono ke liye important hain.
+</p>
+
+
+<div class="grid-3">
+
+
+<div class="card operation-card">
+
+<div class="operation-number">
+01
+</div>
+
+<div class="operation-icon">
+＋
+</div>
+
+<h2>
+Creation
+</h2>
+
+<p>
+New nodes create karke unhe linked list mein connect karna.
+</p>
+
+</div>
+
+
+<div class="card operation-card">
+
+<div class="operation-number">
+02
+</div>
+
+<div class="operation-icon">
+→
+</div>
+
+<h2>
+Traversal
+</h2>
+
+<p>
+Head se start karke har node ko sequentially visit karna.
+</p>
+
+</div>
+
+
+<div class="card operation-card">
+
+<div class="operation-number">
+03
+</div>
+
+<div class="operation-icon">
+＋
+</div>
+
+<h2>
+Insertion
+</h2>
+
+<p>
+Beginning, end ya kisi specific position par node add karna.
+</p>
+
+</div>
+
+
+<div class="card operation-card">
+
+<div class="operation-number">
+04
+</div>
+
+<div class="operation-icon">
+−
+</div>
+
+<h2>
+Deletion
+</h2>
+
+<p>
+Linked List se kisi node ko remove karna.
+</p>
+
+</div>
+
+
+<div class="card operation-card">
+
+<div class="operation-number">
+05
+</div>
+
+<div class="operation-icon">
+⌕
+</div>
+
+<h2>
+Searching
+</h2>
+
+<p>
+Kisi particular value ko list ke andar find karna.
+</p>
+
+</div>
+
+
+<div class="card operation-card">
+
+<div class="operation-number">
+06
+</div>
+
+<div class="operation-icon">
+↻
+</div>
+
+<h2>
+Updating
+</h2>
+
+<p>
+Existing node ke data ko modify karna.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BASIC STRUCTURE -->
+
+<section>
+
+<h2 class="section-heading">
+    01. Linked List ka <span>Basic Structure</span>
+</h2>
+
+<div class="card">
+
+<p>
+Ek basic Singly Linked List ka structure:
+</p>
+
+<div class="diagram">
+
+<div class="list">
+
+<div class="flow-node">
+HEAD
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="node">
+
+<div class="data">10</div>
+<div class="next">NEXT</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="node">
+
+<div class="data">20</div>
+<div class="next">NEXT</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="node">
+
+<div class="data">30</div>
+<div class="next">NULL</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="info-list">
+
+<div class="info-item">
+📌 HEAD first node ka address store karta hai.
+</div>
+
+<div class="info-item">
+📌 Har node next node ka address store karta hai.
+</div>
+
+<div class="info-item">
+📌 Last node ka next normally NULL hota hai.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CREATION -->
+
+<section>
+
+<h2 class="section-heading">
+    02. <span>Creation</span>
+</h2>
+
+<div class="grid-2">
+
+<div class="card">
+
+<h2>
+Concept
+</h2>
+
+<p>
+Creation mein dynamically memory allocate karke
+Node create kiya jata hai.
+</p>
+
+<div class="operation-flow">
+
+<div class="flow-node">
+Create Node
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+Store Data
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+Connect
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>
+C++ Code
+</h2>
+
+<pre><code>
+struct Node
+{
+    int data;
+    Node* next;
+};
+
+Node* newNode =
+    new Node();
+
+newNode->data = 10;
+newNode->next = NULL;
+</code></pre>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- TRAVERSAL -->
+
+<section>
+
+<h2 class="section-heading">
+    03. <span>Traversal</span>
+</h2>
+
+<div class="card">
+
+<p>
+Traversal ka matlab hai list ke har node ko one-by-one visit
+karna.
+</p>
+
+<div class="visual-box">
+
+<div class="operation-flow">
+
+<div class="flow-node">
+HEAD
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+30
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+NULL
+</div>
+
+</div>
+
+</div>
+
+
+<h3 style="margin-top:30px">
+Algorithm
+</h3>
+
+<div class="info-list">
+
+<div class="info-item">
+1️⃣ Start with <strong>temp = head</strong>.
+</div>
+
+<div class="info-item">
+2️⃣ Jab tak temp != NULL ho, data print karo.
+</div>
+
+<div class="info-item">
+3️⃣ temp = temp → next.
+</div>
+
+<div class="info-item">
+4️⃣ NULL aane par stop.
+</div>
+
+</div>
+
+
+<pre><code>
+void display(Node* head)
+{
+    Node* temp = head;
+
+    while(temp != NULL)
+    {
+        cout << temp->data << " ";
+
+        temp = temp->next;
+    }
+}
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- INSERTION -->
+
+<section>
+
+<h2 class="section-heading">
+    04. <span>Insertion</span>
+</h2>
+
+<div class="grid-3">
+
+<div class="card">
+
+<h3>
+Insertion at Beginning
+</h3>
+
+<div class="operation-flow">
+
+<div class="flow-node">
+NEW
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+HEAD
+</div>
+
+</div>
+
+<p>
+New node ka next current head ko point karega,
+phir head ko new node bana denge.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+Insertion at End
+</h3>
+
+<div class="operation-flow">
+
+<div class="flow-node">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+NEW
+</div>
+
+</div>
+
+<p>
+Last node tak traverse karke uska next new node ko point karayenge.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+Insertion at Position
+</h3>
+
+<div class="operation-flow">
+
+<div class="flow-node">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+NEW
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+20
+</div>
+
+</div>
+
+<p>
+Required position tak traverse karke pointers adjust karte hain.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- INSERTION CODE -->
+
+<section>
+
+<div class="card">
+
+<h2>
+Insertion at Beginning — C++
+</h2>
+
+<pre><code>
+void insertBeginning(Node*& head, int value)
+{
+    Node* newNode = new Node();
+
+    newNode->data = value;
+
+    newNode->next = head;
+
+    head = newNode;
+}
+</code></pre>
+
+<div class="info-item">
+⏱️ Time Complexity: <strong>O(1)</strong>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DELETION -->
+
+<section>
+
+<h2 class="section-heading">
+    05. <span>Deletion</span>
+</h2>
+
+<div class="card">
+
+<div class="operation-flow">
+
+<div class="flow-node">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+30
+</div>
+
+</div>
+
+<br>
+
+<p style="text-align:center">
+
+Suppose 20 delete karna hai:
+
+</p>
+
+<div class="operation-flow">
+
+<div class="flow-node">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+30
+</div>
+
+</div>
+
+<div class="info-list">
+
+<div class="info-item">
+1️⃣ Previous node identify karo.
+</div>
+
+<div class="info-item">
+2️⃣ Previous node ka next update karo.
+</div>
+
+<div class="info-item">
+3️⃣ Deleted node ki memory free karo.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SEARCHING -->
+
+<section>
+
+<h2 class="section-heading">
+    06. <span>Searching</span>
+</h2>
+
+<div class="card">
+
+<p>
+Linked List mein generally linear search use hoti hai.
+Head se start karke har node ka data target se compare karte hain.
+</p>
+
+<div class="visual-box">
+
+<div class="operation-flow">
+
+<div class="flow-node">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+30 🎯
+</div>
+
+</div>
+
+</div>
+
+<pre><code>
+bool search(Node* head, int key)
+{
+    Node* temp = head;
+
+    while(temp != NULL)
+    {
+        if(temp->data == key)
+            return true;
+
+        temp = temp->next;
+    }
+
+    return false;
+}
+</code></pre>
+
+<div class="info-item">
+⏱️ Worst Case Time Complexity: <strong>O(n)</strong>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- UPDATING -->
+
+<section>
+
+<h2 class="section-heading">
+    07. <span>Updating</span>
+</h2>
+
+<div class="card">
+
+<div class="operation-flow">
+
+<div class="flow-node">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+30
+</div>
+
+</div>
+
+<br>
+
+<p style="text-align:center">
+Suppose 20 ko 200 banana hai:
+</p>
+
+<div class="operation-flow">
+
+<div class="flow-node">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+200
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+30
+</div>
+
+</div>
+
+<pre><code>
+temp->data = 200;
+</code></pre>
+
+<p>
+Pehle required node tak traverse karenge,
+phir uske data ko update karenge.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- OPERATIONS TABLE -->
+
+<section>
+
+<h2 class="section-heading">
+    Complexity <span>Chart</span>
+</h2>
+
+<div class="card">
+
+<div class="table-wrapper">
+
+<table>
+
+<tr>
+<th>Operation</th>
+<th>Best Case</th>
+<th>Average</th>
+<th>Worst Case</th>
+</tr>
+
+<tr>
+<td>Traversal</td>
+<td>O(1)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+
+<tr>
+<td>Search</td>
+<td>O(1)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+
+<tr>
+<td>Insert Beginning</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>Insert End</td>
+<td>O(1)*</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+
+<tr>
+<td>Delete Beginning</td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>O(1)</td>
+</tr>
+
+<tr>
+<td>Delete End</td>
+<td>O(n)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+
+<tr>
+<td>Update</td>
+<td>O(1)</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+
+</table>
+
+</div>
+
+<p style="color:var(--muted);margin-top:15px">
+* Tail pointer maintain karne par insertion at end O(1) ho sakta hai.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- REAL WORLD -->
+
+<section>
+
+<h2 class="section-heading">
+    🌍 Real World <span>Examples</span>
+</h2>
+
+<div class="grid-4">
+
+<div class="card">
+
+<h3>
+🎵 Playlist
+</h3>
+
+<p>
+Songs ko linked sequence mein maintain kiya ja sakta hai.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+🌐 Browser History
+</h3>
+
+<p>
+Back aur Forward navigation ke liye doubly linked structure useful hai.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+🎮 Gaming Turns
+</h3>
+
+<p>
+Players ke turns ko circular linked list se manage kiya ja sakta hai.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+🖥️ Memory Management
+</h3>
+
+<p>
+Dynamic memory blocks ke management mein linked structures useful hote hain.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- AKTU -->
+
+<section>
+
+<h2 class="section-heading">
+    🎯 AKTU <span>Exam Zone</span>
+</h2>
+
+<div class="card">
+
+<div class="info-list">
+
+<div class="info-item">
+⭐ Explain different operations on Linked List.
+</div>
+
+<div class="info-item">
+⭐ Write algorithm for traversal of Linked List.
+</div>
+
+<div class="info-item">
+⭐ Explain insertion at beginning, end and specific position.
+</div>
+
+<div class="info-item">
+⭐ Explain deletion from Linked List.
+</div>
+
+<div class="info-item">
+⭐ Write C/C++ program for insertion in Linked List.
+</div>
+
+<div class="info-item">
+⭐ Write C/C++ program for deletion in Linked List.
+</div>
+
+<div class="info-item">
+⭐ Explain searching operation in Linked List.
+</div>
+
+<div class="info-item">
+⭐ Discuss time complexity of Linked List operations.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- QUICK REVISION -->
+
+<section>
+
+<h2 class="section-heading">
+    ⚡ One Minute <span>Revision</span>
+</h2>
+
+<div class="card">
+
+<div class="operation-flow">
+
+<div class="flow-node">
+Create
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+Traverse
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+Insert
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+Delete
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+Search
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-node">
+Update
+</div>
+
+</div>
+
+<div class="info-list">
+
+<div class="info-item">
+🚀 Beginning insertion = <strong>O(1)</strong>
+</div>
+
+<div class="info-item">
+🔎 Searching = <strong>O(n)</strong>
+</div>
+
+<div class="info-item">
+🔄 Traversal = <strong>O(n)</strong>
+</div>
+
+<div class="info-item">
+🗑️ End deletion in singly list = <strong>O(n)</strong>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- QUIZ -->
+
+<section>
+
+<h2 class="section-heading">
+    🧠 Test Your <span>Knowledge</span>
+</h2>
+
+<div class="card">
+
+<h3>
+Q1. Linked List mein first node ko kya represent karta hai?
+</h3>
+
+<label class="option">
+<input type="radio" name="q1" value="wrong">
+Tail
+</label>
+
+<label class="option">
+<input type="radio" name="q1" value="correct">
+Head
+</label>
+
+<label class="option">
+<input type="radio" name="q1" value="wrong">
+NULL
+</label>
+
+
+<h3 style="margin-top:30px">
+Q2. Singly Linked List ke beginning mein insertion ki complexity?
+</h3>
+
+<label class="option">
+<input type="radio" name="q2" value="correct">
+O(1)
+</label>
+
+<label class="option">
+<input type="radio" name="q2" value="wrong">
+O(n)
+</label>
+
+<label class="option">
+<input type="radio" name="q2" value="wrong">
+O(log n)
+</label>
+
+
+<h3 style="margin-top:30px">
+Q3. Linked List mein normal searching ki worst-case complexity?
+</h3>
+
+<label class="option">
+<input type="radio" name="q3" value="wrong">
+O(1)
+</label>
+
+<label class="option">
+<input type="radio" name="q3" value="correct">
+O(n)
+</label>
+
+<label class="option">
+<input type="radio" name="q3" value="wrong">
+O(log n)
+</label>
+
+
+<h3 style="margin-top:30px">
+Q4. Traversal mein generally kis pointer ka use hota hai?
+</h3>
+
+<label class="option">
+<input type="radio" name="q4" value="correct">
+Temporary pointer
+</label>
+
+<label class="option">
+<input type="radio" name="q4" value="wrong">
+Only NULL
+</label>
+
+<label class="option">
+<input type="radio" name="q4" value="wrong">
+Only tail
+</label>
+
+
+<h3 style="margin-top:30px">
+Q5. Node ko delete karne ke baad kya karna chahiye?
+</h3>
+
+<label class="option">
+<input type="radio" name="q5" value="wrong">
+New node banana
+</label>
+
+<label class="option">
+<input type="radio" name="q5" value="correct">
+Pointers adjust karke memory free karna
+</label>
+
+<label class="option">
+<input type="radio" name="q5" value="wrong">
+Head ko hamesha NULL karna
+</label>
+
+
+<button
+class="quiz-btn"
+onclick="checkQuiz()">
+
+Check Answers
+
+</button>
+
+<div id="result"></div>
+
+</div>
+
+</section>
+
+
+<!-- NAVIGATION -->
+
+<section>
+
+<div class="topic-navigation">
+
+<a
+href="linked-list-types.html"
+class="topic-nav">
+
+<span class="nav-label">
+← PREVIOUS
+</span>
+
+<span class="nav-topic">
+Linked List Types
+</span>
+
+</a>
+
+
+<a
+href="index.html"
+class="home-btn">
+
+🏠 Unit 1
+
+</a>
+
+
+<a
+href="linked-list-insertion.html"
+class="topic-nav next">
+
+<span class="nav-label">
+NEXT →
+</span>
+
+<span class="nav-topic">
+Linked List Insertion
+</span>
+
+</a>
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<div class="developer">
+
+Web Developer
+<span>
+Vaibhav
+</span>
+
+</div>
+
+<p>
+DSA Vault • AKTU Data Structures
+</p>
+
+<div class="social">
+
+<a
+href="#"
+target="_blank">
+
+GitHub
+
+</a>
+
+<a
+href="#"
+target="_blank">
+
+LinkedIn
+
+</a>
+
+</div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   DARK / LIGHT MODE
+========================= */
+
+const themeToggle =
+document.getElementById("themeToggle");
+
+const savedTheme =
+localStorage.getItem("dsa-theme");
+
+
+if(savedTheme === "dark"){
+
+    document.body.classList.add("dark");
+
+    themeToggle.textContent = "☀️";
+
+}
+
+
+themeToggle.addEventListener(
+"click",
+function(){
+
+    document.body.classList.toggle("dark");
+
+    const dark =
+    document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "dsa-theme",
+        dark ? "dark" : "light"
+    );
+
+
+    themeToggle.textContent =
+    dark ? "☀️" : "🌙";
+
+});
+
+
+/* =========================
+   READING PROGRESS
+========================= */
+
+window.addEventListener(
+"scroll",
+function(){
+
+    const scrollTop =
+    document.documentElement.scrollTop;
+
+    const scrollHeight =
+    document.documentElement.scrollHeight -
+    document.documentElement.clientHeight;
+
+    const progress =
+    (scrollTop / scrollHeight) * 100;
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+    progress + "%";
+
+});
+
+
+/* =========================
+   QUIZ
+========================= */
+
+function checkQuiz(){
+
+    const questions = [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+    ];
+
+    let score = 0;
+
+    let answered = 0;
+
+
+    questions.forEach(
+    function(question){
+
+        const selected =
+        document.querySelector(
+            'input[name="' +
+            question +
+            '"]:checked'
+        );
+
+
+        if(selected){
+
+            answered++;
+
+
+            if(
+                selected.value ===
+                "correct"
+            ){
+
+                score++;
+
+            }
+
+        }
+
+    });
+
+
+    const result =
+    document.getElementById("result");
+
+
+    if(answered < questions.length){
+
+        result.innerHTML =
+        "⚠️ Pehle saare questions attempt karo.";
+
+        return;
+
+    }
+
+
+    if(score === 5){
+
+        result.innerHTML =
+        "🎉 5/5 — Perfect! Linked List Operations mastered!";
+
+    }
+
+    else if(score === 4){
+
+        result.innerHTML =
+        "🔥 4/5 — Excellent! Bas ek concept revise karo.";
+
+    }
+
+    else if(score === 3){
+
+        result.innerHTML =
+        "👍 3/5 — Good! Complexity aur algorithms revise karo.";
+
+    }
+
+    else{
+
+        result.innerHTML =
+        "📚 Linked List Operations dobara revise karo.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
