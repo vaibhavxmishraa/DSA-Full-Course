@@ -1,0 +1,2967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Linked List Insertion | DSA Vault | Vaibhav</title>
+
+<style>
+
+/* =====================================================
+   THEME
+===================================================== */
+
+:root{
+    --bg:#f7f8fc;
+    --surface:#ffffff;
+    --surface2:#f0f1f7;
+    --text:#171827;
+    --muted:#686b7d;
+
+    --primary:#6757e8;
+    --secondary:#ff4f81;
+    --orange:#ff9f43;
+    --cyan:#00bfa6;
+    --green:#27c96f;
+    --red:#ff5b5b;
+    --yellow:#ffc857;
+
+    --border:rgba(20,20,40,.09);
+    --shadow:0 20px 60px rgba(40,30,90,.12);
+
+    --code:#15141c;
+    --codeText:#f5f5f7;
+}
+
+body.dark{
+    --bg:#080910;
+    --surface:#11121c;
+    --surface2:#191a26;
+    --text:#f6f6ff;
+    --muted:#a5a7b8;
+
+    --border:rgba(255,255,255,.09);
+    --shadow:0 25px 80px rgba(0,0,0,.55);
+
+    --code:#05060a;
+    --codeText:#f5f5f7;
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+    background:
+    radial-gradient(
+        circle at 10% 10%,
+        rgba(103,87,232,.14),
+        transparent 28%
+    ),
+    radial-gradient(
+        circle at 90% 20%,
+        rgba(255,79,129,.12),
+        transparent 25%
+    ),
+    radial-gradient(
+        circle at 50% 100%,
+        rgba(0,191,166,.08),
+        transparent 30%
+    ),
+    var(--bg);
+
+    color:var(--text);
+
+    line-height:1.7;
+
+    overflow-x:hidden;
+
+    transition:.4s;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
+}
+
+
+/* =====================================================
+   BACKGROUND ORBS
+===================================================== */
+
+.orb{
+
+    position:fixed;
+
+    width:300px;
+    height:300px;
+
+    border-radius:50%;
+
+    filter:blur(100px);
+
+    opacity:.13;
+
+    pointer-events:none;
+
+    z-index:-1;
+
+    animation:
+    floatOrb 10s ease-in-out infinite;
+}
+
+.orb.one{
+    background:var(--primary);
+    left:-150px;
+    top:10%;
+}
+
+.orb.two{
+    background:var(--secondary);
+    right:-150px;
+    top:40%;
+
+    animation-delay:2s;
+}
+
+.orb.three{
+    background:var(--cyan);
+    bottom:-160px;
+    left:40%;
+
+    animation-delay:4s;
+}
+
+@keyframes floatOrb{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-45px);
+    }
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.progress-container{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    z-index:3000;
+}
+
+.progress{
+
+    width:0%;
+
+    height:100%;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--primary),
+        var(--secondary),
+        var(--orange),
+        var(--cyan)
+    );
+}
+
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:2000;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:16px 6%;
+
+    background:
+    color-mix(
+        in srgb,
+        var(--surface) 84%,
+        transparent
+    );
+
+    backdrop-filter:blur(20px);
+
+    border-bottom:
+    1px solid var(--border);
+}
+
+.logo{
+
+    font-size:1.45rem;
+
+    font-weight:950;
+}
+
+.logo span{
+    color:var(--primary);
+}
+
+.nav-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.nav-btn{
+
+    border:
+    1px solid var(--border);
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    padding:9px 15px;
+
+    border-radius:50px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.nav-btn:hover{
+
+    transform:translateY(-3px);
+
+    border-color:var(--primary);
+
+    box-shadow:
+    0 10px 25px
+    rgba(103,87,232,.16);
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+    min-height:78vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding:80px 6%;
+}
+
+.hero-content{
+    max-width:1050px;
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:50px;
+
+    background:
+    rgba(103,87,232,.12);
+
+    color:var(--primary);
+
+    font-weight:900;
+
+    margin-bottom:25px;
+}
+
+.hero h1{
+
+    font-size:
+    clamp(3rem,8vw,7rem);
+
+    line-height:.95;
+
+    letter-spacing:-5px;
+
+    background:
+    linear-gradient(
+        110deg,
+        var(--primary),
+        var(--secondary),
+        var(--orange),
+        var(--cyan)
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+    margin-bottom:28px;
+}
+
+.hero p{
+
+    max-width:820px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    font-size:1.1rem;
+}
+
+
+/* =====================================================
+   SECTION
+===================================================== */
+
+section{
+
+    width:min(1150px,90%);
+
+    margin:auto;
+
+    padding:70px 0;
+}
+
+.section-heading{
+
+    font-size:
+    clamp(2rem,5vw,3rem);
+
+    line-height:1.1;
+
+    margin-bottom:10px;
+}
+
+.section-heading span{
+    color:var(--primary);
+}
+
+.section-subtitle{
+
+    color:var(--muted);
+
+    margin-bottom:30px;
+}
+
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.card{
+
+    background:var(--surface);
+
+    border:
+    1px solid var(--border);
+
+    border-radius:26px;
+
+    padding:30px;
+
+    box-shadow:var(--shadow);
+
+    transition:.35s;
+}
+
+.card:hover{
+
+    transform:translateY(-7px);
+
+    box-shadow:
+    0 30px 80px
+    rgba(103,87,232,.16);
+}
+
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.grid-2{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(2,1fr);
+
+    gap:25px;
+}
+
+.grid-3{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+}
+
+
+/* =====================================================
+   INSERTION DIAGRAM
+===================================================== */
+
+.diagram{
+
+    overflow-x:auto;
+
+    padding:35px 10px;
+}
+
+.list{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    min-width:max-content;
+}
+
+.node{
+
+    display:flex;
+
+    border:
+    2px solid var(--primary);
+
+    border-radius:17px;
+
+    overflow:hidden;
+
+    background:var(--surface);
+
+    box-shadow:
+    0 15px 35px
+    rgba(103,87,232,.16);
+
+    animation:
+    nodeIn .7s ease both;
+}
+
+.data{
+
+    min-width:80px;
+
+    min-height:65px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:950;
+
+    color:white;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+}
+
+.next{
+
+    min-width:70px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:var(--surface2);
+
+    color:var(--primary);
+
+    font-weight:950;
+}
+
+.arrow{
+
+    margin:0 10px;
+
+    font-size:2rem;
+
+    color:var(--primary);
+
+    font-weight:950;
+}
+
+.new-node{
+
+    border-color:var(--green);
+
+    animation:
+    newNode 1.2s ease-in-out infinite alternate;
+}
+
+.new-node .data{
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--green),
+        var(--cyan)
+    );
+}
+
+@keyframes nodeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(30px)
+        scale(.8);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        scale(1);
+    }
+}
+
+@keyframes newNode{
+
+    from{
+        transform:translateY(0);
+    }
+
+    to{
+        transform:translateY(-10px);
+    }
+}
+
+
+/* =====================================================
+   STEP CARDS
+===================================================== */
+
+.step{
+
+    position:relative;
+
+    padding-top:55px;
+}
+
+.step-number{
+
+    position:absolute;
+
+    top:20px;
+    left:25px;
+
+    width:45px;
+    height:45px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:50%;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    font-weight:950;
+}
+
+
+/* =====================================================
+   FLOW
+===================================================== */
+
+.flow{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    margin:30px 0;
+}
+
+.flow-box{
+
+    padding:17px 25px;
+
+    border-radius:18px;
+
+    border:
+    1px solid var(--border);
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(103,87,232,.11),
+        rgba(255,79,129,.08)
+    );
+
+    font-weight:950;
+}
+
+.flow-arrow{
+
+    font-size:2rem;
+
+    color:var(--primary);
+
+    font-weight:950;
+}
+
+
+/* =====================================================
+   CODE
+===================================================== */
+
+pre{
+
+    background:var(--code);
+
+    color:var(--codeText);
+
+    padding:25px;
+
+    border-radius:20px;
+
+    overflow-x:auto;
+
+    border:
+    1px solid var(--border);
+
+    box-shadow:var(--shadow);
+
+    margin-top:20px;
+}
+
+code{
+
+    font-family:
+    Consolas,
+    "Courier New",
+    monospace;
+
+    font-size:.92rem;
+}
+
+
+/* =====================================================
+   INFO
+===================================================== */
+
+.info-list{
+
+    display:grid;
+
+    gap:14px;
+
+    margin-top:20px;
+}
+
+.info-item{
+
+    padding:16px 20px;
+
+    border-radius:16px;
+
+    background:
+    rgba(103,87,232,.07);
+
+    border-left:
+    4px solid var(--primary);
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+
+    width:100%;
+
+    min-width:600px;
+
+    border-collapse:collapse;
+}
+
+th,
+td{
+
+    padding:16px;
+
+    text-align:left;
+
+    border-bottom:
+    1px solid var(--border);
+}
+
+th{
+    color:var(--primary);
+}
+
+
+/* =====================================================
+   QUIZ
+===================================================== */
+
+.option{
+
+    display:block;
+
+    padding:14px 18px;
+
+    margin:10px 0;
+
+    border:
+    1px solid var(--border);
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.option:hover{
+
+    border-color:var(--primary);
+
+    transform:translateX(6px);
+}
+
+.quiz-btn{
+
+    border:none;
+
+    padding:13px 25px;
+
+    border-radius:50px;
+
+    color:white;
+
+    font-weight:950;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    cursor:pointer;
+
+    margin-top:15px;
+}
+
+#result{
+
+    margin-top:20px;
+
+    font-weight:950;
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+.topic-navigation{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr auto 1fr;
+
+    gap:15px;
+
+    align-items:center;
+}
+
+.topic-nav{
+
+    padding:20px;
+
+    border:
+    1px solid var(--border);
+
+    border-radius:20px;
+
+    background:var(--surface);
+
+    transition:.3s;
+}
+
+.topic-nav:hover{
+
+    transform:translateY(-5px);
+
+    border-color:var(--primary);
+}
+
+.topic-nav.next{
+    text-align:right;
+}
+
+.nav-label{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:.8rem;
+}
+
+.nav-topic{
+
+    font-weight:950;
+}
+
+.home-btn{
+
+    padding:15px 25px;
+
+    border-radius:50px;
+
+    background:
+    linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    color:white;
+
+    font-weight:950;
+
+    text-align:center;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+
+    margin-top:50px;
+
+    padding:60px 20px;
+
+    text-align:center;
+
+    border-top:
+    1px solid var(--border);
+}
+
+.developer{
+
+    font-size:1.5rem;
+
+    font-weight:950;
+}
+
+.developer span{
+    color:var(--primary);
+}
+
+.social{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin-top:20px;
+}
+
+.social a{
+
+    padding:10px 20px;
+
+    border:
+    1px solid var(--border);
+
+    border-radius:50px;
+
+    transition:.3s;
+}
+
+.social a:hover{
+
+    background:var(--primary);
+
+    color:white;
+
+    transform:translateY(-4px);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:850px){
+
+    .grid-2,
+    .grid-3{
+        grid-template-columns:1fr;
+    }
+
+    .topic-navigation{
+        grid-template-columns:1fr;
+    }
+
+    .topic-nav.next{
+        text-align:center;
+    }
+
+    .navbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:12px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- BACKGROUND -->
+
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div class="orb three"></div>
+
+
+<!-- PROGRESS -->
+
+<div class="progress-container">
+
+    <div
+        class="progress"
+        id="progressBar">
+    </div>
+
+</div>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <a
+        href="index.html"
+        class="logo">
+
+        DSA<span>Vault</span>
+
+    </a>
+
+    <div class="nav-actions">
+
+        <a
+            href="linked-list.html"
+            class="nav-btn">
+
+            ← Linked List
+
+        </a>
+
+        <a
+            href="index.html"
+            class="nav-btn">
+
+            🏠 Home
+
+        </a>
+
+        <button
+            id="themeToggle"
+            class="nav-btn">
+
+            🌙
+
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+
+<header class="hero">
+
+<div class="hero-content">
+
+    <div class="badge">
+
+        UNIT 1 • LINKED LIST • INSERTION
+
+    </div>
+
+    <h1>
+        Linked List
+        <br>
+        Insertion
+    </h1>
+
+    <p>
+
+        Learn how to insert a new node at the beginning,
+        end and any specific position of a Singly Linked List.
+        Visual diagrams + pointer logic + C++ implementation
+        + dry run + AKTU exam preparation.
+
+    </p>
+
+</div>
+
+</header>
+
+
+<!-- BASIC IDEA -->
+
+<section>
+
+<h2 class="section-heading">
+
+    What is <span>Insertion?</span>
+
+</h2>
+
+<p class="section-subtitle">
+
+    Insertion ka matlab linked list mein ek naya node
+    add karna hota hai.
+
+</p>
+
+<div class="card">
+
+<div class="diagram">
+
+<div class="list">
+
+<div class="node">
+
+<div class="data">
+10
+</div>
+
+<div class="next">
+→
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="node">
+
+<div class="data">
+20
+</div>
+
+<div class="next">
+→
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="node">
+
+<div class="data">
+30
+</div>
+
+<div class="next">
+→
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+NULL
+</div>
+
+</div>
+
+</div>
+
+<p>
+
+Suppose hume <strong>25</strong> ko 20 aur 30 ke beech
+insert karna hai.
+
+</p>
+
+<div class="diagram">
+
+<div class="list">
+
+<div class="node">
+
+<div class="data">
+10
+</div>
+
+<div class="next">
+→
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="node">
+
+<div class="data">
+20
+</div>
+
+<div class="next">
+→
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="node new-node">
+
+<div class="data">
+25
+</div>
+
+<div class="next">
+→
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="node">
+
+<div class="data">
+30
+</div>
+
+<div class="next">
+→
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+<div class="flow-box">
+NULL
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- TYPES -->
+
+<section>
+
+<h2 class="section-heading">
+
+    Three Main <span>Insertion Cases</span>
+
+</h2>
+
+<div class="grid-3">
+
+<div class="card step">
+
+<div class="step-number">
+1
+</div>
+
+<h3>
+Insertion at Beginning
+</h3>
+
+<p>
+
+New node ko head se pehle add karna.
+
+</p>
+
+<pre><code>
+newNode → oldHead
+
+head = newNode;
+</code></pre>
+
+</div>
+
+
+<div class="card step">
+
+<div class="step-number">
+2
+</div>
+
+<h3>
+Insertion at End
+</h3>
+
+<p>
+
+New node ko list ke last mein add karna.
+
+</p>
+
+<pre><code>
+last → newNode → NULL
+</code></pre>
+
+</div>
+
+
+<div class="card step">
+
+<div class="step-number">
+3
+</div>
+
+<h3>
+Insertion at Position
+</h3>
+
+<p>
+
+Kisi particular position par new node insert karna.
+
+</p>
+
+<pre><code>
+A → B → C
+
+A → B → NEW → C
+</code></pre>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BEGINNING -->
+
+<section>
+
+<h2 class="section-heading">
+
+    01. Insert at <span>Beginning</span>
+
+</h2>
+
+<div class="card">
+
+<h3>
+Example
+</h3>
+
+<div class="flow">
+
+<div class="flow-box">
+HEAD
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+</div>
+
+<p>
+Ab hume <strong>5</strong> insert karna hai.
+</p>
+
+<div class="flow">
+
+<div class="flow-box">
+5
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LOGIC -->
+
+<section>
+
+<h2 class="section-heading">
+
+    Beginning Insertion <span>Logic</span>
+
+</h2>
+
+<div class="card">
+
+<div class="info-list">
+
+<div class="info-item">
+
+<strong>Step 1:</strong>
+New node create karo.
+
+</div>
+
+<div class="info-item">
+
+<strong>Step 2:</strong>
+New node ka next current head ko point karega.
+
+</div>
+
+<div class="info-item">
+
+<strong>Step 3:</strong>
+Head ko new node bana do.
+
+</div>
+
+</div>
+
+<pre><code>
+Node* newNode = new Node();
+
+newNode->data = 5;
+
+newNode->next = head;
+
+head = newNode;
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- END -->
+
+<section>
+
+<h2 class="section-heading">
+
+    02. Insert at the <span>End</span>
+
+</h2>
+
+<div class="card">
+
+<div class="flow">
+
+<div class="flow-box">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+NULL
+</div>
+
+</div>
+
+<p>
+Ab hume <strong>40</strong> ko end mein insert karna hai.
+</p>
+
+<div class="flow">
+
+<div class="flow-box">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box"
+style="border:2px solid var(--green);">
+
+40
+
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+NULL
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- END LOGIC -->
+
+<section>
+
+<h2 class="section-heading">
+
+    End Insertion <span>Logic</span>
+
+</h2>
+
+<div class="card">
+
+<div class="info-list">
+
+<div class="info-item">
+
+<strong>Step 1:</strong>
+New node create karo.
+
+</div>
+
+<div class="info-item">
+
+<strong>Step 2:</strong>
+New node ka next NULL rakho.
+
+</div>
+
+<div class="info-item">
+
+<strong>Step 3:</strong>
+Head se traversal start karo.
+
+</div>
+
+<div class="info-item">
+
+<strong>Step 4:</strong>
+Last node tak jao.
+
+</div>
+
+<div class="info-item">
+
+<strong>Step 5:</strong>
+Last node ka next new node ko point karao.
+
+</div>
+
+</div>
+
+<pre><code>
+Node* newNode = new Node();
+
+newNode->data = 40;
+
+newNode->next = NULL;
+
+Node* temp = head;
+
+while(temp->next != NULL)
+{
+    temp = temp->next;
+}
+
+temp->next = newNode;
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- POSITION -->
+
+<section>
+
+<h2 class="section-heading">
+
+    03. Insert at <span>Specific Position</span>
+
+</h2>
+
+<div class="card">
+
+<h3>
+Insert 25 at position 3
+</h3>
+
+<div class="flow">
+
+<div class="flow-box">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+</div>
+
+<p>
+
+Position 3 par new node add karne ke baad:
+
+</p>
+
+<div class="flow">
+
+<div class="flow-box">
+10
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box"
+style="border:2px solid var(--green);">
+
+25
+
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- POSITION POINTER LOGIC -->
+
+<section>
+
+<h2 class="section-heading">
+
+    Pointer <span>Rearrangement</span>
+
+</h2>
+
+<div class="card">
+
+<p>
+Sabse important concept: insertion ke time pointers
+ko correct order mein change karna.
+</p>
+
+<div class="flow">
+
+<div class="flow-box">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+</div>
+
+<p>
+Pehle new node ka next 30 ko point karwao:
+</p>
+
+<pre><code>
+newNode->next = temp->next;
+</code></pre>
+
+<p>
+Ab 20 ka next new node ko point karwao:
+</p>
+
+<pre><code>
+temp->next = newNode;
+</code></pre>
+
+<div class="flow">
+
+<div class="flow-box">
+20
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box"
+style="border:2px solid var(--green);">
+25
+</div>
+
+<div class="flow-arrow">
+→
+</div>
+
+<div class="flow-box">
+30
+</div>
+
+</div>
+
+<div class="info-item">
+
+⚠️ <strong>Important:</strong>
+Pehle <code>newNode->next</code> set karna safer hai.
+Agar original next ko lose kar diya, to remaining list
+tak pahunchna possible nahi rahega.
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- POSITION CODE -->
+
+<section>
+
+<h2 class="section-heading">
+
+    C++: Insert at <span>Position</span>
+
+</h2>
+
+<div class="card">
+
+<pre><code>
+void insertAtPosition(
+    Node*& head,
+    int value,
+    int position)
+{
+    Node* newNode =
+        new Node();
+
+    newNode->data =
+        value;
+
+    if(position == 1)
+    {
+        newNode->next =
+            head;
+
+        head = newNode;
+
+        return;
+    }
+
+    Node* temp = head;
+
+    for(int i = 1;
+        i < position - 1 &&
+        temp != NULL;
+        i++)
+    {
+        temp =
+            temp->next;
+    }
+
+    if(temp == NULL)
+    {
+        cout << "Invalid Position";
+        delete newNode;
+        return;
+    }
+
+    newNode->next =
+        temp->next;
+
+    temp->next =
+        newNode;
+}
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- COMPLETE CODE -->
+
+<section>
+
+<h2 class="section-heading">
+
+    Complete <span>C++ Program</span>
+
+</h2>
+
+<div class="card">
+
+<pre><code>
+#include &lt;iostream&gt;
+
+using namespace std;
+
+
+struct Node
+{
+    int data;
+
+    Node* next;
+};
+
+
+void display(Node* head)
+{
+    Node* temp = head;
+
+    while(temp != NULL)
+    {
+        cout &lt;&lt; temp-&gt;data
+             &lt;&lt; " → ";
+
+        temp = temp-&gt;next;
+    }
+
+    cout &lt;&lt; "NULL\n";
+}
+
+
+void insertBeginning(
+    Node*& head,
+    int value)
+{
+    Node* newNode =
+        new Node();
+
+    newNode-&gt;data =
+        value;
+
+    newNode-&gt;next =
+        head;
+
+    head =
+        newNode;
+}
+
+
+void insertEnd(
+    Node*& head,
+    int value)
+{
+    Node* newNode =
+        new Node();
+
+    newNode-&gt;data =
+        value;
+
+    newNode-&gt;next =
+        NULL;
+
+    if(head == NULL)
+    {
+        head =
+            newNode;
+
+        return;
+    }
+
+    Node* temp =
+        head;
+
+    while(
+        temp-&gt;next != NULL
+    )
+    {
+        temp =
+            temp-&gt;next;
+    }
+
+    temp-&gt;next =
+        newNode;
+}
+
+
+void insertAtPosition(
+    Node*& head,
+    int value,
+    int position)
+{
+    Node* newNode =
+        new Node();
+
+    newNode-&gt;data =
+        value;
+
+    if(position == 1)
+    {
+        newNode-&gt;next =
+            head;
+
+        head =
+            newNode;
+
+        return;
+    }
+
+    Node* temp =
+        head;
+
+    for(
+        int i = 1;
+        i &lt; position - 1 &&
+        temp != NULL;
+        i++
+    )
+    {
+        temp =
+            temp-&gt;next;
+    }
+
+    if(temp == NULL)
+    {
+        cout
+        &lt;&lt; "Invalid Position";
+
+        delete newNode;
+
+        return;
+    }
+
+    newNode-&gt;next =
+        temp-&gt;next;
+
+    temp-&gt;next =
+        newNode;
+}
+
+
+int main()
+{
+    Node* head =
+        NULL;
+
+
+    insertEnd(
+        head,
+        10
+    );
+
+    insertEnd(
+        head,
+        20
+    );
+
+    insertEnd(
+        head,
+        30
+    );
+
+
+    cout
+    &lt;&lt; "Original List:\n";
+
+    display(head);
+
+
+    insertBeginning(
+        head,
+        5
+    );
+
+    cout
+    &lt;&lt; "After Beginning Insertion:\n";
+
+    display(head);
+
+
+    insertEnd(
+        head,
+        40
+    );
+
+    cout
+    &lt;&lt; "After End Insertion:\n";
+
+    display(head);
+
+
+    insertAtPosition(
+        head,
+        25,
+        4
+    );
+
+    cout
+    &lt;&lt; "After Position Insertion:\n";
+
+    display(head);
+
+
+    return 0;
+}
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- DRY RUN -->
+
+<section>
+
+<h2 class="section-heading">
+
+    Complete <span>Dry Run</span>
+
+</h2>
+
+<div class="card">
+
+<h3>
+Initial List
+</h3>
+
+<pre><code>
+HEAD
+ ↓
+10 → 20 → 30 → NULL
+</code></pre>
+
+
+<h3 style="margin-top:30px">
+Insert 5 at Beginning
+</h3>
+
+<pre><code>
+newNode = 5
+
+5 → 10 → 20 → 30 → NULL
+
+HEAD
+ ↓
+5
+</code></pre>
+
+
+<h3 style="margin-top:30px">
+Insert 40 at End
+</h3>
+
+<pre><code>
+10 → 20 → 30 → 40 → NULL
+</code></pre>
+
+
+<h3 style="margin-top:30px">
+Insert 25 after 20
+</h3>
+
+<pre><code>
+Before:
+
+10 → 20 → 30 → 40
+          ↑
+        temp
+
+
+After:
+
+10 → 20 → 25 → 30 → 40
+</code></pre>
+
+</div>
+
+</section>
+
+
+<!-- COMPLEXITY -->
+
+<section>
+
+<h2 class="section-heading">
+
+    Time <span>Complexity</span>
+
+</h2>
+
+<div class="card">
+
+<div class="table-wrapper">
+
+<table>
+
+<tr>
+
+<th>Insertion</th>
+<th>Time Complexity</th>
+<th>Reason</th>
+
+</tr>
+
+<tr>
+
+<td>Beginning</td>
+
+<td>O(1)</td>
+
+<td>No traversal required</td>
+
+</tr>
+
+<tr>
+
+<td>End</td>
+
+<td>O(n)</td>
+
+<td>Last node find karna padta hai</td>
+
+</tr>
+
+<tr>
+
+<td>Specific Position</td>
+
+<td>O(n)</td>
+
+<td>Position tak traversal</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- IMPORTANT EDGE CASES -->
+
+<section>
+
+<h2 class="section-heading">
+
+    Important <span>Edge Cases</span>
+
+</h2>
+
+<div class="grid-2">
+
+<div class="card">
+
+<h3>List Empty</h3>
+
+<pre><code>
+head == NULL
+</code></pre>
+
+<p>
+Empty list mein first node directly head ban sakta hai.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Position = 1</h3>
+
+<pre><code>
+newNode->next = head;
+head = newNode;
+</code></pre>
+
+<p>
+Beginning insertion jaisa behave karega.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Invalid Position</h3>
+
+<p>
+Agar position list ki valid range se bahar hai,
+to insertion perform nahi karna chahiye.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>Memory</h3>
+
+<p>
+Dynamic node create karne ke liye
+<code>new</code> use hota hai.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- REAL WORLD -->
+
+<section>
+
+<h2 class="section-heading">
+
+    Real World <span>Connection</span>
+
+</h2>
+
+<div class="grid-3">
+
+<div class="card">
+
+<h3>🎵 Playlist</h3>
+
+<p>
+Existing playlist mein new song ko kisi position
+par add karna.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>🚆 Train Coaches</h3>
+
+<p>
+Conceptually ek coach sequence mein new coach add
+karne jaisa structure.
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>📋 Task List</h3>
+
+<p>
+Dynamic task sequence mein new task add karna.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- AKTU -->
+
+<section>
+
+<h2 class="section-heading">
+
+    AKTU <span>Exam Zone</span>
+
+</h2>
+
+<div class="card">
+
+<div class="info-list">
+
+<div class="info-item">
+⭐ Explain insertion at beginning in Singly Linked List.
+</div>
+
+<div class="info-item">
+⭐ Explain insertion at end with algorithm.
+</div>
+
+<div class="info-item">
+⭐ Write C++ program for insertion in Linked List.
+</div>
+
+<div class="info-item">
+⭐ Explain insertion at a given position with diagram.
+</div>
+
+<div class="info-item">
+⭐ Write algorithm for insertion after a given node.
+</div>
+
+<div class="info-item">
+⭐ Explain pointer manipulation during insertion.
+</div>
+
+<div class="info-item">
+⭐ Give time complexity of different insertion operations.
+</div>
+
+<div class="info-item">
+⭐ Trace a linked list insertion operation.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- QUICK REVISION -->
+
+<section>
+
+<h2 class="section-heading">
+
+    ⚡ Quick <span>Revision</span>
+
+</h2>
+
+<div class="card">
+
+<div class="info-list">
+
+<div class="info-item">
+Beginning insertion → <strong>O(1)</strong>
+</div>
+
+<div class="info-item">
+End insertion without tail → <strong>O(n)</strong>
+</div>
+
+<div class="info-item">
+Position insertion → generally <strong>O(n)</strong>
+</div>
+
+<div class="info-item">
+New node → <strong>new Node()</strong>
+</div>
+
+<div class="info-item">
+Beginning → <strong>newNode → old head</strong>
+</div>
+
+<div class="info-item">
+Position → <strong>newNode.next = temp.next</strong>
+</div>
+
+<div class="info-item">
+Then → <strong>temp.next = newNode</strong>
+</div>
+
+<div class="info-item">
+Always be careful not to lose the original next pointer.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- QUIZ -->
+
+<section>
+
+<h2 class="section-heading">
+
+    🧠 Test Your <span>Knowledge</span>
+
+</h2>
+
+<div class="card">
+
+
+<h3>
+Q1. Beginning mein insertion ki complexity?
+</h3>
+
+<label class="option">
+<input
+type="radio"
+name="q1"
+value="correct">
+
+O(1)
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q1"
+value="wrong">
+
+O(n)
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q1"
+value="wrong">
+
+O(log n)
+
+</label>
+
+
+<h3 style="margin-top:30px">
+Q2. Beginning insertion mein new node ka next kya point karega?
+</h3>
+
+<label class="option">
+<input
+type="radio"
+name="q2"
+value="correct">
+
+Old Head
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q2"
+value="wrong">
+
+NULL always
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q2"
+value="wrong">
+
+Tail
+
+</label>
+
+
+<h3 style="margin-top:30px">
+Q3. End insertion ke basic implementation mein traversal kyu chahiye?
+</h3>
+
+<label class="option">
+<input
+type="radio"
+name="q3"
+value="correct">
+
+Last node find karne ke liye
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q3"
+value="wrong">
+
+Head delete karne ke liye
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q3"
+value="wrong">
+
+Sorting ke liye
+
+</label>
+
+
+<h3 style="margin-top:30px">
+Q4. Position insertion mein correct order kya hai?
+</h3>
+
+<label class="option">
+<input
+type="radio"
+name="q4"
+value="correct">
+
+newNode->next = temp->next, then temp->next = newNode
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q4"
+value="wrong">
+
+temp = NULL
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q4"
+value="wrong">
+
+head = NULL
+
+</label>
+
+
+<h3 style="margin-top:30px">
+Q5. New node dynamically create karne ke liye C++ mein kya use karte hain?
+</h3>
+
+<label class="option">
+<input
+type="radio"
+name="q5"
+value="correct">
+
+new
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q5"
+value="wrong">
+
+create
+
+</label>
+
+<label class="option">
+<input
+type="radio"
+name="q5"
+value="wrong">
+
+mallocNode
+
+</label>
+
+
+<button
+class="quiz-btn"
+onclick="checkQuiz()">
+
+Check Answers
+
+</button>
+
+<div id="result"></div>
+
+</div>
+
+</section>
+
+
+<!-- NAVIGATION -->
+
+<section>
+
+<div class="topic-navigation">
+
+
+<a
+href="linked-list.html"
+class="topic-nav">
+
+<span class="nav-label">
+← PREVIOUS
+</span>
+
+<span class="nav-topic">
+Linked List
+</span>
+
+</a>
+
+
+<a
+href="index.html"
+class="home-btn">
+
+🏠 Unit 1
+
+</a>
+
+
+<a
+href="linked-list-deletion.html"
+class="topic-nav next">
+
+<span class="nav-label">
+NEXT →
+</span>
+
+<span class="nav-topic">
+Linked List Deletion
+</span>
+
+</a>
+
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+<div class="developer">
+
+Web Developer
+<span>
+Vaibhav
+</span>
+
+</div>
+
+<p>
+DSA Vault • AKTU Data Structures
+</p>
+
+<div class="social">
+
+<a
+href="#"
+target="_blank">
+
+GitHub
+
+</a>
+
+<a
+href="#"
+target="_blank">
+
+LinkedIn
+
+</a>
+
+</div>
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+const themeToggle =
+document.getElementById(
+    "themeToggle"
+);
+
+const savedTheme =
+localStorage.getItem(
+    "dsa-theme"
+);
+
+if(savedTheme === "dark"){
+
+    document.body.classList.add(
+        "dark"
+    );
+
+    themeToggle.textContent =
+    "☀️";
+}
+
+
+themeToggle.addEventListener(
+"click",
+function(){
+
+    document.body.classList.toggle(
+        "dark"
+    );
+
+    const dark =
+    document.body.classList.contains(
+        "dark"
+    );
+
+    localStorage.setItem(
+        "dsa-theme",
+        dark ? "dark" : "light"
+    );
+
+    themeToggle.textContent =
+    dark ? "☀️" : "🌙";
+
+});
+
+
+/* =====================================================
+   READING PROGRESS
+===================================================== */
+
+window.addEventListener(
+"scroll",
+function(){
+
+    const scrollTop =
+    document.documentElement.scrollTop;
+
+    const scrollHeight =
+    document.documentElement.scrollHeight -
+    document.documentElement.clientHeight;
+
+    const progress =
+    (scrollTop / scrollHeight) * 100;
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+    progress + "%";
+
+});
+
+
+/* =====================================================
+   QUIZ
+===================================================== */
+
+function checkQuiz(){
+
+    const questions = [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+    ];
+
+    let score = 0;
+
+    let answered = 0;
+
+
+    questions.forEach(
+    function(question){
+
+        const selected =
+        document.querySelector(
+            'input[name="' +
+            question +
+            '"]:checked'
+        );
+
+        if(selected){
+
+            answered++;
+
+            if(
+                selected.value ===
+                "correct"
+            ){
+
+                score++;
+
+            }
+
+        }
+
+    });
+
+
+    const result =
+    document.getElementById(
+        "result"
+    );
+
+
+    if(
+        answered <
+        questions.length
+    ){
+
+        result.innerHTML =
+        "⚠️ Pehle saare questions attempt karo.";
+
+        return;
+    }
+
+
+    if(score === 5){
+
+        result.innerHTML =
+        "🎉 5/5 — Perfect! Insertion concept strong hai.";
+
+    }
+    else if(score === 4){
+
+        result.innerHTML =
+        "🔥 4/5 — Excellent! Ek baar quick revision karo.";
+
+    }
+    else if(score === 3){
+
+        result.innerHTML =
+        "👍 3/5 — Good! Pointer logic dobara dekho.";
+
+    }
+    else{
+
+        result.innerHTML =
+        "📚 Concepts revise karo aur quiz phir attempt karo.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
